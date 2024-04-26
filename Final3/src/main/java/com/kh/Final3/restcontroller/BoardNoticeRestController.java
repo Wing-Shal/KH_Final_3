@@ -130,7 +130,11 @@ public class BoardNoticeRestController {
 	@PostMapping("/") 
 	public BoardNoticeDto insert(@RequestBody BoardNoticeDto boardNoticeDto){ 
 		int sequence = boardNoticeDao.sequence(); //번호생성
+		int comapnyNo = companyDao.selectOnebyEmpNo(token에서parse한거);
+		
+		
 		boardNoticeDto.setNoticeNo(sequence); //번호설정
+		boardNoticeDto.setCompanyNo(comapnyNo);
 		boardNoticeDao.insert(boardNoticeDto); //등록
 		
 		return boardNoticeDao.selectOne(sequence);
