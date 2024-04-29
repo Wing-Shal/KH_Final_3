@@ -39,21 +39,21 @@ public class ReplyBlindRestController {
 	}
 	
 	//등록
-		@PostMapping("/") 
-		public ReplyBlindDto insert(@RequestBody ReplyBlindDto replyBlindDto, @RequestHeader("Authorization") String token){ 
-			int sequence = replyBlindDao.sequence(); //번호생성
-//			String companyName = empDao.selectOnebyCompanyNo(token.getparsedCompanyNo())
-//			토큰 파싱해서 작성자 이름 가져오기
-			String companyName = jwtService.parse(token.substring(7)).getAdminId();
-			
-//			댓글이 달린 게시글 번호 가져오기ㄴ
-			
-			replyBlindDto.setReplyBlindNo(sequence); //시퀀스
-//			boardBlindDto.setBlindCom
-			replyBlindDao.insert(replyBlindDto); //등록
-			
-			return replyBlindDao.selectOne(sequence);
-		}
+//		@PostMapping("/") 
+//		public ReplyBlindDto insert(@RequestBody ReplyBlindDto replyBlindDto, @RequestHeader("Authorization") String token){ 
+//			int sequence = replyBlindDao.sequence(); //번호생성
+////			String companyName = empDao.selectOnebyCompanyNo(token.getparsedCompanyNo())
+////			토큰 파싱해서 작성자 이름 가져오기
+//			String companyName = jwtService.parse(token.substring(7)).getAdminId();
+//			
+////			댓글이 달린 게시글 번호 가져오기ㄴ
+//			
+//			replyBlindDto.setReplyBlindNo(sequence); //시퀀스
+////			boardBlindDto.setBlindCom
+//			replyBlindDao.insert(replyBlindDto); //등록
+//			
+//			return replyBlindDao.selectOne(sequence);
+//		}
 		
 //		삭제
 		//삭제

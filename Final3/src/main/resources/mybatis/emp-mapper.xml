@@ -23,8 +23,13 @@
    
    <!-- Read -->
    <select id="list" resultType="EmpDto">
-      select * from emp order by emp_no asc
+      select * from emp where company_no = #{companyNo}
    </select>
+   
+    <select id="listByDept" resultType="EmpDto">
+      select * from emp where dept_no = #{deptNo} and company_no = #{companyNo}
+   </select>
+   
    <select id="find" resultType="EmpDto">
       select * from emp where emp_no = #{empNo}
    </select>
