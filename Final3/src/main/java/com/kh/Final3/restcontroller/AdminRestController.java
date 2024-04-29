@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +14,6 @@ import com.kh.Final3.dto.AdminDto;
 import com.kh.Final3.service.JwtService;
 import com.kh.Final3.vo.AdminLoginVO;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @CrossOrigin
 @RestController
@@ -28,19 +28,19 @@ public class AdminRestController {
 	
 	@PostMapping("/login")
 	public ResponseEntity<AdminLoginVO> login(@RequestBody AdminDto adminDto) {
-		AdminDto loginDto = adminDao.selectOne(adminDto.getAdminId());
-		if(loginDto == null) {
+		AdminDto findDto = adminDao.selectOne(adminDto.getAdminId());
+		if(findDto == null) {
 			return ResponseEntity.status(404).build();
 		}
 		
-		boolean isValid = loginDto.getAdminPw().equals(adminDto.getAdminPw());
+		boolean isValid = findDto.getAdminPw().equals(adminDto.getAdminPw());
 
 		if(isValid) {
-			String accessToken = jwtService.createAccessToken(adminDto);
-			String refreshToken = jwtService.createRefreshToken(adminDto);
+			String accessToken = jwtService.createAccessToken(findDto);
+			String refreshToken = jwtService.createRefreshToken(findDto);
 			
 			return ResponseEntity.ok().body(AdminLoginVO.builder()
-					.adminId(loginDto.getAdminId())
+					.adminId(findDto.getAdminId())
 					.accessToken(accessToken)
 					.refreshToken(refreshToken)
 				.build());//200
@@ -49,7 +49,7 @@ public class AdminRestController {
 			return ResponseEntity.status(401).build();
 		}
 	}
-	@PostMapping("/refresh")
+	//@PostMapping("/refresh")
 	public ResponseEntity<AdminLoginVO> refresh(@RequestHeader("Authorization") String refreshToken) {
 		try {
 			AdminLoginVO loginVO = jwtService.parse(refreshToken);

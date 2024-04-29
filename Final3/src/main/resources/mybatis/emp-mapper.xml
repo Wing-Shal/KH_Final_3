@@ -22,11 +22,14 @@
    </insert>
    
    <!-- Read -->
-   <select id="list" resultType="EmpDto">
-      select * from emp order by emp_no asc
-   </select>
    <select id="find" resultType="EmpDto">
       select * from emp where emp_no = #{empNo}
+   </select>
+   <select id="listByCompany" resultType="EmpDto">
+      select * from emp where company_no = #{companyNo} order by emp_no asc
+   </select>
+   <select id="listByDept" resultType="EmpDto">
+      select * from emp where dept_no = #{deptNo} and company_no = #{companyNo} order by emp_no asc
    </select>
    
    <!-- Update -->
