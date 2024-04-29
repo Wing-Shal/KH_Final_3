@@ -5,62 +5,71 @@
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
 <mapper namespace="emp">
-	
-	<!-- Create -->
-	<select id="sequence" resultType="int">
-		select emp_seq.nextval from dual
-	</select>
-	<insert id="save">
-		insert into emp(
-			emp_no, emp_pw, emp_name, emp_contact, emp_email, emp_pr, emp_type, 
-			grade_no, company_no, dept_no, emp_status, emp_join, emp_exit
-		)
-		values(
-			#{empNo}, #{empPw}, #{empName}, #{empContact}, #{empEmail}, #{empPr}, #{empType}, #{gradeNo}, #{companyNo}, 
-			#{deptNo}, #{empStatus}, #{empJoin}, #{empExit} 
-		)
-	</insert>
-	
-	<!-- Read -->
-	<select id="list" resultType="EmpDto">
-		select * from emp order by emp_no asc
-	</select>
-	<select id="find" resultType="EmpDto">
-		select * from emp where emp_no = #{empNo}
-	</select>
-	
-	<!-- Update -->
-	<update id="editAll">
-		update emp
-		set 
-			emp_pw = #{empName},
-			emp_name = #{empDept},
-			emp_contact = #{empDate},
-			emp_email = #{empSal},
-			emp_email = #{empSal},
-			emp_email = #{empSal},
-			emp_email = #{empSal},
-			emp_email = #{empSal},
-			emp_email = #{empSal},
-			emp_email = #{empSal},
-			emp_email = #{empSal}
-		where emp_no = #{empNo}
-	</update>
-	
-	<update id="editUnit">
-		update emp
-		<set>
-			<if test="empName != null">emp_name = #{empName},</if>
-			<if test="empDept != null">emp_dept = #{empDept},</if>
-			<if test="empDate != null">emp_date = #{empDate},</if>
-			<if test="empSal > 0">emp_sal = #{empSal}</if>
-		</set>
-		where emp_no = #{empNo}
-	</update>
-	
-	<!-- Delete -->
-	<delete id="delete">
-		delete emp where emp_no = #{empNo}
-	</delete>
-		
+   
+   <!-- Create -->
+   <select id="sequence" resultType="int">
+      select emp_seq.nextval from dual
+   </select>
+   <insert id="save">
+      insert into emp(
+         emp_no, emp_pw, emp_name, emp_contact, emp_email, emp_pr, emp_type, 
+         grade_no, company_no, dept_no, emp_status, emp_join, emp_exit
+      )
+      values(
+         #{empNo}, #{empPw}, #{empName}, #{empContact}, #{empEmail}, #{empPr}, #{empType}, #{gradeNo}, #{companyNo}, 
+         #{deptNo}, #{empStatus}, #{empJoin}, #{empExit} 
+      )
+   </insert>
+   
+   <!-- Read -->
+   <select id="list" resultType="EmpDto">
+      select * from emp order by emp_no asc
+   </select>
+   <select id="find" resultType="EmpDto">
+      select * from emp where emp_no = #{empNo}
+   </select>
+   
+   <!-- Update -->
+   <update id="editAll">
+      update emp
+      set 
+         emp_pw = #{empPw},
+         emp_name = #{empName},
+         emp_contact = #{empContact},
+         emp_email = #{empEmail},
+         emp_pr = #{empPr},
+         emp_type = #{empType},
+         grade_no = #{gradeNo},
+         company_no = #{companyNo},
+         dept_no = #{deptNo},
+         emp_status = #{empStatus},
+         emp_join = #{empJoin}
+         emp_exit = #{empExit}
+      where emp_no = #{empNo}
+   </update>
+   
+   <update id="editUnit">
+      update emp
+      <set>
+         <if test="empPw != null">emp_pw = #{empPw},</if>
+         <if test="empName != null">emp_name = #{empName},</if>
+         <if test="empContact != null">emp_contact = #{empContact},</if>
+         <if test="empEmail != null">emp_email = #{empEmail},</if>
+         <if test="empPr != null">emp_pr = #{empPr},</if>
+         <if test="empType != null">emp_type = #{empType},</if>
+         <if test="gradeNo > 0">grade_no = #{gradeNo},</if>
+         <if test="companyNo > 0">company_no = #{companyNo},</if>
+         <if test="deptNo > 0">dept_no = #{deptNo},</if>
+         <if test="empStatus != null">emp_status = #{empStatus},</if>
+         <if test="empJoin != null">emp_join = #{empJoin},</if>
+         <if test="empExit != null">emp_exit = #{empExit}</if>
+      </set>
+      where emp_no = #{empNo}
+   </update>
+   
+   <!-- Delete -->
+   <delete id="delete">
+      delete emp where emp_no = #{empNo}
+   </delete>
+      
 </mapper>
