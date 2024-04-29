@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="dept">
+   
+   <!-- Create -->
+   <select id="sequence" resultType="int">
+      select dept_seq.nextval from dual
+   </select>
+
+   <insert id="save">
+      insert into dept(
+         dept_no, company_no, dept_name
+      )
+      values(
+         #{deptNo}, #{companyNo}, #{deptName}
+      )
+   </insert>
+   
+   <!-- Read -->
+   <select id="list" resultType="deptDto">
+      select * from dept order by dept_no asc
+   </select>
+   <select id="find" resultType="deptDto">
+      select * from dept where dept_no = #{deptNo}
+   </select>
+   
+   <!-- Update -->
+   <update id="editAll">
+      update dept
+      set 
+         company_no = #{companyNo},
+         dept_name = #{deptName}
+      where dept_no = #{deptNo}
+   </update>
+   
+   <update id="editUnit">
+      update dept
+      <set>
+         <if test="companyNo > 0">company_no = #{companyNo},</if>
+         <if test="deptName != null">dept_name = #{deptName}</if>
+      </set>
+      where dept_no = #{deptNo}
+   </update>
+   
+   <!-- Delete -->
+   <delete id="delete">
+      delete dept where dept_no = #{deptNo}
+   </delete>
+      
+</mapper>

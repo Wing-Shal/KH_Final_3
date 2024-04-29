@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="company">
+   
+   <!-- Create -->
+   <select id="sequence" resultType="int">
+      select company_seq.nextval from dual
+   </select>
+
+   <insert id="save">
+      insert into company(
+         company_no, company_pw, company_name, company_bn, company_contact, company_email, 
+         company_zipcode, company_address1, company_address2
+      )
+      values(
+         #{companyNo}, #{companyPw}, #{companyName}, #{companyBn}, #{companyContact},
+          #{companyEmail}, #{companyZipcode}, #{companyAddress1}, #{companyAddress2}
+      )
+   </insert>
+   
+   <!-- Read -->
+   <select id="list" resultType="companyDto">
+      select * from company order by company_no asc
+   </select>
+   <select id="find" resultType="companyDto">
+      select * from company where company_no = #{companyNo}
+   </select>
+   
+   <!-- Update -->
+   <update id="editAll">
+      update company
+      set 
+         company_pw = #{companyPw},
+         company_name = #{companyName},
+         company_bn = #{companyBn},
+         company_contact = #{companyContact},
+         company_email = #{companyEmail},
+         company_zipcode = #{companyZipcode},
+         company_address1 = #{companyAddress1},
+         company_address2 = #{companyAddress2},
+      where company_no = #{companyNo}
+   </update>
+   
+   <update id="editUnit">
+      update company
+      <set>
+         <if test="companyPw != null">company_pw = #{companyPw},</if>
+         <if test="companyName != null">company_name = #{companyName},</if>
+         <if test="companyBn != null">company_bn = #{companyBn},</if>
+         <if test="companyContact != null">company_contact = #{companyContact},</if>
+         <if test="companyEmail != null">company_email = #{companyEmail},</if>
+         <if test="companyZipcode != null">company_zipcode = #{companyZipcode},</if>
+         <if test="companyAddress1 != null">company_address1 = #{companyAddress1},</if>
+         <if test="companyAddress2 != null">company_address2 = #{companyAddress2}</if>
+      </set>
+      where company_no = #{companyNo}
+   </update>
+   
+   <!-- Delete -->
+   <delete id="delete">
+      delete company where company_no = #{companyNo}
+   </delete>
+      
+</mapper>
