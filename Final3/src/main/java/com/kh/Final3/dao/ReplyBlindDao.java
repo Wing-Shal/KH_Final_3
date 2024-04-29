@@ -26,10 +26,10 @@ public class ReplyBlindDao {
 	public List<ReplyBlindDto> selectList(){
 		return sqlSession.selectList("replyBlind.list");
 	}
-////	상세조회
-//	public ReplyBlindDto selectOne(int replyBlindNo) {
-//		return sqlSession.selectOne("replyBlind.find", replyBlindNo);
-//	}
+//	상세조회
+	public ReplyBlindDto selectOne(int replyBlindNo) {
+		return sqlSession.selectOne("replyBlind.find", replyBlindNo);
+	}
 	
 	//수정
 	public boolean editAll(ReplyBlindDto replyBlindDto) {
