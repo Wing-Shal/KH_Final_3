@@ -1,18 +1,13 @@
 package com.kh.Final3.dto;
 
 import java.sql.Date;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import java.text.SimpleDateFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class MessageDto {
 	private int messageNo;
@@ -21,4 +16,13 @@ public class MessageDto {
 	private Date messageTime;
 	private int chatroomNo;
 	private int messageReply;
+	
+	private String messageSenderName;
+	private String messageSenderGrade;
+	
+    public String getMessageTimeMinute() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return formatter.format(messageTime);
+    }
+
 }

@@ -22,8 +22,28 @@
 	
 	<!-- 목록 -->
 	<select id="list" resultType="MessageDto">
-		select * from message where chatroom_no = #{chatroomNo} order by message_no desc
+		select * from message where chatroom_no = #{chatroomNo} order by message_no asc
 	</select>
+	
+	<!-- 이름찾기 -->
+	<select id="listSetName" resultType="string">
+		select e.emp_name 
+			from emp e 
+			join message m 
+			on e.emp_no = m.message_sender 
+		where m.message_no = #{messageNo}
+	</select>
+	
+	<!-- 직책찾기 -->
+	<select id="listSetGrade" resultType="string">
+		select g.grade_name
+			from emp e
+			join grade g on e.grade_no = g.grade_no
+			where e.emp_no = (select message_sender from message 
+														where message_no = #{messageNo})
+	</select>
+	
+	
 
 	<!-- 상세 -->
 	<select id="find" resultType="MessageDto">
