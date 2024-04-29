@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.Final3.dao.BoardNoticeDao;
 import com.kh.Final3.dto.BoardNoticeDto;
+import com.kh.Final3.service.JwtService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -30,6 +31,9 @@ public class BoardNoticeRestController {
 	
 	@Autowired
 	private BoardNoticeDao boardNoticeDao;
+	
+	@Autowired
+	private JwtService jwtService;
 	
 	//회사 공지 목록
 	@Operation(
@@ -130,11 +134,11 @@ public class BoardNoticeRestController {
 	@PostMapping("/") 
 	public BoardNoticeDto insert(@RequestBody BoardNoticeDto boardNoticeDto){ 
 		int sequence = boardNoticeDao.sequence(); //번호생성
-		int comapnyNo = companyDao.selectOnebyEmpNo(token에서parse한거);
+//		int comapnyNo = companyDao.selectOneByEmpNo(jwtService.parse(token));
 		
 		
 		boardNoticeDto.setNoticeNo(sequence); //번호설정
-		boardNoticeDto.setCompanyNo(comapnyNo);
+//		boardNoticeDto.setCompanyNo(comapnyNo);
 		boardNoticeDao.insert(boardNoticeDto); //등록
 		
 		return boardNoticeDao.selectOne(sequence);
