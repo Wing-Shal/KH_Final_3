@@ -21,9 +21,19 @@ public class MessageDao {
 //		return sqlSession.selectOne("message.find", sequence);
 //	}
 	
-	//조회
-	public List<MessageDto> selectList(int chatroomNo){
-		return sqlSession.selectList("message.list", chatroomNo);
+	// 조회
+	public List<MessageDto> selectList(int chatroomNo) {
+	    List<MessageDto> messageList = sqlSession.selectList("message.list", chatroomNo);
+	    
+	    // 각 메시지의 작성자 이름 설정
+	    for (MessageDto messageDto : messageList) {
+	        String senderName = sqlSession.selectOne("message.listSetName", messageDto.getMessageNo());
+	        String senderGrade = sqlSession.selectOne("message.listSetGrade", messageDto.getMessageNo());
+	        messageDto.setMessageSenderName(senderName);
+	        messageDto.setMessageSenderGrade(senderGrade);
+	    }
+	    
+	    return messageList;
 	}
 	
 }
