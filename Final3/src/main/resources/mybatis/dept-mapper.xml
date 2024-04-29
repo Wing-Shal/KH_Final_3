@@ -21,11 +21,13 @@
    </insert>
    
    <!-- Read -->
-   <select id="list" resultType="deptDto">
-      select * from dept order by dept_no asc
-   </select>
+
    <select id="find" resultType="deptDto">
       select * from dept where dept_no = #{deptNo}
+   </select>
+   
+   <select id="list" resultType="deptDto">
+      select * from dept where company_no = #{companyNo} order by dept_no asc
    </select>
    
    <!-- Update -->

@@ -13,9 +13,12 @@ public class EmpDao {
    @Autowired
    private SqlSession sqlSession;
 
-   public List<EmpDto> selectList() {
-      return sqlSession.selectList("emp.list");
-   }
+   public List<EmpDto> selectListByCompany() {
+         return sqlSession.selectList("emp.listByCompany");
+      }
+   public List<EmpDto> selectListByDept() {
+         return sqlSession.selectList("emp.listByDept");
+      }
 
    public EmpDto selectOne(int empNo) {
       return sqlSession.selectOne("emp.find", empNo);

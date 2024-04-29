@@ -28,19 +28,19 @@ public class CompanyRestController {
 	
 	@PostMapping("/login")
 	public ResponseEntity<CompanyLoginVO> login(@RequestBody CompanyDto companyDto) {
-		CompanyDto loginDto = companyDao.selectOne(companyDto.getCompanyNo());
-		if(loginDto == null) {
+		CompanyDto findDto = companyDao.selectOne(companyDto.getCompanyNo());
+		if(findDto == null) {
 			return ResponseEntity.status(404).build();
 		}
 		
-		boolean isValid = loginDto.getCompanyPw().equals(companyDto.getCompanyPw());
+		boolean isValid = findDto.getCompanyPw().equals(companyDto.getCompanyPw());
 
 		if(isValid) {
-			String accessToken = jwtService.createAccessToken(companyDto);
-			String refreshToken = jwtService.createRefreshToken(companyDto);
+			String accessToken = jwtService.createAccessToken(findDto);
+			String refreshToken = jwtService.createRefreshToken(findDto);
 			
 			return ResponseEntity.ok().body(CompanyLoginVO.builder()
-					.companyNo(loginDto.getCompanyNo())
+					.companyNo(findDto.getCompanyNo())
 					.accessToken(accessToken)
 					.refreshToken(refreshToken)
 				.build());//200
@@ -49,7 +49,6 @@ public class CompanyRestController {
 			return ResponseEntity.status(401).build();
 		}
 	}
-	@PostMapping("/refresh")
 	public ResponseEntity<CompanyLoginVO> refresh(@RequestHeader("Authorization") String refreshToken) {
 		try {
 			CompanyLoginVO loginVO = jwtService.parseCompany(refreshToken);
