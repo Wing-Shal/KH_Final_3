@@ -16,15 +16,17 @@
 	<!-- Create(등록)  -->
 	<insert id="save">
 		insert into project(
-			project_no, project_name, project_start_time , project_limit_time, company_no			
+			project_no, project_name, project_start_time , project_limit_time, company_no,
+			project_writer, emp_no			
 		)
-		values (#{projectNo}, #{projectName}, #{projectStartTime}, 
-		 #{projectLimitTime}, #{companyNo})
+values (
+    #{projectNo}, #{projectName}, #{projectStartTime}, #{projectLimitTime}, #{companyNo},
+    #{projectWriter}, #{empNo}
+)
 	</insert> 
 	
-	
-	
-	<!-- Read 조회 -->
+
+	<!--  Read 조회 -->
 	<select id="list" resultType="ProjectDto">
 		select * from project order by project_no desc
 	</select>
@@ -41,6 +43,7 @@
 			project_start_time = #{projectStartTime},
 			project_limit_time = #{projectLimitTime}
 			company_no = #{companyNo}
+			emp_no = #{empNo}
 			
 		where project_no = #{projectNo}
 	</update>
