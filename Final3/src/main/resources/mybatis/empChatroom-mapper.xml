@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="empChatroom">
+
+	<!-- 사번 별 채팅방 목록 -->
+	<select id="listByEmpNo" resultType="ChatroomDto">
+		select ec.chatroom_no, c.chatroom_name
+			from emp_chatroom ec
+				join chatroom c on ec.chatroom_no = c.chatroom_no
+			where ec.emp_no = #{empNo}
+	</select>
+	
+	
+	
+	
+	
+</mapper>

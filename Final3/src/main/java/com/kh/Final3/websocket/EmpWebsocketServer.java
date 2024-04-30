@@ -19,5 +19,9 @@ public class EmpWebsocketServer extends BinaryWebSocketHandler{
 	
 	@Autowired
 	private MessageDao messageDao;
+	
+	
+	
+	
 
 }
