@@ -13,9 +13,7 @@ import com.kh.Final3.configuration.JwtProperties;
 import com.kh.Final3.dto.AdminDto;
 import com.kh.Final3.dto.CompanyDto;
 import com.kh.Final3.dto.EmpDto;
-import com.kh.Final3.vo.AdminLoginVO;
-import com.kh.Final3.vo.CompanyLoginVO;
-import com.kh.Final3.vo.EmpLoginVO;
+import com.kh.Final3.vo.LoginVO;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -146,52 +144,21 @@ public class JwtService {
                .compact();
       return token;
    }
+ 
    
-   public AdminLoginVO parse(String token) {
-      String keyStr = jwtProperties.getKeyStr();
-      SecretKey key = Keys.hmacShaKeyFor(keyStr.getBytes(StandardCharsets.UTF_8));
-      
-      Claims claims = (Claims) Jwts.parser()
-                              .verifyWith(key)
-                              .requireIssuer(jwtProperties.getIssuer())
-                              .build()
-                              .parse(token)
-                              .getPayload();
-      return AdminLoginVO.builder()
-                  .adminId((String) claims.get("loginId"))
-                  .adminLevel((String) claims.get("운영자"))
-               .build();
-   }
-   
-   public EmpLoginVO parseEmp(String token) {
-      String keyStr = jwtProperties.getKeyStr();
-      SecretKey key = Keys.hmacShaKeyFor(keyStr.getBytes(StandardCharsets.UTF_8));
-      
-      Claims claims = (Claims) Jwts.parser()
-                              .verifyWith(key)
-                              .requireIssuer(jwtProperties.getIssuer())
-                              .build()
-                              .parse(token)
-                              .getPayload();
-      return EmpLoginVO.builder()
-                  .empNo((Integer) claims.get("loginId"))
-                  .empType((String) claims.get("loginLevel"))
-               .build();
-   }
-   
-   public CompanyLoginVO parseCompany(String token) {
-      String keyStr = jwtProperties.getKeyStr();
-      SecretKey key = Keys.hmacShaKeyFor(keyStr.getBytes(StandardCharsets.UTF_8));
-      
-      Claims claims = (Claims) Jwts.parser()
-                              .verifyWith(key)
-                              .requireIssuer(jwtProperties.getIssuer())
-                              .build()
-                              .parse(token)
-                              .getPayload();
-      return CompanyLoginVO.builder()
-                  .companyNo((Integer) claims.get("loginId"))
-                  .companyLevel((String) claims.get("loginLevel"))
-               .build();
-   }
+   public LoginVO parse(String token) {
+	      String keyStr = jwtProperties.getKeyStr();
+	      SecretKey key = Keys.hmacShaKeyFor(keyStr.getBytes(StandardCharsets.UTF_8));
+	      
+	      Claims claims = (Claims) Jwts.parser()
+	                              .verifyWith(key)
+	                              .requireIssuer(jwtProperties.getIssuer())
+	                              .build()
+	                              .parse(token)
+	                              .getPayload();
+	      return LoginVO.builder()
+	    		  		.loginId((Integer) claims.get("loginId"))
+	    		  		.loginLevel((String) claims.get("loginLevel"))
+	    		  	.build();
+	   }
 }

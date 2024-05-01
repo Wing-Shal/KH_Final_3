@@ -12,7 +12,7 @@ public class AdminDao {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	public AdminDto selectOne(String adminId) {
+	public AdminDto selectOne(int adminId) {
 		return sqlSession.selectOne("admin.find", adminId);
 	}
 }
