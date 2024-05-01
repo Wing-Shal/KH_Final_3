@@ -49,6 +49,7 @@ public class CompanyRestController {
 			return ResponseEntity.status(401).build();
 		}
 	}
+	@PostMapping("/refresh")
 	public ResponseEntity<CompanyLoginVO> refresh(@RequestHeader("Authorization") String refreshToken) {
 		try {
 			CompanyLoginVO loginVO = jwtService.parseCompany(refreshToken);

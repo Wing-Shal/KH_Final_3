@@ -3,6 +3,7 @@ package com.kh.Final3.restcontroller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.Final3.dao.AdminDao;
 import com.kh.Final3.dto.AdminDto;
+import com.kh.Final3.dto.CompanyDto;
 import com.kh.Final3.service.JwtService;
 import com.kh.Final3.vo.AdminLoginVO;
 
@@ -41,6 +43,7 @@ public class AdminRestController {
          
          return ResponseEntity.ok().body(AdminLoginVO.builder()
                .adminId(findDto.getAdminId())
+               .adminLevel("운영자")
                .accessToken(accessToken)
                .refreshToken(refreshToken)
             .build());//200
@@ -49,7 +52,7 @@ public class AdminRestController {
          return ResponseEntity.status(401).build();
       }
    }
-   //@PostMapping("/refresh")
+   @PostMapping("/refresh")
    public ResponseEntity<AdminLoginVO> refresh(@RequestHeader("Authorization") String refreshToken) {
       try {
          AdminLoginVO loginVO = jwtService.parse(refreshToken);
@@ -62,6 +65,7 @@ public class AdminRestController {
          
          return ResponseEntity.ok().body(AdminLoginVO.builder()
                .adminId(adminDto.getAdminId())
+               .adminLevel("운영자")
                .accessToken(accessToken)
                .refreshToken(newRefreshToken)
             .build());

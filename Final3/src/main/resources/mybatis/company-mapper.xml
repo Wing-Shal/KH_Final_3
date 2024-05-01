@@ -29,6 +29,7 @@
    <select id="find" resultType="companyDto">
       select * from company where company_no = #{companyNo}
    </select>
+
    
    <!-- Update -->
    <update id="editAll">
@@ -42,6 +43,7 @@
          company_zipcode = #{companyZipcode},
          company_address1 = #{companyAddress1},
          company_address2 = #{companyAddress2},
+         company_checked = #{companyChecked},
       where company_no = #{companyNo}
    </update>
    
@@ -55,7 +57,8 @@
          <if test="companyEmail != null">company_email = #{companyEmail},</if>
          <if test="companyZipcode != null">company_zipcode = #{companyZipcode},</if>
          <if test="companyAddress1 != null">company_address1 = #{companyAddress1},</if>
-         <if test="companyAddress2 != null">company_address2 = #{companyAddress2}</if>
+         <if test="companyAddress2 != null">company_address2 = #{companyAddress2},</if>
+         <if test="companyChecked != null">company_checked = #{companyChecked}</if>
       </set>
       where company_no = #{companyNo}
    </update>

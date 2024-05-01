@@ -1,5 +1,7 @@
 package com.kh.Final3.dto;
 
+import java.sql.Timestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,4 +20,5 @@ public class CompanyDto {
 	private String companyZipcode;//우편번호
 	private String companyAddress1;//주소1
 	private String companyAddress2;//주소2
+	private Timestamp companyChecked;//인증 시각
 }
