@@ -22,11 +22,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kh.Final3.dao.ChatroomDao;
 import com.kh.Final3.dao.MessageDao;
 import com.kh.Final3.dto.ChatroomDto;
-import com.kh.Final3.dto.EmpChatroomDto;
 import com.kh.Final3.dto.MessageDto;
 import com.kh.Final3.service.JwtService;
 import com.kh.Final3.vo.ChatRequestVO;
-import com.kh.Final3.vo.EmpLoginVO;
 
 @Service
 public class EmpWebsocketServer extends TextWebSocketHandler {
@@ -51,10 +49,7 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
 	private Map<String, ChatroomDto> chatrooms = Collections.synchronizedMap(new HashMap<>());
 	private Set<WebSocketSession> users = new CopyOnWriteArraySet<>();//동기화 됨(자물쇠 있음)
 	
-	
-//	Integer loginEmpNo = empLoginVO.getEmpNo();
-	
-	
+
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -62,24 +57,13 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
         // WebSocket 세션에서 채팅방 번호를 추출
         String chatroomNo = (String) session.getAttributes().get("chatroomNo");
         
-       
+        
+        
+//       Integer empNo = jwtService.parse(token);
         
         if (chatroomNo != null) {
             ChatroomDto chatroomDto = chatrooms.get(chatroomNo);
-            List<EmpChatroomDto> empNoInRoom = sqlSession.selectList("empChatroom.listByRoomNo", chatroomNo);
             
-            //속해있지 않다면 차단 ..?
-//            boolean isContain = false;
-//            for (EmpChatroomDto empChatroom : empNoInRoom) {
-//                if (empChatroom.getEmpNo() == loginEmpNo) {
-//                    isContain = true;
-//                    break;
-//                }
-//            }
-//
-//            if (!isContain) {
-//                return;
-//            }
             
             if (chatroomDto != null) {
                 List<MessageDto> list = messageDao.selectList(chatroomDto.getChatroomNo());
@@ -108,9 +92,9 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
 		    ObjectMapper mapper = new ObjectMapper();
 		    ChatRequestVO requestVO = mapper.readValue(message.getPayload(), ChatRequestVO.class);
 		    String token = requestVO.getToken();
-		    Integer empNo = jwtService.parseEmp(token).getEmpNo();
+		    Integer empNo = jwtService.parse(token).getLoginId();
 		    
-            List<EmpChatroomDto> empNoInRoom = sqlSession.selectList("empChatroom.listByRoomNo", requestVO.getChatroomNo());
+//            List<EmpChatroomDto> empNoInRoom = sqlSession.selectList("empChatroom.listByRoomNo", requestVO.getChatroomNo());
             
             //속해있지 않다면 차단 ..?
 //            boolean isContain = false;
