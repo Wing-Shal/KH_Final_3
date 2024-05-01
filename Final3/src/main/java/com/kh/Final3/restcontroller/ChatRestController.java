@@ -13,6 +13,7 @@ import com.kh.Final3.dao.ChatroomDao;
 import com.kh.Final3.dao.MessageDao;
 import com.kh.Final3.dto.ChatroomDto;
 import com.kh.Final3.dto.MessageDto;
+import com.kh.Final3.vo.ChatDataVO;
 
 @CrossOrigin
 @RestController
@@ -32,10 +33,31 @@ public class ChatRestController {
 		return messageDao.selectList(chatroomNo);
 	}
 	
+	@GetMapping("/{chatroomNo}/page/{page}/size/{size}")
+	public ChatDataVO list(@PathVariable int chatroomNo, @PathVariable int page, @PathVariable int size) {
+	    //역방향으로 페이지를 계산하여 데이터 조회
+	    int count = messageDao.count();
+	    int startRow = count - (page - 1) * size;
+	    int endRow = Math.max(0, startRow - size); //음수가 되지 않도록
+
+	    List<MessageDto> list = messageDao.selectListByPaging(chatroomNo, endRow, startRow - endRow);
+
+	    //마지막 페이지 여부 계산
+	    boolean last = endRow <= 0;
+
+	    return ChatDataVO.builder()
+	                .list(list)
+	                .count(count)
+	                .last(last)
+	            .build();
+	}
+	
 	@GetMapping("/list/{empNo}")
 	public List<ChatroomDto> chatroomList(@PathVariable("empNo") int empNo) {
 	    return chatroomDao.selectList(empNo);
 	}
+	
+
 
 
 	

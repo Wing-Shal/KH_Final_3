@@ -39,8 +39,6 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
 	@Autowired
 	private JwtService jwtService;
 	
-//	@Autowired
-//	private EmpLoginVO empLoginVO;
 	
 	@Autowired
 	private SqlSession sqlSession;
@@ -59,7 +57,6 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
         
         
         
-//       Integer empNo = jwtService.parse(token);
         
         if (chatroomNo != null) {
             ChatroomDto chatroomDto = chatrooms.get(chatroomNo);
@@ -94,20 +91,7 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
 		    String token = requestVO.getToken();
 		    Integer empNo = jwtService.parse(token).getLoginId();
 		    
-//            List<EmpChatroomDto> empNoInRoom = sqlSession.selectList("empChatroom.listByRoomNo", requestVO.getChatroomNo());
-            
-            //속해있지 않다면 차단 ..?
-//            boolean isContain = false;
-//            for (EmpChatroomDto empChatroom : empNoInRoom) {
-//                if (empChatroom.getEmpNo() == loginEmpNo) {
-//                    isContain = true;
-//                    break;
-//                }
-//            }
-//
-//            if (!isContain) {
-//                return;
-//            }
+
 		    
 		    //(+추가) 이 시점에 DB에 메세지를 등록하도록 코드 추가
 		    MessageDto messageDto = messageDao.insert(MessageDto.builder()
@@ -124,8 +108,8 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
 		    String json = mapper.writeValueAsString(messageDto);
 		    TextMessage response = new TextMessage(json);
 		    
-//		    System.out.println("보내는사람 = " + empNo);
-		   
+//	    System.out.println("보내는사람 = " + empNo);
+//		users.forEach(System.out::println);
 		    
 		for(WebSocketSession user : users) {
 			user.sendMessage(response);

@@ -35,6 +35,29 @@
 		select * from message where chatroom_no = #{chatroomNo} order by message_no asc
 	</select>
 	
+	<!-- 무한스크롤 목록 -->
+	<select id="listByPaging" resultType="MessageDto">
+	    <include refid="top-n-header"></include>
+	        select * from message where chatroom_no = #{chatroomNo} order by message_no desc
+	    <include refid="top-n-footer"></include>
+	</select>
+	
+	<!-- 상단 -->
+	<sql id="top-n-header">
+	    <if test="startRow != null and endRow != null">
+	        select * from (
+	        select rownum rn, TMP.* from (
+	    </if>
+	</sql>
+	
+	<!-- 하단 -->
+	<sql id="top-n-footer">
+	    <if test="startRow != null and endRow != null">
+	        ) TMP
+	        ) where rn between #{startRow} and #{endRow}
+	    </if>
+	</sql>
+	
 
 	
 	<!-- 이름찾기 -->
