@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class MessageDto {
 	private int messageNo;
-	private String messageSender;
+	private int messageSender;
 	private String messageContent;
 	private Date messageTime;
 	private int chatroomNo;
-	private int messageReply;
+//	private Integer messageReply;
 	
 	private String messageSenderName;
 	private String messageSenderGrade;

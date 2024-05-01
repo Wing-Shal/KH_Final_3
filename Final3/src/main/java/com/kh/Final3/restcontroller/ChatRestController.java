@@ -1,7 +1,6 @@
 package com.kh.Final3.restcontroller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,6 +24,7 @@ public class ChatRestController {
 	
 	@Autowired
 	private ChatroomDao chatroomDao;
+	
 	
 	
 	@GetMapping("/{chatroomNo}")

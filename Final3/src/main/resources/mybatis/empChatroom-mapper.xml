@@ -14,6 +14,11 @@
 			where ec.emp_no = #{empNo}
 	</select>
 	
+	<!-- 채팅방에 누구누구 있는지 조회 -->
+	<select id="listByRoomNo" resultType="empChatroomDto">
+		select emp_no from emp_chatroom where chatroom_no = #{chatroomNo}
+	</select>
+	
 	
 	
 	

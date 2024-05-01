@@ -14,7 +14,7 @@ public class ChatResponseVO {
 	private String messageSender; //전송한 사람
 	private int chatroomNo; //채팅방 번호
 	
-	private Integer messageReply; //답글번호 // 생각해보니 null일수도 있어서 인티저로 했음
+//	private Integer messageReply; //답글번호 // 생각해보니 null일수도 있어서 인티저로 했음
 	
 	
 }
