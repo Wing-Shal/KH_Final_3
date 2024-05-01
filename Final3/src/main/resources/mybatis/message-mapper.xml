@@ -11,6 +11,7 @@
 	</select>
 	
 	<!-- 등록 -->
+<!--  	
 	<insert id="save">
 		insert into message(
 			message_no, message_sender, message_content, message_time, chatroom_no, message_reply
@@ -19,11 +20,22 @@
 			#{messageNo}, #{messageSender}, #{messageContent}, sysdate, #{chatroomNo}, #{messageReply}
 		)
 	</insert>
+-->
+	<insert id="save">
+		insert into message(
+			message_no, message_sender, message_content, message_time, chatroom_no
+		)
+		values(
+			#{messageNo}, #{messageSender}, #{messageContent}, sysdate, #{chatroomNo}
+		)
+	</insert>
 	
 	<!-- 목록 -->
 	<select id="list" resultType="MessageDto">
 		select * from message where chatroom_no = #{chatroomNo} order by message_no asc
 	</select>
+	
+
 	
 	<!-- 이름찾기 -->
 	<select id="listSetName" resultType="string">
