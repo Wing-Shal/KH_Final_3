@@ -1,6 +1,8 @@
 package com.kh.Final3.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,30 @@ public class MessageDao {
 	    }
 	    
 	    return messageList;
+	}
+	
+	// 무한스크롤 조회
+	public List<MessageDto> selectListByPaging(int chatroomNo, int endRow, int startRow) {
+	    Map<String, Object> data = new HashMap<>();
+	    data.put("chatroomNo", chatroomNo);
+	    data.put("startRow", startRow);
+	    data.put("endRow", endRow);
+	    
+	    List<MessageDto> messageList = sqlSession.selectList("message.listByPaging", data);
+	    
+	    // 각 메시지의 작성자 이름 설정
+	    for (MessageDto messageDto : messageList) {
+	        String senderName = sqlSession.selectOne("message.listSetName", messageDto.getMessageNo());
+	        String senderGrade = sqlSession.selectOne("message.listSetGrade", messageDto.getMessageNo());
+	        messageDto.setMessageSenderName(senderName);
+	        messageDto.setMessageSenderGrade(senderGrade);
+	    }
+	    
+	    return messageList;
+	}
+	
+	public int count() {
+		return sqlSession.selectOne("message.count");
 	}
 	
 	
