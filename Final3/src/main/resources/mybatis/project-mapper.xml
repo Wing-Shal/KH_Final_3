@@ -13,6 +13,8 @@
 	<select id="sequence" resultType="int">
 		select notice_seq.nextval from dual
 	</select>
+	
+	
 	<!-- Create(등록)  -->
 	<insert id="save">
 		insert into project(

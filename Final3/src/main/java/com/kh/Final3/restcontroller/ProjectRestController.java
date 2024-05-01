@@ -11,16 +11,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.Final3.dao.EmpDao;
 import com.kh.Final3.dao.ProjectDao;
+import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.dto.ProjectDto;
 import com.kh.Final3.service.JwtService;
 import com.kh.Final3.vo.ProjectDataVO;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -36,6 +38,8 @@ public class ProjectRestController {
 	private ProjectDao projectDao;
 	@Autowired
     private JwtService jwtService;
+	@Autowired
+	private EmpDao empDao;
 	
 	// 문서용 설정 추가
 	@Operation(description = "문서 목록 조회", responses = {
@@ -104,10 +108,19 @@ public class ProjectRestController {
 	@PostMapping("/")
 	public ResponseEntity<ProjectDto> insert(
 			//@Parameter(description = "생성할 학생 정보에 대한 입력값", required = true, schema = @Schema(implementation = ProjectDto.class))
-			@RequestBody ProjectDto projectDto) {
-		int sequence = projectDao.sequence();
-		projectDto.setProjectNo(sequence);
-		projectDao.insert(projectDto);
+			@RequestBody ProjectDto projectDto, @RequestHeader("Authorization") String token) {
+			 //String documentWriter = jwtService.parse(token).getEmpNo();
+			 Integer empNo = jwtService.parseEmp(token).getEmpNo();
+			 //String empName = empDao.getEmpName(empNo); 
+			 
+			 int sequence = projectDao.sequence();
+			 
+			 projectDto.setProjectNo(sequence);
+			 projectDto.setEmpNo(empNo);
+			// projectDto.setEmpName(empName);
+			 
+			 projectDao.insert(projectDto);
+				
 		return ResponseEntity.ok().body(projectDao.selectOne(sequence));
 	}
 	// 전체 수정

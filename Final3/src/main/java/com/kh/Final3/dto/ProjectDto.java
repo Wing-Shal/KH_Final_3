@@ -20,5 +20,7 @@ public class ProjectDto {
 	private int companyNo; //회사번호
 	private String projectWriter; //프로젝트 작성자
 	private int empNo;
+	private String token;
+	//private String empName;
 
 }
