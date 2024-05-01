@@ -7,11 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -65,26 +64,12 @@ public class ProjectRestController {
 				.last(last)// 마지막 여부
 				.build();
 	}
-
-	// 프로젝트 상세 조회
-	@Operation(description = "프로젝트 상세 조회", responses = {
-			@ApiResponse(responseCode = "200", description = "조회 성공", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = ProjectDto.class)) }),
-			@ApiResponse(responseCode = "404", description = "해당 프로젝트 데이터가 없음", content = @Content(mediaType = "text/plain", schema = @Schema(implementation = String.class), examples = @ExampleObject("not found"))),
-			@ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(mediaType = "text/plain", schema = @Schema(implementation = String.class), examples = @ExampleObject("server error"))) })
-
-	@GetMapping("/{documentNo}")
-	public ResponseEntity<ProjectDto> find(@PathVariable int projectNo) {
-		ProjectDto projectDto = projectDao.selectOne(projectNo);
-		if (projectDto == null) {
-			// return ResponseEntity.notFound().build();
-			return ResponseEntity.status(404).build();
-		}
-		// return ResponseEntity.ok(empDto);
-		return ResponseEntity.status(200).body(projectDto);
+	
+	@GetMapping("/{empNo}")
+	public List<ProjectDto> myList(@PathVariable int empNo) {
+		return projectDao.myList(empNo);
 	}
 
-	// 등록
 	
 	//등록
 		@Operation(
@@ -108,32 +93,80 @@ public class ProjectRestController {
 	@PostMapping("/")
 	public ResponseEntity<ProjectDto> insert(
 			//@Parameter(description = "생성할 학생 정보에 대한 입력값", required = true, schema = @Schema(implementation = ProjectDto.class))
-			@RequestBody ProjectDto projectDto, @RequestHeader("Authorization") String token) {
-			 //String documentWriter = jwtService.parse(token).getEmpNo();
-			 Integer empNo = jwtService.parseEmp(token).getEmpNo();
-			 //String empName = empDao.getEmpName(empNo); 
-			 
+			@RequestBody ProjectDto projectDto) {
+			 System.out.println(projectDto);
+			 EmpDto empDto = empDao.selectOne(projectDto.getEmpNo());
 			 int sequence = projectDao.sequence();
-			 
 			 projectDto.setProjectNo(sequence);
-			 projectDto.setEmpNo(empNo);
-			// projectDto.setEmpName(empName);
+			 projectDto.setProjectWriter(empDto.getEmpName());
+			 projectDto.setCompanyNo(empDto.getCompanyNo());
 			 
 			 projectDao.insert(projectDto);
 				
 		return ResponseEntity.ok().body(projectDao.selectOne(sequence));
 	}
-	// 전체 수정
-	@PutMapping("/")
-	public ResponseEntity<?> editAll(@RequestBody ProjectDto projectDto) {
-		boolean result = projectDao.editAll(projectDto);
-		if (result == false) {
-			// return ResponseEntity.notFound().build();
-			return ResponseEntity.status(404).build();
+	// 수정
+		@Operation(
+				description = "프로젝트 정보 변경",
+				responses = {
+					@ApiResponse(responseCode = "200",description = "변경 완료",
+						content = @Content(
+							mediaType = "application/json",
+							schema = @Schema(implementation = ProjectDto.class)
+						)
+					),
+					@ApiResponse(responseCode = "404",description = "프로젝트 정보 없음",
+						content = @Content(
+								mediaType = "text/plain",
+								schema = @Schema(implementation = String.class), 
+								examples = @ExampleObject("not found")
+						)
+					),
+					@ApiResponse(responseCode = "500",description = "서버 오류",
+						content = @Content(
+								mediaType = "text/plain",
+								schema = @Schema(implementation = String.class), 
+								examples = @ExampleObject("server error")
+						)
+					),
+				}
+			)
+		//수정
+	@PatchMapping("/")
+	public ResponseEntity<ProjectDto> edit(@RequestBody ProjectDto projectDto) {
+		boolean result = projectDao.edit(projectDto);
+		if (result == false) 
+			return ResponseEntity.notFound().build();
+		return ResponseEntity.ok().body(projectDao.selectOne(projectDto.getProjectNo()));
 		}
-		return ResponseEntity.ok().build();
-	}
-
+	//삭제
+		@Operation(
+			description = "학생 정보 삭제",
+			responses = {
+				@ApiResponse(responseCode = "200",description = "삭제 완료",
+					content = @Content(
+							mediaType = "text/plain",
+							schema = @Schema(implementation = String.class),
+							examples = @ExampleObject("ok")
+					)
+				),
+				@ApiResponse(responseCode = "404",description = "학생 정보 없음",
+					content = @Content(
+							mediaType = "text/plain",
+							schema = @Schema(implementation = String.class), 
+							examples = @ExampleObject("not found")
+					)
+				),
+				@ApiResponse(responseCode = "500",description = "서버 오류",
+					content = @Content(
+							mediaType = "text/plain",
+							schema = @Schema(implementation = String.class), 
+							examples = @ExampleObject("server error")
+					)
+				),
+			}
+		)
+		
 	// 삭제
 	@DeleteMapping("/{projectNo}")
 	public ResponseEntity<?> delete(@PathVariable int projectNo) {
