@@ -7,14 +7,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.Final3.dto.CompanyDto;
+import com.kh.Final3.vo.CompanySearchVO;
 
 @Repository
 public class CompanyDao {
    @Autowired
    private SqlSession sqlSession;
 
-   public List<CompanyDto> selectList() {
-      return sqlSession.selectList("company.list");
+   public List<CompanyDto> list() {
+	   return sqlSession.selectList("company.list");
+   }
+   
+   public List<CompanyDto> selectList(CompanySearchVO companySearchVO) {
+      return sqlSession.selectList("company.listOrSearch", companySearchVO);
    }
 
    public CompanyDto selectOne(int companyNo) {
