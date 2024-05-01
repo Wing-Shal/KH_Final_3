@@ -39,6 +39,9 @@ public class CompanyDao {
    public boolean editUnit(CompanyDto companyDto) {
       return sqlSession.update("company.editUnit", companyDto) > 0;
    }
+   public boolean approveCompany(int companyNo) {
+	   return sqlSession.update("company.approveCompany", companyNo) > 0;
+   }
 
    public boolean delete(int companyNo) {
       return sqlSession.delete("company.delete", companyNo) > 0;
