@@ -32,9 +32,10 @@ public class ProjectDao {
 		Map<String, Object> data = new HashMap<>();
 		data.put("beginRow", beginRow);
 		data.put("endRow", endRow);
-		return sqlSession.selectList("project.listByPaging", data);
-	
-		
+		return sqlSession.selectList("project.listByPaging", data);		
+	}
+	public List<ProjectDto> myList(int empNo) {
+		return sqlSession.selectList("project.myList", empNo);
 	}
 	
 	public int count() {
@@ -52,13 +53,13 @@ public class ProjectDao {
 	}
 	
 	//등록
-	public void insert(ProjectDto ProjectDto) {
-		sqlSession.insert("project.save", ProjectDto);
+	public void insert(ProjectDto projectDto) {
+		sqlSession.insert("project.save", projectDto);
 	}
 
 	//전체수정
-	public boolean editAll(ProjectDto ProjectDto) {
-		return sqlSession.update("project.editAll", ProjectDto) > 0;
+	public boolean edit(ProjectDto projectDto) {
+		return sqlSession.update("project.edit", projectDto) > 0;
 	}
 	
 	

@@ -37,22 +37,24 @@ values (
 		select * from project where project_no = #{projectNo}
 	</select>
 	
+	<select id="myList" resultType="ProjectDto">
+		select * from project where emp_no = #{empNo}
+	</select>
+	
 	<!-- update 전체수정-->
-		<update id="editAll">
+		<update id="edit">
 		update project
-		set 
-			project_name = #{projectName},
-			project_start_time = #{projectStartTime},
-			project_limit_time = #{projectLimitTime}
-			company_no = #{companyNo}
-			emp_no = #{empNo}
-			
+		<set>
+			<if test="projectName != null">project_name = #{projectName},</if>
+			<if test="projectStartTime != null">project_start_time = #{projectStartTime},</if>
+			<if test="projectLimitTime != null">project_limit_time = #{projectLimitTime},</if>
+			</set> 
 		where project_no = #{projectNo}
 	</update>
 	
 	<!-- Delete  -->
 	<delete id="delete">
-		delete project where documetn_no = #{projectNo}
+		delete project where project_no = #{projectNo}
 	</delete>
 
 
