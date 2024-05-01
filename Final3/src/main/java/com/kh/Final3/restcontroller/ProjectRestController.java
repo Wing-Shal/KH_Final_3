@@ -11,17 +11,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.Final3.dao.ProjectDao;
-import com.kh.Final3.dto.DocumentDto;
 import com.kh.Final3.dto.ProjectDto;
 import com.kh.Final3.service.JwtService;
 import com.kh.Final3.vo.ProjectDataVO;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -82,18 +81,35 @@ public class ProjectRestController {
 	}
 
 	// 등록
+	
+	//등록
+		@Operation(
+			description = "프로젝트 등록",
+			responses = {
+				@ApiResponse(responseCode = "200",description = "프로젝트 등록 완료",
+					content = @Content(
+						mediaType = "application/json",
+						schema = @Schema(implementation = ProjectDto.class)
+					)
+				),
+				@ApiResponse(responseCode = "500",description = "서버 오류",
+					content = @Content(
+							mediaType = "text/plain",
+							schema = @Schema(implementation = String.class), 
+							examples = @ExampleObject("server error")
+					)
+				),
+			}
+		)
 	@PostMapping("/")
-	public ProjectDto save(@RequestBody ProjectDto projectDto, @RequestHeader("Authorization") String token) {
-		  // 토큰 파싱하여 작성자 이름 가져오기
-        String projectWriter = jwtService.parse(token).getAdminId();
-		int sequence = projectDao.sequence();// 번호생성
-
-		
-		projectDto.setProjectNo(sequence);// 번호설정
-		projectDao.insert(projectDto);// 등록
-		return projectDao.selectOne(sequence);// 등록된 결과를 조회하여 반환
+	public ResponseEntity<ProjectDto> insert(
+			//@Parameter(description = "생성할 학생 정보에 대한 입력값", required = true, schema = @Schema(implementation = ProjectDto.class))
+			@RequestBody ProjectDto projectDto) {
+		int sequence = projectDao.sequence();
+		projectDto.setProjectNo(sequence);
+		projectDao.insert(projectDto);
+		return ResponseEntity.ok().body(projectDao.selectOne(sequence));
 	}
-
 	// 전체 수정
 	@PutMapping("/")
 	public ResponseEntity<?> editAll(@RequestBody ProjectDto projectDto) {

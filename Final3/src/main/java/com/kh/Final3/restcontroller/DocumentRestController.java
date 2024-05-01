@@ -89,14 +89,14 @@ public class DocumentRestController {
 
 	// 문서 등록
 	@PostMapping("/")
-	public DocumentDto save(@RequestBody DocumentDto documentDto, @RequestHeader("Authorization") String token) {
+	public DocumentDto save(@RequestBody DocumentDto documentDto) {//, @RequestHeader("Authorization") String token
 		  // 토큰 파싱하여 작성자 이름 가져오기
-		String documentWriter = jwtService.parse(token).getAdminId();
+		//String documentWriter = jwtService.parse(token).getAdminId();
         
 		int sequence = documentDao.sequence();// 번호생성
 
 		documentDto.setDocumentNo(sequence);// 번호설정
-		documentDto.setDocumentWriter(documentWriter); //문서작성자 설정
+		//documentDto.setDocumentWriter(documentWriter); //문서작성자 설정
 		
 		documentDao.insert(documentDto);// 등록
 		return documentDao.selectOne(sequence);// 등록된 결과를 조회하여 반환
