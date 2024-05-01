@@ -6,9 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data@Builder@NoArgsConstructor@AllArgsConstructor
-public class AdminLoginVO {
-	private String adminId;
-	private String adminLevel;
+public class LoginVO {
+	private Integer loginId;
+	private String loginLevel;
 	private String accessToken;
 	private String refreshToken;
 }

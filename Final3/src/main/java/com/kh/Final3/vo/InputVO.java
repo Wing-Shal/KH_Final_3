@@ -1,4 +1,4 @@
-package com.kh.Final3.dto;
+package com.kh.Final3.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data@Builder@NoArgsConstructor@AllArgsConstructor
-public class AdminDto {
-	private int adminId;
-	private String adminPw;
+public class InputVO {
+	private String id;
+	private String pw;
 }
