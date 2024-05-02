@@ -42,6 +42,7 @@
 	    <include refid="top-n-footer"></include>
 	</select>
 	
+	
 	<!-- 메시지 총 개수 조회 -->
 	<select id="count" resultType="int">
 	    select count(*) from message where chatroom_no = #{chatroomNo}
