@@ -35,22 +35,24 @@ public class ChatRestController {
 	
 	@GetMapping("/{chatroomNo}/page/{page}/size/{size}")
 	public ChatDataVO list(@PathVariable int chatroomNo, @PathVariable int page, @PathVariable int size) {
-	    //역방향으로 페이지를 계산하여 데이터 조회
-	    int count = messageDao.count();
-	    int startRow = count - (page - 1) * size;
-	    int endRow = Math.max(0, startRow - size); //음수가 되지 않도록
+	    // 역방향으로 페이지를 계산하여 데이터 조회
+	    int count = messageDao.count(chatroomNo);
+	    int endRow = count - (page - 1) * size;
+	    int startRow = Math.max(0, endRow - size); // 시작 행 계산 수정
 
-	    List<MessageDto> list = messageDao.selectListByPaging(chatroomNo, endRow, startRow - endRow);
+	    // 메시지 목록 조회
+	    List<MessageDto> list = messageDao.selectListByPaging(chatroomNo, startRow, endRow);
 
-	    //마지막 페이지 여부 계산
+	    // 마지막 페이지 여부 계산
 	    boolean last = endRow <= 0;
 
 	    return ChatDataVO.builder()
-	                .list(list)
-	                .count(count)
-	                .last(last)
-	            .build();
+	                     .list(list)
+	                     .count(count)
+	                     .last(last)
+	                     .build();
 	}
+	
 	
 	@GetMapping("/list/{empNo}")
 	public List<ChatroomDto> chatroomList(@PathVariable("empNo") int empNo) {

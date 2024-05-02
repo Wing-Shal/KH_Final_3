@@ -39,7 +39,7 @@ public class MessageDao {
 	}
 	
 	// 무한스크롤 조회
-	public List<MessageDto> selectListByPaging(int chatroomNo, int endRow, int startRow) {
+	public List<MessageDto> selectListByPaging(int chatroomNo, int startRow, int endRow) {
 	    Map<String, Object> data = new HashMap<>();
 	    data.put("chatroomNo", chatroomNo);
 	    data.put("startRow", startRow);
@@ -57,9 +57,10 @@ public class MessageDao {
 	    
 	    return messageList;
 	}
-	
-	public int count() {
-		return sqlSession.selectOne("message.count");
+
+	// 메시지 총 개수 조회
+	public int count(int chatroomNo) {
+	    return sqlSession.selectOne("message.count", chatroomNo);
 	}
 	
 	
