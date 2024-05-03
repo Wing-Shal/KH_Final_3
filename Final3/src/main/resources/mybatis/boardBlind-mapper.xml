@@ -1,48 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
     
+    
+    
 <mapper namespace="boardBlind">
-	
-	<!-- Create -->
+
+	<!-- 시퀀스 생성 -->
 	<select id="sequence" resultType="int">
-		select blind_seq.nextval from dual
+		select notice_seq.nextval from dual
 	</select>
+	
+	
+	<!-- Create(등록)  -->
 	<insert id="save">
 		insert into board_blind(
-			blind_no, blind_title, blind_content, blind_writer_nick, 
-			blind_writer_company, blind_wtime, blind_etime, blind_view
+			blind_no, blind_title, blind_content, blind_writer_nick, blind_writer_company,
+			blind_wtime, blind_etime, blind_view, blind_password, blind_emp_no, company_no	
 		)
-		values(
-			#{blindNo}, #{blindTitle}, #{blindContent}, #{blindWriterNick}, 
-			#{blindWriterCompany}, #{blindWtime}, #{blindEtime}, #{blindView}
-		)
-	</insert>
+values (
+    #{blindNo}, #{blindTitle}, #{blindContent}, #{blindWriterNick}, #{blindWriterCompany},
+    #{blindWtime}, #{blindEtime}, #{blindView}, #{blindPassword}, #{blindEmpNo},#{companyNo}
+)
+	</insert> 
 	
-	<!-- Read -->
+
+	<!--  Read 조회 -->
 	<select id="list" resultType="BoardBlindDto">
-		select * from board_blind order by blind_no asc
+		select * from board_blind order by blind_no desc
 	</select>
+	
 	<select id="find" resultType="BoardBlindDto">
 		select * from board_blind where blind_no = #{blindNo}
 	</select>
 	
-	<!-- Update -->
-	<update id="editAll">
+	<!-- update 전체수정-->
+		<update id="edit">
 		update board_blind
-		set 
-			blind_title = #{blindTitle},
-			blind_content = #{blindContent},
-			blind_writer_nick = #{blindWriterNick},
-			blind_etime = #{blindEtime}
-		where blind_no = #{blindNo}
+		<set>
+			<if test="blindTitle != null">blind_title = #{blindTitle},</if>
+			<if test="blindContent != null">blind_content = #{blindContent},</if>
+			<if test="blindEtime != null">blind_etime = #{blindEtime},</if>
+			</set> 
+		where board_blind_no = #{blindNo}
 	</update>
 	
-	<!-- Delete -->
+	<!-- Delete  -->
 	<delete id="delete">
 		delete board_blind where blind_no = #{blindNo}
 	</delete>
-		
+
+
 </mapper>
