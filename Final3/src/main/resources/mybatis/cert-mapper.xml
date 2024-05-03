@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="cert">
+   
+   <!-- Create -->
+   <insert id="save">
+      insert into cert(
+         cert_email, cert_number
+      )
+      values(
+         #{certEmail}, #{certNumber}
+      )
+   </insert>
+   
+   <!-- Read -->
+   <select id="find" resultType="certDto">
+     select * from cert where cert_email = #{certEmail}
+   </select>
+
+   
+   <select id="checkValid" resultType="certDto">
+   		select * from cert where cert_email = #{certEmail} 
+   		and cert_number = #{certNumber} 
+   		and cert_time &gt;= sysdate-5/24/60
+   </select>
+ 
+   
+   <!-- Delete -->
+   <delete id="delete">
+      delete cert where cert_email = #{certEmail}
+   </delete>
+   
+   <delete id="deleteLegacy">
+   		delete cert where cert_time &lt; sysdate-5/24/60
+   </delete>
+      
+</mapper>
