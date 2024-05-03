@@ -19,11 +19,11 @@
 	<insert id="save">
 		insert into board_blind(
 			blind_no, blind_title, blind_content, blind_writer_nick, blind_writer_company,
-			blind_wtime, blind_etime, blind_view, blind_password, blind_emp_no, company_no	
+			blind_wtime, blind_etime, blind_view, blind_password, blind_emp_no, company_no, company_name	
 		)
 values (
     #{blindNo}, #{blindTitle}, #{blindContent}, #{blindWriterNick}, #{blindWriterCompany},
-    #{blindWtime}, #{blindEtime}, #{blindView}, #{blindPassword}, #{blindEmpNo},#{companyNo}
+    #{blindWtime}, #{blindEtime}, #{blindView}, #{blindPassword}, #{blindEmpNo},#{companyNo}, #{companyName}
 )
 	</insert> 
 	

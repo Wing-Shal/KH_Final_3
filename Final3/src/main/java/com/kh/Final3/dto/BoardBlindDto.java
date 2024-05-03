@@ -25,7 +25,9 @@ public class BoardBlindDto {
 	private Date blindEtime; //게시글 수정시각
 	private int blindView; //게시글 조회수
 	private String blindPassword; //게시글비밀번호
-	private int blindEmpNo;//테이블에도 참조하는 사원번호를 추가해야할 것 같은데?
-	private int companyNo; 
+	private int blindEmpNo;
+	private int companyNo;
+	private String companyName;
+	
 }
 

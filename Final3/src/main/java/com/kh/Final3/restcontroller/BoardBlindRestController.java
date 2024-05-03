@@ -70,23 +70,27 @@ public class BoardBlindRestController {
 			)
 		@PostMapping("/")
 		public ResponseEntity<BoardBlindDto> insert(
-				//@Parameter(description = "생성할 학생 정보에 대한 입력값", required = true, schema = @Schema(implementation = ProjectDto.class))
 				@RequestBody BoardBlindDto boardBlindDto) {
-				
+				// 게시글 작성자의 사원 번호를 사용하여 해당 사원의 회사 번호를 가져옵니다.
 				 EmpDto empDto = empDao.selectOne(boardBlindDto.getBlindEmpNo());
-				// CompanyDto companyDto = companyDao.selectOne(boardBlindDto.getCompanyName());
+				    int companyNo = empDto.getCompanyNo(); // 게시글 작성자의 회사 번호
+				    
 				 int sequence = boardBlindDao.sequence();
-				
 				 boardBlindDto.setBlindNo(sequence);
-				 //boardBlindDto.setEmpNo(empDto.getEmpNo());
-				 
-				// boardBlindDto.setBlindWriterCompany(companyDto.getCompanyName());
+
+				// 회사 번호를 사용하여 회사 정보를 가져옵니다.
+				    CompanyDto companyDto = companyDao.selectOne(companyNo);
+				    String companyName = companyDto.getCompanyName(); // 회사 이름
+				    
+				    // 가져온 회사 이름을 BoardBlindDto에 설정합니다.
+				    boardBlindDto.setBlindWriterCompany(companyName);
 				 
 				 boardBlindDao.insert(boardBlindDto);
 				 
 				 System.out.println("보드정보"+boardBlindDto);
 				 System.out.println("사원정보"+empDto);
-			return ResponseEntity.ok().body(boardBlindDao.selectOne(sequence));
+				 BoardBlindDto insertedBoard = boardBlindDao.selectOne(sequence);
+				 return ResponseEntity.ok().body(insertedBoard);
 		}
 			
 			//조회
@@ -95,6 +99,28 @@ public class BoardBlindRestController {
 			public List<BoardBlindDto> list() {
 				return boardBlindDao.selectList();
 			}
+			
+//			@GetMapping("/")
+//			public List<BoardBlindDto> list() {
+//			    List<BoardBlindDto> boardBlindList = boardBlindDao.selectList();
+//
+//			    // 각 게시글의 작성자의 회사 이름을 가져와서 BoardBlindDto에 설정합니다.
+//			    for (BoardBlindDto boardBlind : boardBlindList) {
+//			        int empNo = boardBlind.getBlindEmpNo();
+//			        EmpDto empDto = empDao.selectOne(empNo);
+//			        int companyNo = empDto.getCompanyNo();
+//			        CompanyDto companyDto = companyDao.selectOne(companyNo);
+//			        String companyName = companyDto.getCompanyName();
+//			        boardBlind.setCompanyName(companyName);
+//			    }
+//
+//			    return boardBlindList;
+//			}
+
+			
+			
+			
+			
 		// 수정
 			@Operation(
 					description = "게시물 정보 변경",
