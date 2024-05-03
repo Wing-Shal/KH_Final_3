@@ -25,4 +25,8 @@ public class EmpDto {
 	private Date empJoin;//입사일
 	private Date empExit;//퇴사일
 	
+	
+	private String empGrade; //직급명 출력용
+	private String empDept; //부서명 출력용
+	
 }

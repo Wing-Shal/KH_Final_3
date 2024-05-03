@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.Final3.dto.DeptDto;
 import com.kh.Final3.dto.EmpDto;
 
 @Repository
@@ -13,15 +14,30 @@ public class EmpDao {
    @Autowired
    private SqlSession sqlSession;
 
-   public List<EmpDto> selectListByCompany() {
-         return sqlSession.selectList("emp.listByCompany");
+   public List<EmpDto> selectListByCompany(int companyNo) {
+	   List<EmpDto> empList = sqlSession.selectList("emp.listByCompany", companyNo);
+	   
+	   //리스트 뽑을 때 직책 설정
+	   for(EmpDto empDto : empList) {
+		   String empGrade = sqlSession.selectOne("emp.listSetGrade", empDto.getEmpNo());
+		   String empDept = sqlSession.selectOne("emp.setDeptName", empDto.getEmpNo());
+		   empDto.setEmpGrade(empGrade);
+		   empDto.setEmpDept(empDept);
+	   }
+         return empList;
       }
-   public List<EmpDto> selectListByDept() {
-         return sqlSession.selectList("emp.listByDept");
+   public List<EmpDto> selectListByDept(DeptDto deptDto) {
+         return sqlSession.selectList("emp.listByDept", deptDto);
       }
 
    public EmpDto selectOne(int empNo) {
-      return sqlSession.selectOne("emp.find", empNo);
+	   EmpDto empDto = sqlSession.selectOne("emp.find", empNo);
+
+	  //부서 이름 설정
+	   String empDept = sqlSession.selectOne("emp.setDeptName", empNo);
+	   empDto.setEmpDept(empDept);
+	   
+      return empDto;
    }
    
    public int sequence() {
