@@ -19,10 +19,14 @@
 		select emp_no from emp_chatroom where chatroom_no = #{chatroomNo}
 	</select>
 	
+	<!-- 새로 방이 생성될 때 사원이랑 채팅방 연결하기 -->
+	<insert id="save">
+		insert into emp_chatroom (emp_no, chatroom_no) 
+		values (#{empNo}, #{chatroomNo})
+	</insert>
 	
 	
-	
-	
+
 	
 	
 </mapper>

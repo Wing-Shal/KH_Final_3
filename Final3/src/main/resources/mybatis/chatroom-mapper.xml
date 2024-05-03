@@ -46,8 +46,13 @@
 			    select count(*)
 			    from emp_chatroom
 			    where chatroom_no = A.chatroom_no
-			) = 2;
+			) = 2
 	</select>
+	
+	<!-- 채팅방 번호로 채팅방 조회 -->
+    <select id="findByChatroomNo" resultType="ChatroomDto">
+        select * from chatroom where chatroom_no = #{chatroomNo}
+    </select>
 	
 	<!-- Delete / 채팅방에 아무도 없을 때 삭제되게..? -->
 	<delete id="delete">

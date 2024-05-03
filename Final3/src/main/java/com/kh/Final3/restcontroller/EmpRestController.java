@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.Final3.dao.EmpDao;
+import com.kh.Final3.dto.ChatroomDto;
 import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.service.JwtService;
 import com.kh.Final3.vo.InputVO;
@@ -63,7 +64,9 @@ public class EmpRestController {
    }
    
    @GetMapping("/list/{empNo}")
-   public ResponseEntity <List<EmpDto>> list(@PathVariable int empNo){
+   public ResponseEntity <List<EmpDto>> list(@RequestHeader("Authorization") String token){
+		LoginVO loginVO = jwtService.parse(token);
+		int empNo = loginVO.getLoginId();
 	   EmpDto empDto = empDao.selectOne(empNo);
 	   int companyNo = empDto.getCompanyNo();
 	   List<EmpDto> empList = empDao.selectListByCompany(companyNo);
@@ -98,7 +101,9 @@ public class EmpRestController {
 	)
    
    @GetMapping("/{empNo}")
-   public ResponseEntity<EmpDto> find(@PathVariable int empNo){
+   public ResponseEntity<EmpDto> find(@RequestHeader("Authorization") String token){
+		LoginVO loginVO = jwtService.parse(token);
+		int empNo = loginVO.getLoginId();
 		EmpDto empDto = empDao.selectOne(empNo);
 		if(empDto == null) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(empDto);
@@ -107,15 +112,7 @@ public class EmpRestController {
    
    
    
-   
-   
-   
-   
-   
-   
-   
-   
-   
+  
    
    
 }

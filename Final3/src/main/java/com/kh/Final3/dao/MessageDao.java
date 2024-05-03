@@ -58,13 +58,7 @@ public class MessageDao {
 	    return messageList;
 	}
 	
-	//단둘이 있는 채팅방만 조회
-	public Integer findOnlyTwo(int empNo1, int empNo2) {
-	    Map<String, Integer> emp = new HashMap<>();
-	    emp.put("empNo1", empNo1);
-	    emp.put("empNo2", empNo2);
-	    return sqlSession.selectOne("chatroom.findOnlyTwo", emp);
-	}
+
 
 	// 메시지 총 개수 조회
 	public Integer count(int chatroomNo) {

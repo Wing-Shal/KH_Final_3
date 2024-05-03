@@ -6,14 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.Final3.dao.ChatroomDao;
 import com.kh.Final3.dao.MessageDao;
 import com.kh.Final3.dto.ChatroomDto;
 import com.kh.Final3.dto.MessageDto;
+import com.kh.Final3.service.ChatroomService;
+import com.kh.Final3.service.JwtService;
 import com.kh.Final3.vo.ChatDataVO;
+import com.kh.Final3.vo.LoginVO;
 
 @CrossOrigin
 @RestController
@@ -25,6 +31,12 @@ public class ChatRestController {
 	
 	@Autowired
 	private ChatroomDao chatroomDao;
+	
+	@Autowired
+	private JwtService jwtService;
+	
+    @Autowired
+    private ChatroomService chatroomService;
 	
 	
 	
@@ -65,10 +77,23 @@ public class ChatRestController {
 	
 	//empNo가 속한 채팅방 목록
 	@GetMapping("/list/{empNo}")
-	public List<ChatroomDto> chatroomList(@PathVariable("empNo") int empNo) {
+	public List<ChatroomDto> chatroomList(@RequestHeader("Authorization") String token) {
+		LoginVO loginVO = jwtService.parse(token);
+		int empNo = loginVO.getLoginId();
 	    return chatroomDao.selectList(empNo);
 	}
 	
+
+	//새로 채팅방을 열지, 만들지
+    @PostMapping("/findOrCreate/{loginId}/{empNo}")
+    public ChatroomDto findOrCreateChatroom(@RequestHeader("Authorization") String token,
+//    public ChatroomDto findOrCreateChatroom(@PathVariable int loginId, 
+    													@PathVariable int empNo) {
+		LoginVO loginVO = jwtService.parse(token);
+		int loginId = loginVO.getLoginId();
+		
+        return chatroomService.findOrCreateChatroom(loginId, empNo);
+    }
 
 
 
