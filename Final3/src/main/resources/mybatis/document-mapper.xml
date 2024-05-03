@@ -16,14 +16,20 @@
 	<!-- Create(등록)  -->
 	<insert id="save">
 		insert into document(
-			document_no, project_no, document_title, document_content, document_status, 
-			document_write_time, document_limit_time, document_writer, document_approver
+			document_no, project_no, document_title, document_content,  
+			document_write_time, document_limit_time, document_writer, document_approver,
+			 emp_no
 			
 		)
-		values (#{documentNo}, #{projectNo}, #{documentTitle}, #{documentContent}, #{documentStatus},
-				 #{documentWriteTime}, #{documentLimitTime}, #{documentWriter}, #{documentApprover})
+		values (#{documentNo}, #{projectNo}, #{documentTitle}, #{documentContent}, 
+				 #{documentWriteTime}, #{documentLimitTime}, #{documentWriter}, #{documentApprover},
+				  #{empNo}
+				 )
 	</insert> 
 	
+		<select id="docuList" resultType="DocumentDto">
+		select * from document where emp_no = #{empNo}
+	</select>
 	
 	
 	<!-- Read 조회 -->
@@ -36,17 +42,15 @@
 	</select>
 	
 	<!-- update 전체수정-->
-		<update id="editAll">
+		<update id="edit">
 		update document
-		set 
-			project_no = #{projectNo},
-			document_title = #{documentTitle},
-			document_content = #{documentContent},
-			document_status = #{documentStatus}
-			document_write_time = #{documentWriteTime}
-			document_limit_time  = #{documentLimitTime}
-			document_approver   = #{documentApprover}
-			
+		<set>			
+			<if test="documentTitle != null">document_title = #{documentTitle},</if>
+			<if test="documentContent != null">document_content = #{documentContent},</if>
+			<if test="documentWriteTime != null"> document_write_time = #{documentWriteTime},</if>
+			<if test="documentLimitTime != null">document_limit_time  = #{documentLimitTime},</if>
+			<if test= "documentApprover != null">document_approver = #{documentApprover},</if>
+			</set> 
 		where document_no = #{documentNo}
 	</update>
 	

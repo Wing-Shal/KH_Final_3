@@ -94,7 +94,7 @@ public class ProjectRestController {
 	public ResponseEntity<ProjectDto> insert(
 			//@Parameter(description = "생성할 학생 정보에 대한 입력값", required = true, schema = @Schema(implementation = ProjectDto.class))
 			@RequestBody ProjectDto projectDto) {
-			 System.out.println(projectDto);
+			
 			 EmpDto empDto = empDao.selectOne(projectDto.getEmpNo());
 			 int sequence = projectDao.sequence();
 			 projectDto.setProjectNo(sequence);

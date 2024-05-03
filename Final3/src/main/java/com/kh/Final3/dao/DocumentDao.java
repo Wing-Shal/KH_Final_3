@@ -52,15 +52,18 @@ public class DocumentDao {
 	
 	//등록
 	public void insert(DocumentDto documentDto) {
+		System.out.println(documentDto);
 		sqlSession.insert("document.save", documentDto);
 	}
 
 	//전체수정
-	public boolean editAll(DocumentDto documentDto) {
-		return sqlSession.update("document.editAll", documentDto) > 0;
+	public boolean edit(DocumentDto documentDto) {
+		return sqlSession.update("document.edit", documentDto) > 0;
 	}
 	
-	
+	public List<DocumentDto> docuList(int empNo){
+		return sqlSession.selectList("document.docuList",empNo);
+	}
 	
 	//삭제
 	public boolean delete(int documentNo) {
