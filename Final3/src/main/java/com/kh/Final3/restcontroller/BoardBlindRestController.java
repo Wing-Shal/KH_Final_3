@@ -93,6 +93,8 @@ public class BoardBlindRestController {
 				 return ResponseEntity.ok().body(insertedBoard);
 		}
 			
+			
+			
 //			//조회
 //			
 			@GetMapping("/")
