@@ -10,9 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.Final3.dao.CompanyDao;
 import com.kh.Final3.dto.CompanyDto;
+import com.kh.Final3.service.EmailService;
 import com.kh.Final3.service.JwtService;
 import com.kh.Final3.vo.InputVO;
 import com.kh.Final3.vo.LoginVO;
+
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @CrossOrigin
 @RestController
@@ -24,6 +28,9 @@ public class CompanyRestController {
 	
 	@Autowired
 	private JwtService jwtService;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	@PostMapping("/login")
 	public ResponseEntity<LoginVO> login(@RequestBody InputVO inputVO) {
@@ -48,5 +55,16 @@ public class CompanyRestController {
 		else {
 			return ResponseEntity.status(401).build();
 		}
+	}
+	
+	@PostMapping("/join")
+	public ResponseEntity<CompanyDto> insert(
+			@Parameter(description = "회사 생성에 대한 입력값", required = true, schema = @Schema(implementation = CompanyDto.class))
+			@RequestBody CompanyDto companyDto) {
+		int sequence = companyDao.sequence();
+		companyDto.setCompanyNo(sequence);
+		companyDao.insert(companyDto);
+		emailService.sendVerifyMail(companyDto);
+		return ResponseEntity.ok().body(companyDao.selectOne(sequence));
 	}
 }
