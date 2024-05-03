@@ -38,8 +38,14 @@
 	<!-- 무한스크롤 목록 -->
 	<select id="listByPaging" resultType="MessageDto">
 	    <include refid="top-n-header"></include>
-	        select * from message where chatroom_no = #{chatroomNo} order by message_no desc
+	        select * from message where chatroom_no = #{chatroomNo} order by message_no asc
 	    <include refid="top-n-footer"></include>
+	</select>
+	
+	
+	<!-- 메시지 총 개수 조회 -->
+	<select id="count" resultType="int">
+	    select count(*) from message where chatroom_no = #{chatroomNo}
 	</select>
 	
 	<!-- 상단 -->
