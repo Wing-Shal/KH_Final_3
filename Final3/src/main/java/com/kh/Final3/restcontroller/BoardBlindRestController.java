@@ -77,28 +77,38 @@ public class BoardBlindRestController {
 				    
 				 int sequence = boardBlindDao.sequence();
 				 boardBlindDto.setBlindNo(sequence);
-
+				 boardBlindDto.setBlindEmpNo(empDto.getEmpNo());
 				// 회사 번호를 사용하여 회사 정보를 가져옵니다.
 				    CompanyDto companyDto = companyDao.selectOne(companyNo);
 				    String companyName = companyDto.getCompanyName(); // 회사 이름
 				    
 				    // 가져온 회사 이름을 BoardBlindDto에 설정합니다.
 				    boardBlindDto.setBlindWriterCompany(companyName);
-				 
+					 System.out.println("이엠피"+empDto);
 				 boardBlindDao.insert(boardBlindDto);
+
 				 
-				 System.out.println("보드정보"+boardBlindDto);
-				 System.out.println("사원정보"+empDto);
+			
 				 BoardBlindDto insertedBoard = boardBlindDao.selectOne(sequence);
 				 return ResponseEntity.ok().body(insertedBoard);
 		}
 			
-			//조회
-			
+//			//조회
+//			
 			@GetMapping("/")
-			public List<BoardBlindDto> list() {
-				return boardBlindDao.selectList();
+			public List<BoardBlindDto> selectBlindList() {
+				
+				return boardBlindDao.selectBlindList();
+				
 			}
+			
+//		    @GetMapping("/{empNo}")
+//		    public List<BoardBlindDto> docuList(@PathVariable int blindEmpNo) {
+//		    	 System.out.println("보드정보"+blindEmpNo);
+//		    	
+//
+//		    	return boardBlindDao.docuList(blindEmpNo);
+//		    }
 			
 //			@GetMapping("/")
 //			public List<BoardBlindDto> list() {

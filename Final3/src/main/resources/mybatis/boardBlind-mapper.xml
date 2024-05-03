@@ -28,10 +28,35 @@ values (
 	</insert> 
 	
 
-	<!--  Read 조회 -->
-	<select id="list" resultType="BoardBlindDto">
+	<!--  Read 조회
+	 <select id="list" resultType="BoardBlindDto">
 		select * from board_blind order by blind_no desc
 	</select>
+	-->
+	 
+	 <select id="selectBlindList" resultType="BoardBlindDto">
+    SELECT 
+    bb.blind_no, bb.blind_title, bb.blind_content, bb.blind_writer_nick,
+    c.company_name AS blind_writer_company, bb.blind_wtime, bb.blind_etime,
+    bb.blind_view, bb.blind_password, bb.blind_emp_no
+FROM 
+    board_blind bb
+JOIN 
+    emp e ON bb.blind_emp_no = e.emp_no
+JOIN 
+    company c ON e.company_no = c.company_no
+ORDER BY 
+    bb.blind_no DESC
+</select>
+	 
+	 
+	 
+	 
+	       
+	       <!--  <select id="docuList" resultType="BoardBlindDto">
+        select * from board_blind where blind_emp_no = #{blindEmpNo}
+    </select>
+     -->
 	
 	<select id="find" resultType="BoardBlindDto">
 		select * from board_blind where blind_no = #{blindNo}
@@ -52,6 +77,11 @@ values (
 	<delete id="delete">
 		delete board_blind where blind_no = #{blindNo}
 	</delete>
+	
+	
+	
+	
+	
 
 
 </mapper>

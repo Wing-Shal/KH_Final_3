@@ -16,13 +16,17 @@ public class BoardBlindDao {
 	private SqlSession sqlSession;
 
 
-	// 조회
-	public List<BoardBlindDto> selectList() {
-		                            
-		return sqlSession.selectList("boardBlind.list");
-		
-	}
+//	// 조회
+//	public List<BoardBlindDto> selectList() {
+//		                            
+//		return sqlSession.selectList("boardBlind.list");
+//		
+//	}
 	
+	 // 게시글 목록 가져오기
+    public List<BoardBlindDto> selectBlindList() {
+        return sqlSession.selectList("boardBlind.selectBlindList");
+    }
 
 	// 페이지 카운트
 	public int count() {
@@ -33,6 +37,10 @@ public class BoardBlindDao {
 	public BoardBlindDto selectOne(int blindNo) {
 		return sqlSession.selectOne("boardBlind.find", blindNo);
 	}
+	
+//	public List<BoardBlindDto> docuList(int blindEmpNo){
+//        return sqlSession.selectList("boardBlind.docuList",blindEmpNo);
+//    }
 
 	// 시퀀스
 	public int sequence() {
