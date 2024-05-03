@@ -28,20 +28,21 @@ public class ChatRestController {
 	
 	
 	
+	//채팅방의 전체 메세지
 	@GetMapping("/{chatroomNo}")
 	public List<MessageDto> list(@PathVariable int chatroomNo) {
 		return messageDao.selectList(chatroomNo);
 	}
 	
+	//채팅방 무한스크롤
 	@GetMapping("/{chatroomNo}/page/{page}/size/{size}")
 	public ChatDataVO list(@PathVariable int chatroomNo, @PathVariable int page, @PathVariable int size) {
 	    int count = messageDao.count(chatroomNo);
 	    int startRow = Math.max(0, count - (page * size));
 	    
 	    int endRow;
-	    
 	    if(page != 1) {
-	    	endRow = Math.max(0, count - ((page - 1) * size) - 1); //
+	    	endRow = Math.max(0, count - ((page - 1) * size) - 1);
 	    }
 	    else {
 	    	endRow = Math.max(0, count - ((page - 1) * size));
@@ -62,7 +63,7 @@ public class ChatRestController {
 	
 
 	
-	
+	//empNo가 속한 채팅방 목록
 	@GetMapping("/list/{empNo}")
 	public List<ChatroomDto> chatroomList(@PathVariable("empNo") int empNo) {
 	    return chatroomDao.selectList(empNo);
