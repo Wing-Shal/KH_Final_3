@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.Final3.dto.ChatroomDto;
 import com.kh.Final3.dto.EmpChatroomDto;
+import com.kh.Final3.dto.MessageDto;
 
 @Repository
 public class ChatroomDao {
@@ -22,9 +23,21 @@ public class ChatroomDao {
 		return sqlSession.selectList("empChatroom.listByEmpNo", empNo);
 	}
 	
-	//채팅방 번호에 속해있는 사원 조회
-	public List<EmpChatroomDto> selectListEmp(int chatroomNo){
-		return sqlSession.selectList("empChatroom.listByRoomNo", chatroomNo);
+	// 채팅방 번호에 속해있는 사원 조회
+	public List<EmpChatroomDto> selectListEmpByChatroom(int chatroomNo){
+	    List<EmpChatroomDto> empInChatroomList = sqlSession.selectList("empChatroom.listByRoomNo", chatroomNo);
+	    
+	    // 각각 이름, 직책 설정
+	    for (EmpChatroomDto empChatroomDto : empInChatroomList) {
+	    	Map<String, Integer> empInfo = new HashMap<>();
+	    	empInfo.put("chatroomNo", chatroomNo);
+	    	empInfo.put("empNo", empChatroomDto.getEmpNo());
+	        String empName = sqlSession.selectOne("empChatroom.listSetName", empInfo);
+	        String empGrade = sqlSession.selectOne("empChatroom.listSetGrade", empInfo);
+	        empChatroomDto.setEmpName(empName);
+	        empChatroomDto.setEmpGrade(empGrade);
+	    }
+	    return empInChatroomList;
 	}
 	
 	//단둘이 있는 채팅방만 조회
@@ -45,7 +58,7 @@ public class ChatroomDao {
        sqlSession.insert("chatroom.save", chatroomDto);
    }
    
-   // 채팅방 번호로 채팅방 조회
+   // 채팅방 번호로 채팅방 조회(?)
    public ChatroomDto findByChatroomNo(int chatroomNo) {
        return sqlSession.selectOne("chatroom.findByChatroomNo", chatroomNo);
    }
@@ -58,6 +71,8 @@ public class ChatroomDao {
 	    sqlSession.insert("empChatroom.save", info);
 	}
    
+   
+
    
 	
 

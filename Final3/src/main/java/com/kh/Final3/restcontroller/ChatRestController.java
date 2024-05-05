@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.Final3.dao.ChatroomDao;
 import com.kh.Final3.dao.MessageDao;
 import com.kh.Final3.dto.ChatroomDto;
+import com.kh.Final3.dto.EmpChatroomDto;
 import com.kh.Final3.dto.MessageDto;
 import com.kh.Final3.service.ChatroomService;
 import com.kh.Final3.service.JwtService;
@@ -82,6 +82,13 @@ public class ChatRestController {
 		int empNo = loginVO.getLoginId();
 	    return chatroomDao.selectList(empNo);
 	}
+	
+	//chatroomNo에 속한 empNo목록
+	@GetMapping("/chatroomList/{chatroomNo}")
+	public List<EmpChatroomDto> empInChatroomList(@PathVariable int chatroomNo){
+		return chatroomDao.selectListEmpByChatroom(chatroomNo);
+	}
+	
 	
 
 	//새로 채팅방을 열지, 만들지
