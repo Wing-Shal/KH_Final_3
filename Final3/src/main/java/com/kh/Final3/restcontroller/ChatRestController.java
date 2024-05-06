@@ -84,7 +84,7 @@ public class ChatRestController {
 	}
 	
 	//chatroomNo에 속한 empNo목록
-	@GetMapping("/chatroomList/{chatroomNo}")
+	@GetMapping("/chatroomEmpList/{chatroomNo}")
 	public List<EmpChatroomDto> empInChatroomList(@PathVariable int chatroomNo){
 		return chatroomDao.selectListEmpByChatroom(chatroomNo);
 	}
