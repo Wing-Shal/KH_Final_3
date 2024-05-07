@@ -19,8 +19,41 @@
 		select emp_no from emp_chatroom where chatroom_no = #{chatroomNo}
 	</select>
 	
+	<!-- 새로 방이 생성될 때 사원이랑 채팅방 연결하기 -->
+	<insert id="save">
+		insert into emp_chatroom (emp_no, chatroom_no) 
+		values (#{empNo}, #{chatroomNo})
+	</insert>
+	
+	<!-- 이름찾기 -->
+	<select id="listSetName" resultType="string">
+		select e.emp_name 
+			from emp e 
+			join emp_chatroom ec 
+			on e.emp_no = ec.emp_no
+		where ec.chatroom_no = #{chatroomNo} and ec.emp_no = #{empNo}
+	</select>
+	
+	<!-- 직책찾기 -->
+	<select id="listSetGrade" resultType="string">
+		select g.grade_name 
+		    from emp e 
+		    join emp_chatroom ec on e.emp_no = ec.emp_no
+		    join grade g on e.grade_no = g.grade_no
+		where ec.chatroom_no = #{chatroomNo} and ec.emp_no = #{empNo}
+	</select>
+	
+	<!-- 이름 직책 둘다 됨..? -->
+	<select id="listSetNameAndGrade" resultType="string">
+    select e.emp_name, g.grade_name 
+    	from emp e 
+    	join emp_chatroom ec on e.emp_no = ec.emp_no
+    	join grade g on e.grade_no = g.grade_no
+    where ec.chatroom_no = #{chatroomNo}
+</select>
 	
 	
+
 	
 	
 </mapper>

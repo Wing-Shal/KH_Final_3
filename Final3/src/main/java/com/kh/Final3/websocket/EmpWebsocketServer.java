@@ -33,8 +33,6 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
 	@Autowired
 	private MessageDao messageDao;
 	
-	@Autowired
-	private ChatroomDao chatroomDao;
 	
 	@Autowired
 	private JwtService jwtService;

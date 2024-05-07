@@ -57,9 +57,11 @@ public class MessageDao {
 	    
 	    return messageList;
 	}
+	
+
 
 	// 메시지 총 개수 조회
-	public int count(int chatroomNo) {
+	public Integer count(int chatroomNo) {
 	    return sqlSession.selectOne("message.count", chatroomNo);
 	}
 	

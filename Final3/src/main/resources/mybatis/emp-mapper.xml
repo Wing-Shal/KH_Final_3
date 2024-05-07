@@ -32,6 +32,21 @@
       select * from emp where dept_no = #{deptNo} and company_no = #{companyNo} order by emp_no asc
    </select>
    
+   <!-- 직급 이름 -->
+   <select id="listSetGrade" resultType="string">
+		select g.grade_name
+			from emp e
+			join grade g on e.grade_no = g.grade_no
+		where e.emp_no = #{empNo}
+   </select>
+   
+   <select id="setDeptName" resultType="string">
+		select d.dept_name
+			from emp e
+			join dept d on e.dept_no = d.dept_no
+		where e.emp_no = #{empNo}
+   </select>
+   
    <!-- Update -->
    <update id="editAll">
       update emp

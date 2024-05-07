@@ -10,4 +10,7 @@ import lombok.NoArgsConstructor;
 public class EmpChatroomDto {
 	private int empNo;
 	private int chatroomNo;
+	
+	private String empName;
+	private String empGrade;
 }
