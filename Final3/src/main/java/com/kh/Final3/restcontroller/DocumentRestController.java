@@ -93,7 +93,7 @@ public class DocumentRestController {
 //		// return ResponseEntity.ok(empDto);
 //		return ResponseEntity.status(200).body(documentDto);
 //		//문서를 찾은 경우 해당문서 반환 
-//	}
+//	}///
 
 	// 문서 등록
 	@PostMapping("/")

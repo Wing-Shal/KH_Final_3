@@ -52,7 +52,7 @@
 		project_no = #{projectNo}
 	</select>
 
-	<!-- update 전체수정 -->
+	<!-- update 전체수정/ -->
 	<update id="edit">
 		update document
 		<set>

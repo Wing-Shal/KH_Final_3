@@ -9,7 +9,7 @@
     
 <mapper namespace="project">
 
-	<!-- 시퀀스 생성 -->
+	<!-- 시퀀스 생성 //-->
 	<select id="sequence" resultType="int">
 		select notice_seq.nextval from dual
 	</select>
@@ -41,7 +41,7 @@ values (
 		select * from project where emp_no = #{empNo}
 	</select>
 	
-	<!-- 프로젝트번호가 같은 문서 불러오기 -->
+	<!-- 프로젝트번호가 같은 문서 불러오//기 -->
 
 	
 	<!-- update 전체수정-->

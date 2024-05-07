@@ -18,7 +18,7 @@ public class ProjectDao {
 	private SqlSession sqlSession;
 
 	
-	//문서 조회 (무한스크롤)
+	//문서 조회 (무한스크롤)//
 	public List<ProjectDto> selectList() {
 		return sqlSession.selectList("project.list");
 	}

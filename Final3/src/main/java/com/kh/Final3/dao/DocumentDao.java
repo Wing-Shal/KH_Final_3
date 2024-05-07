@@ -22,7 +22,7 @@ public class DocumentDao {
 		return sqlSession.selectList("document.list");
 	}
 	
-	//무한 스크롤을 위한 페이징 메소드
+	//무한 스크롤을 위한 페이징 메소드//
 		//- 받아야 하는 정보 : 페이지번호, 페이지크기
 		//- 반환해야 하는 정보 : 문서 목록, List<DocumentDto>
 	public List<DocumentDto> selectListByPaging(int page, int size) {
