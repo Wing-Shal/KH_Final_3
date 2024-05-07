@@ -26,8 +26,6 @@ public class BoardBlindDto {
 	private int blindView; //게시글 조회수
 	private String blindPassword; //게시글비밀번호
 	private int blindEmpNo;
-	private int companyNo;
-	private String companyName;
-	
+//	private int companyNo;
 }
 

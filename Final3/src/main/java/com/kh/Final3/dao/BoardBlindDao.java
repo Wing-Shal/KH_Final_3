@@ -33,7 +33,14 @@ public class BoardBlindDao {
 		return sqlSession.selectOne("boardBlind.count");
 	}
 
-	// 조회
+	// 상세조회
+	public List<BoardBlindDto> find(int blindNo){
+		return sqlSession.selectList("boardBlind.find",blindNo);
+	}
+	
+	
+	
+	
 	public BoardBlindDto selectOne(int blindNo) {
 		return sqlSession.selectOne("boardBlind.find", blindNo);
 	}
@@ -61,4 +68,16 @@ public class BoardBlindDao {
 	public boolean delete(int blindNo) {
 		return sqlSession.delete("boardBlind.delete", blindNo) > 0;
 	}
+	
+	// 토큰을 이용하여 사용자의 사원 번호와 회사 번호를 가져오는 메서드 추가
+    public int selectCompanyNoByToken(String token) {
+        return sqlSession.selectOne("boardBlind.selectCompanyNoByToken", token);
+    }
+
+    // 회사 번호를 이용하여 회사 이름을 가져오는 메서드 추가
+    public String selectCompanyNameByCompanyNo(int companyNo) {
+        return sqlSession.selectOne("boardBlind.selectCompanyNameByCompanyNo", companyNo);
+    }
+	
+	
 }

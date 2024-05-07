@@ -25,6 +25,7 @@ import com.kh.Final3.dto.DocumentDto;
 import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.dto.ProjectDto;
 import com.kh.Final3.service.JwtService;
+import com.kh.Final3.vo.LoginVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -68,30 +69,34 @@ public class BoardBlindRestController {
 					),
 				}
 			)
-		@PostMapping("/")
-		public ResponseEntity<BoardBlindDto> insert(
-				@RequestBody BoardBlindDto boardBlindDto) {
-				// 게시글 작성자의 사원 번호를 사용하여 해당 사원의 회사 번호를 가져옵니다.
-				 EmpDto empDto = empDao.selectOne(boardBlindDto.getBlindEmpNo());
-				    int companyNo = empDto.getCompanyNo(); // 게시글 작성자의 회사 번호
-				    
-				 int sequence = boardBlindDao.sequence();
-				 boardBlindDto.setBlindNo(sequence);
-				 boardBlindDto.setBlindEmpNo(empDto.getEmpNo());
-				// 회사 번호를 사용하여 회사 정보를 가져옵니다.
-				    CompanyDto companyDto = companyDao.selectOne(companyNo);
-				    String companyName = companyDto.getCompanyName(); // 회사 이름
-				    
-				    // 가져온 회사 이름을 BoardBlindDto에 설정합니다.
-				    boardBlindDto.setBlindWriterCompany(companyName);
-					 System.out.println("이엠피"+empDto);
-				 boardBlindDao.insert(boardBlindDto);
+			@PostMapping("/")
+			public ResponseEntity<BoardBlindDto> insert(@RequestBody BoardBlindDto boardBlindDto, @RequestHeader("Authorization") String token) {
+			    // 토큰을 해석하여 사용자 정보 가져오기
+				
+			    LoginVO loginVO = jwtService.parse(token);
+			    int sequence = boardBlindDao.sequence();
+			    boardBlindDto.setBlindNo(sequence);
+			    int loginId = loginVO.getLoginId(); // 토큰에서 사용자의 사원 번호 가져오기
+			    EmpDto empDto = empDao.selectOne(loginId); // 사용자의 사원 정보 조회
+			    int companyNo = empDto.getCompanyNo(); // 사용자의 회사 번호 가져오기
+			    System.out.println("회사번호"+companyNo);
+			    CompanyDto companyDto = companyDao.selectOne(companyNo); // 회사 정보 조회
+			    String companyName = companyDto.getCompanyName(); // 회사 이름 가져오기
+			    System.out.println("회사이름"+companyName);
+			    boardBlindDto.setBlindEmpNo(loginId); // 게시글 작성자의 사원 번호 설정
+			    System.out.println("작성자의 사원번호 설정"+boardBlindDto.getBlindEmpNo());
+			    boardBlindDto.setBlindWriterCompany(companyName); // 게시글 작성자의 회사 이름 설정
+			    System.out.println("작성자의 회사이름 설정"+boardBlindDto.getBlindWriterCompany());
+//			    여기까지 디버깅 완료
+			    
+			    System.out.println(boardBlindDto);
+			    // 여기에 게시글 작성 시간과 조회수, 비밀번호 등 필요한 정보를 설정할 수 있습니다.
+			    boardBlindDao.insert(boardBlindDto); // 게시글 등록
+			    BoardBlindDto insertedBoard = boardBlindDao.selectOne(boardBlindDto.getBlindNo());
+			    return ResponseEntity.ok().body(insertedBoard);
+			}
 
-				 
-			
-				 BoardBlindDto insertedBoard = boardBlindDao.selectOne(sequence);
-				 return ResponseEntity.ok().body(insertedBoard);
-		}
+
 			
 			
 			
@@ -102,6 +107,13 @@ public class BoardBlindRestController {
 				
 				return boardBlindDao.selectBlindList();
 				
+			}
+			
+			
+//			상세조회
+			@GetMapping("/{blindNo}")
+			public List<BoardBlindDto> find(@PathVariable int blindNo){
+				return boardBlindDao.find(blindNo);
 			}
 			
 //		    @GetMapping("/{empNo}")
@@ -196,7 +208,7 @@ public class BoardBlindRestController {
 			)
 			
 		// 삭제
-		@DeleteMapping("/{projectNo}")
+		@DeleteMapping("/{blindNo}")
 		public ResponseEntity<?> delete(@PathVariable int blindNo) {
 			boolean result = boardBlindDao.delete(blindNo);
 						if (result == false) {

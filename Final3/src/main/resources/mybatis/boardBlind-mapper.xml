@@ -4,84 +4,106 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
-    
-    
+
+
+
 <mapper namespace="boardBlind">
 
 	<!-- 시퀀스 생성 -->
 	<select id="sequence" resultType="int">
-		select notice_seq.nextval from dual
+		select notice_seq.nextval from
+		dual
 	</select>
-	
-	
-	<!-- Create(등록)  -->
-	<insert id="save">
-		insert into board_blind(
-			blind_no, blind_title, blind_content, blind_writer_nick, blind_writer_company,
-			blind_wtime, blind_etime, blind_view, blind_password, blind_emp_no, company_no, company_name	
-		)
-values (
-    #{blindNo}, #{blindTitle}, #{blindContent}, #{blindWriterNick}, #{blindWriterCompany},
-    #{blindWtime}, #{blindEtime}, #{blindView}, #{blindPassword}, #{blindEmpNo},#{companyNo}, #{companyName}
-)
-	</insert> 
-	
 
-	<!--  Read 조회
-	 <select id="list" resultType="BoardBlindDto">
-		select * from board_blind order by blind_no desc
+
+	<!-- Create(등록) -->
+	<insert id="save">
+
+		INSERT INTO board_blind(BLIND_NO, BLIND_TITLE, BLIND_CONTENT,
+		BLIND_WRITER_NICK,
+		BLIND_WRITER_COMPANY, BLIND_WTIME, BLIND_ETIME, BLIND_VIEW, BLIND_PASSWORD, BLIND_EMP_NO)
+		VALUES
+		(#{blindNo}, #{blindTitle}, #{blindContent}, #{blindWriterNick},
+		#{blindWriterCompany}, #{blindWtime},
+		#{blindEtime}, #{blindView}, #{blindPassword}, #{blindEmpNo}
+
+	</insert>
+
+
+
+	<!-- Read 조회 <select id="list" resultType="BoardBlindDto"> select * from 
+		board_blind order by blind_no desc </select> -->
+
+	<select id="selectBlindList" resultType="BoardBlindDto">
+		SELECT
+		bb.blind_no, bb.blind_title, bb.blind_content, bb.blind_writer_nick,
+		c.company_name AS blind_writer_company, bb.blind_wtime,
+		bb.blind_etime,
+		bb.blind_view, bb.blind_password, bb.blind_emp_no
+		FROM
+		board_blind bb
+		JOIN
+		emp e ON bb.blind_emp_no = e.emp_no
+		JOIN
+		company c ON e.company_no = c.company_no
+		ORDER BY
+		bb.blind_no DESC
 	</select>
-	-->
-	 
-	 <select id="selectBlindList" resultType="BoardBlindDto">
-    SELECT 
-    bb.blind_no, bb.blind_title, bb.blind_content, bb.blind_writer_nick,
-    c.company_name AS blind_writer_company, bb.blind_wtime, bb.blind_etime,
-    bb.blind_view, bb.blind_password, bb.blind_emp_no
-FROM 
-    board_blind bb
-JOIN 
-    emp e ON bb.blind_emp_no = e.emp_no
-JOIN 
-    company c ON e.company_no = c.company_no
-ORDER BY 
-    bb.blind_no DESC
-</select>
-	 
-	 
-	 
-	 
-	       
-	       <!--  <select id="docuList" resultType="BoardBlindDto">
-        select * from board_blind where blind_emp_no = #{blindEmpNo}
-    </select>
-     -->
-	
+
+
+
+
+
+	<!-- <select id="docuList" resultType="BoardBlindDto"> select * from board_blind 
+		where blind_emp_no = #{blindEmpNo} </select> -->
+
 	<select id="find" resultType="BoardBlindDto">
-		select * from board_blind where blind_no = #{blindNo}
+		select * from board_blind where
+		blind_no = #{blindNo}
 	</select>
-	
-	<!-- update 전체수정-->
-		<update id="edit">
+
+	<!-- update 전체수정 -->
+	<update id="edit">
 		update board_blind
 		<set>
 			<if test="blindTitle != null">blind_title = #{blindTitle},</if>
 			<if test="blindContent != null">blind_content = #{blindContent},</if>
 			<if test="blindEtime != null">blind_etime = #{blindEtime},</if>
-			</set> 
+		</set>
 		where board_blind_no = #{blindNo}
 	</update>
-	
-	<!-- Delete  -->
+
+	<!-- Delete -->
 	<delete id="delete">
 		delete board_blind where blind_no = #{blindNo}
 	</delete>
-	
-	
-	
-	
-	
 
 
+
+	<!-- 사용자의 회사 번호 조회 -->
+	<select id="selectCompanyNoByToken" resultType="int">
+		SELECT
+		e.company_no
+		FROM
+		emp e
+		WHERE
+		e.emp_no = (
+		SELECT
+		emp_no
+		FROM
+		emp
+		WHERE
+		token = #{token}
+		)
+	</select>
+
+	<!-- 회사 번호로 회사 이름 조회 -->
+	<select id="selectCompanyNameByCompanyNo" resultType="String">
+		SELECT
+		company_name
+		FROM
+		company
+		WHERE
+		company_no = #{companyNo}
+	</select>
 </mapper>
