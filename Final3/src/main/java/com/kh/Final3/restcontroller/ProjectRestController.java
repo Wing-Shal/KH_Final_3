@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.Final3.dao.DocumentDao;
 import com.kh.Final3.dao.EmpDao;
 import com.kh.Final3.dao.ProjectDao;
+import com.kh.Final3.dto.DocumentDto;
 import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.dto.ProjectDto;
 import com.kh.Final3.service.JwtService;
@@ -39,6 +41,8 @@ public class ProjectRestController {
     private JwtService jwtService;
 	@Autowired
 	private EmpDao empDao;
+	@Autowired
+	private DocumentDao documentDao;
 	
 	// 문서용 설정 추가
 	@Operation(description = "문서 목록 조회", responses = {
@@ -176,5 +180,8 @@ public class ProjectRestController {
 		}
 		return ResponseEntity.ok().build();
 	}
+		
+
+
 }
 

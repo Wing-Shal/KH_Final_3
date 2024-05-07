@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.Final3.dao.DocumentDao;
 import com.kh.Final3.dao.EmpDao;
+import com.kh.Final3.dao.ProjectDao;
 import com.kh.Final3.dto.DocumentDto;
 import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.dto.ProjectDto;
@@ -40,6 +42,8 @@ public class DocumentRestController {
     private JwtService jwtService;
 	@Autowired
 	private EmpDao empDao;
+	@Autowired
+	private ProjectDao projectDao;
 	
 	// 문서용 설정 추가
 	@Operation(description = "문서 목록 조회", responses = {
@@ -52,11 +56,6 @@ public class DocumentRestController {
 	@GetMapping("/")
 	public List<DocumentDto> list() {
 		return documentDao.selectList();
-	}
-
-	@GetMapping("/{empNo}")
-	public List<DocumentDto> docuList(@PathVariable int empNo) {
-		return documentDao.docuList(empNo);
 	}
 	
 	//페이지별 문서 목록 조회
@@ -101,17 +100,29 @@ public class DocumentRestController {
 	public ResponseEntity<DocumentDto> insert(
 			//@Parameter(description = "생성할 학생 정보에 대한 입력값", required = true, schema = @Schema(implementation = ProjectDto.class))
 			@RequestBody DocumentDto documentDto) {
-			
+		
 			 EmpDto empDto = empDao.selectOne(documentDto.getEmpNo());
+			 
+			 ProjectDto projectDto = projectDao.selectOne(documentDto.getProjectNo());
+			 System.out.println("프로젝트"+projectDto);
 			 int sequence = documentDao.sequence();
 			 documentDto.setDocumentNo(sequence);
+			 int sequence2 = projectDao.sequence();
+			 projectDto.setProjectNo(sequence);
 			 documentDto.setDocumentWriter(empDto.getEmpName());
 			 documentDto.setDocumentApprover(empDto.getEmpName());
-			 System.out.println("문서Dto"+documentDto);
+			 
+			
 			 documentDao.insert(documentDto);
 			 
 				
 		return ResponseEntity.ok().body(documentDao.selectOne(sequence));
+	}
+	
+	//프로젝트 번호로 해당 문서 조회
+	@GetMapping("/{projectNo}")
+	public List<DocumentDto> docuList(@PathVariable int projectNo) {
+		return documentDao.docuList(projectNo);
 	}
 
 	//수정
@@ -140,7 +151,7 @@ public class DocumentRestController {
 				),
 			}
 		)
-	
+	//수정
 	@PutMapping("/")
 	public ResponseEntity<DocumentDto> edit(@RequestBody DocumentDto documentDto) {
 		boolean result = documentDao.edit(documentDto);
@@ -159,5 +170,13 @@ public class DocumentRestController {
 		}
 		return ResponseEntity.ok().build();
 	}
+
+	//통합검색
+	@GetMapping("/search")
+	public List<DocumentDto> searchDocuments(@RequestParam String keyword){
+		return documentDao.searchDocuments(keyword);
+	}
+	
+	
 }
 

@@ -42,9 +42,7 @@ values (
 	</select>
 	
 	<!-- 프로젝트번호가 같은 문서 불러오기 -->
-	<select id="pDocument" resultType="DocumentDto">
-	select * from document where project_no = #{projectNo}
-	</select>
+
 	
 	<!-- update 전체수정-->
 		<update id="edit">
