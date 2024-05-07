@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.Final3.dto.DocumentDto;
+import com.kh.Final3.dto.ProjectDto;
 
 @Repository
 public class DocumentDao {
@@ -21,7 +22,7 @@ public class DocumentDao {
 		return sqlSession.selectList("document.list");
 	}
 	
-	//무한 스크롤을 위한 페이징 메소드
+	//무한 스크롤을 위한 페이징 메소드//
 		//- 받아야 하는 정보 : 페이지번호, 페이지크기
 		//- 반환해야 하는 정보 : 문서 목록, List<DocumentDto>
 	public List<DocumentDto> selectListByPaging(int page, int size) {
@@ -35,7 +36,10 @@ public class DocumentDao {
 	
 		
 	}
-	
+	//해당 프로젝트에 맞는 문서 조회
+	public List<DocumentDto> docuList(int projectNo){
+		return sqlSession.selectList("document.docuList",projectNo);
+	}
 	public int count() {
 		return sqlSession.selectOne("document.count");
 	}
@@ -45,6 +49,11 @@ public class DocumentDao {
 		return sqlSession.selectOne("document.find", documentNo);
 	}
 	
+	public ProjectDto selectOne1(int projectNo) {
+		return sqlSession.selectOne("document.find2", projectNo);
+	}
+	
+	
 	//시퀀스
 	public int sequence() {
 		return sqlSession.selectOne("document.sequence");
@@ -52,20 +61,27 @@ public class DocumentDao {
 	
 	//등록
 	public void insert(DocumentDto documentDto) {
+		System.out.println(documentDto);
 		sqlSession.insert("document.save", documentDto);
 	}
 
 	//전체수정
-	public boolean editAll(DocumentDto documentDto) {
-		return sqlSession.update("document.editAll", documentDto) > 0;
+	public boolean edit(DocumentDto documentDto) {
+		return sqlSession.update("document.edit", documentDto) > 0;
 	}
-	
 	
 	
 	//삭제
 	public boolean delete(int documentNo) {
 		return sqlSession.delete("document.delete", documentNo) > 0;
 	}
+
+	//통합검색
+	public List<DocumentDto>searchDocuments(String keyword){
+		return sqlSession.selectList("document.searchDocuments",keyword);
+	}
+	
+
 
 }
 

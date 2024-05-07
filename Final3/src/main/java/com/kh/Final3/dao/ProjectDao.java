@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.Final3.dto.DocumentDto;
 import com.kh.Final3.dto.ProjectDto;
 
 @Repository
@@ -17,7 +18,7 @@ public class ProjectDao {
 	private SqlSession sqlSession;
 
 	
-	//문서 조회 (무한스크롤)
+	//문서 조회 (무한스크롤)//
 	public List<ProjectDto> selectList() {
 		return sqlSession.selectList("project.list");
 	}
@@ -68,6 +69,7 @@ public class ProjectDao {
 	public boolean delete(int projectNo) {
 		return sqlSession.delete("project.delete", projectNo) > 0;
 	}
+
 
 }
 
