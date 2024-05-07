@@ -121,7 +121,7 @@ public class BoardBlindRestController {
 		int sequence = boardBlindDao.sequence(); //번호생성
 //		String companyName = empDao.selectOnebyCompanyNo(token.getparsedCompanyNo())
 //		토큰 파싱해서 작성자 이름 가져오기
-		String companyName = jwtService.parse(token.substring(7)).getAdminId();
+//		String companyName = jwtService.parse(token.substring(7)).getLoginId();
 		
 		boardBlindDto.setBlindNo(sequence); //시퀀스
 //		boardBlindDto.setBlindCom
