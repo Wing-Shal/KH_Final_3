@@ -1,5 +1,6 @@
 package com.kh.Final3.restcontroller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.Final3.dao.EmpDao;
 import com.kh.Final3.dto.ChatroomDto;
 import com.kh.Final3.dto.EmpDto;
+import com.kh.Final3.service.AttachService;
 import com.kh.Final3.service.JwtService;
 import com.kh.Final3.vo.InputVO;
 import com.kh.Final3.vo.LoginVO;
@@ -109,7 +113,23 @@ public class EmpRestController {
 		return ResponseEntity.ok().body(empDto);
    }
    
-   
+	   @Autowired
+	   private AttachService attachService;
+	   
+	   @PostMapping("/upload")
+	   public Integer upload(@RequestParam MultipartFile empAttach) throws IllegalStateException, IOException {
+	      
+//	      if(empAttach.isEmpty()) {
+//	         int attachNo = attachService.save(empAttach);
+//	      }
+	      
+	      if(empAttach.isEmpty()) return null;
+	       //비어있으면 null 리턴
+	       return attachService.save(empAttach);
+	      //사진 하나만 올리고 저장!
+	       
+	   }
+
    
    
   
