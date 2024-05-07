@@ -24,8 +24,20 @@ public class AttachDao {
 		sqlSession.insert("attach.insert", attachDto);
 	}
 	
+	public void insertEmp (AttachDto attachDto) {
+		sqlSession.insert("attach.insertEmp", attachDto);
+	}
+	
 	public boolean delete (int attachNo) {
 		return sqlSession.delete("attach.delete", attachNo) > 0;
 	}
+	
+	public AttachDto findEmpAttach (int empNo) {
+		return sqlSession.selectOne("attach.findEmpAttach", empNo);
+	}
+	
+
+	
+
 
 }
