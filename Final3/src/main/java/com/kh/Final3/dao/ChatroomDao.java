@@ -23,6 +23,7 @@ public class ChatroomDao {
 		return sqlSession.selectList("empChatroom.listByEmpNo", empNo);
 	}
 	
+	
 	// 채팅방 번호에 속해있는 사원 조회
 	public List<EmpChatroomDto> selectListEmpByChatroom(int chatroomNo){
 	    List<EmpChatroomDto> empInChatroomList = sqlSession.selectList("empChatroom.listByRoomNo", chatroomNo);
@@ -39,6 +40,12 @@ public class ChatroomDao {
 	    }
 	    return empInChatroomList;
 	}
+	
+	//위에서 단순히 사원번호만 조회
+	public List<EmpChatroomDto> selectListEmpByChatroom2(int chatroomNo){
+	    return sqlSession.selectList("empChatroom.listByRoomNo", chatroomNo);
+	}
+	
 	
 	//단둘이 있는 채팅방만 조회
 	public Integer findOnlyTwo(int empNo1, int empNo2) {
@@ -70,6 +77,10 @@ public class ChatroomDao {
 	    info.put("chatroomNo", chatroomNo);
 	    sqlSession.insert("empChatroom.save", info);
 	}
+   
+   public Integer numberOfParticipants(int chatroomNo) {
+	   return sqlSession.selectOne("chatroom.numberOfEmpInChatroom", chatroomNo);
+   }
    
    
 

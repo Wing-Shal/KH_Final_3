@@ -57,11 +57,5 @@ public class EmpDao {
    public boolean delete(int empNo) {
       return sqlSession.delete("emp.delete", empNo) > 0;
    }
-//   public String getEmpName(Integer empNo) {
-//	    // 데이터베이스에서 empNo에 해당하는 직원의 이름 조회
-//	    String empName = ""; // 초기화
-//
-//
-//	    return empName;
-//   }
+
 }

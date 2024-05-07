@@ -101,6 +101,12 @@ public class ChatRestController {
 		
         return chatroomService.findOrCreateChatroom(loginId, empNo);
     }
+    
+    //사원 초대하기
+    @PostMapping("/inviteEmp/{chatroomNo}/{empNo}")
+    public ChatroomDto invetEmp(@PathVariable int chatroomNo, @PathVariable int empNo) {
+    	return chatroomService.inviteEmp(chatroomNo, empNo);
+    }
 
 
 
