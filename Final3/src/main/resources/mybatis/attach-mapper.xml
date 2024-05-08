@@ -15,10 +15,15 @@
       values (#{attachNo}, #{attachName}, #{attachType}, #{attachSize})
    </insert>
    
-   <insert id="connect">
-        insert into emp_attach (emp_no, attach_no)
-        values (#{empNo}, #{attachNo})
-    </insert>
+<!--    <insert id="insertEmp"> -->
+<!--       insert into attach (attach_no, attach_name, attach_type, attach_size)  -->
+<!--       values (#{attachNo}, #{attachName}, #{attachType}, #{attachSize}) -->
+<!--    </insert> -->
+   
+<!--    <insert id="connect"> -->
+<!--         insert into emp_attach (emp_no, attach_no) -->
+<!--         values (#{empNo}, #{attachNo}) -->
+<!--     </insert> -->
    
    <select id="find" resultType="AttachDto">
       select * from attach where attach_no = #{attachNo}
@@ -28,9 +33,9 @@
       delete attach where attach_no = #{attachNo}
    </delete>
 
-   <select id="findEmpAttach" resultType="int">
-      select attach_no from emp_attach where emp_no = #{empNo}
-   </select>
+<!--    <select id="findEmpAttach" resultType="int"> -->
+<!--       select attach_no from emp_attach where emp_no = #{empNo} -->
+<!--    </select> -->
 
 <!--    <select id="findEmp" resultType="AttachDto"> -->
 <!--       select emp_no from emp_attach where emp_no = #{empNo} -->
