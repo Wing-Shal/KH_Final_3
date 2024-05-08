@@ -16,10 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kh.Final3.dao.AdminCompanyDao;
 import com.kh.Final3.dao.CompanyDao;
+import com.kh.Final3.dao.PaymentDao;
 import com.kh.Final3.dto.CompanyDto;
 import com.kh.Final3.service.EmailService;
+import com.kh.Final3.vo.AdminCompanyVO;
 import com.kh.Final3.vo.CompanySearchVO;
+import com.kh.Final3.vo.PaymentHistoryVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,11 +36,19 @@ public class AdminCompanyRestcontroller {
 	@Autowired
 	private CompanyDao companyDao;
 	@Autowired
+	private AdminCompanyDao adminCompanyDao;
+	@Autowired
+	private PaymentDao paymentDao;
+	@Autowired
 	private EmailService emailService;
 
 	@GetMapping("/")
-	public List<CompanyDto> search() {
-		return companyDao.list();
+	public List<AdminCompanyVO> search() {
+		return adminCompanyDao.CompanyListWithStatus();
+	}
+	@GetMapping("/paymentHistory/{companyNo}")
+	public List<PaymentHistoryVO> history(@PathVariable int companyNo) {
+		return paymentDao.selectHistoryByCompanyNo(companyNo);
 	}
 	@PutMapping("/")//전체수정
 	public boolean editAll(@RequestBody CompanyDto companyDto) {

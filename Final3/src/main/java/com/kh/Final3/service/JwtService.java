@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.Final3.configuration.JwtProperties;
+import com.kh.Final3.dao.CompanyDao;
+import com.kh.Final3.dao.PaymentDao;
 import com.kh.Final3.dto.AdminDto;
 import com.kh.Final3.dto.CompanyDto;
 import com.kh.Final3.dto.EmpDto;
@@ -24,6 +26,8 @@ public class JwtService {
    
    @Autowired
    private JwtProperties jwtProperties;
+   @Autowired
+   private PaymentDao paymentDao;
    
    public String createAccessToken(AdminDto adminDto) {
       String KeyStr = jwtProperties.getKeyStr();
@@ -61,6 +65,7 @@ public class JwtService {
                   .signWith(key)
                   .claim("loginId", empDto.getEmpNo())
                   .claim("loginLevel", empDto.getEmpType())
+                  .claim("isPaid", paymentDao.isPaid(empDto.getCompanyNo()))
                .compact();
       return token;
    }
@@ -81,6 +86,7 @@ public class JwtService {
                   .signWith(key)
                   .claim("loginId", companyDto.getCompanyNo())
                   .claim("loginLevel", "회사")
+                  .claim("isPaid", paymentDao.isPaid(companyDto.getCompanyNo()))
                .compact();
       return token;
    }
@@ -121,6 +127,7 @@ public class JwtService {
                   .signWith(key)
                   .claim("loginId", empDto.getEmpNo())
                   .claim("loginLevel", empDto.getEmpType())
+                  .claim("isPaid", paymentDao.isPaid(empDto.getCompanyNo()))
                .compact();
       return token;
    }
@@ -141,6 +148,7 @@ public class JwtService {
                   .signWith(key)
                   .claim("loginId", companyDto.getCompanyNo())
                   .claim("loginLevel", "회사")
+                  .claim("isPaid", paymentDao.isPaid(companyDto.getCompanyNo()))
                .compact();
       return token;
    }

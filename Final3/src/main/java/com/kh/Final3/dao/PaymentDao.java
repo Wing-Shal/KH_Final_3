@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.Final3.dto.PaymentDto;
+import com.kh.Final3.vo.PaymentHistoryVO;
 
 @Repository
 public class PaymentDao {
@@ -25,5 +26,19 @@ public class PaymentDao {
 	}
 	public List<PaymentDto> selectListByCompanyNo(int companyNo) {
 		return sqlSession.selectList("payment.paymentList", companyNo);
+	}
+	public List<PaymentDto> selectActiveSubscription() {
+		return sqlSession.selectList("payment.selectActiveSubscription");
+	}
+	public String isPaid(int companyNo) {
+		String result = sqlSession.selectOne("payment.isPaid", companyNo);
+		if(result == null) {
+			return "INACTIVE";
+		} else {
+			return result;
+		}
+	}
+	public List<PaymentHistoryVO> selectHistoryByCompanyNo(int companyNo) {
+		return sqlSession.selectList("payment.selectHistory", companyNo);
 	}
 }

@@ -47,8 +47,8 @@ public class KakaoPayRestctroller {
 		KakaoPayReadyRequestVO requestVO = new KakaoPayReadyRequestVO();
 		requestVO.setPartnerOrderId(UUID.randomUUID().toString());
 		requestVO.setPartnerUserId(Integer.toString(loginVO.getLoginId()));
-		requestVO.setItemName("Planet 정기 이용권");
-		requestVO.setTotalAmount(990000);
+		requestVO.setItemName(kakaoPayProperties.getItemName());
+		requestVO.setTotalAmount(kakaoPayProperties.getTotalAmount());
 		
 		KakaoPayReadyResponseVO responseVO = kakaoPayService.ready(requestVO);
 //		System.out.println(responseVO);

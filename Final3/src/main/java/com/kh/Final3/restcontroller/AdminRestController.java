@@ -42,6 +42,7 @@ public class AdminRestController {
          return ResponseEntity.ok().body(LoginVO.builder()
                .loginId(findDto.getAdminId())
                .loginLevel("운영자")
+               .isPaid("운영자")
                .accessToken(accessToken)
                .refreshToken(refreshToken)
             .build());//200
