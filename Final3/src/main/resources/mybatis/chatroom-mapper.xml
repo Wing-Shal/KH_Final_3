@@ -67,7 +67,7 @@
 		select count(*) emp_no from emp_chatroom where chatroom_no = #{chatroomNo}
 	</select>
 	
-	<!-- 채팅방 이름 개설할 때 설정용 -->
+	<!-- 채팅방 이름 개설할 때 설정용(이름만 조회) -->
 	<select id="findEmpName" resultType="String">
 		select emp_name from emp where emp_no = #{empNo}
 	</select>

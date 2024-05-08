@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.Final3.dto.ChatroomDto;
 import com.kh.Final3.dto.EmpChatroomDto;
-import com.kh.Final3.dto.MessageDto;
 
 @Repository
 public class ChatroomDao {
@@ -68,6 +67,13 @@ public class ChatroomDao {
    // 채팅방 생성
    public void save(ChatroomDto chatroomDto) {
        sqlSession.insert("chatroom.save", chatroomDto);
+   }
+   
+   public void save(int chatroomNo, String chatroomName) {
+	   Map<String, Object> info = new HashMap<>();
+	    info.put("chatroomNo", chatroomNo);
+	    info.put("chatroomName", chatroomName);
+       sqlSession.insert("chatroom.save", info);
    }
    
    // 채팅방 번호로 채팅방 조회(?)
