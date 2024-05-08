@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.Final3.dao.EmpDao;
+import com.kh.Final3.dao.PaymentDao;
 import com.kh.Final3.dto.ChatroomDto;
 import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.service.AttachService;
@@ -38,7 +39,8 @@ public class EmpRestController {
    
    @Autowired
    private EmpDao empDao;
-   
+   @Autowired
+   private PaymentDao paymentDao;
    @Autowired
    private JwtService jwtService;
    
@@ -58,6 +60,7 @@ public class EmpRestController {
          return ResponseEntity.ok().body(LoginVO.builder()
                .loginId(findDto.getEmpNo())//사원아이디
                .loginLevel(findDto.getEmpType())//사원등급(사원,임원)
+               .isPaid(paymentDao.isPaid(findDto.getCompanyNo()))
                .accessToken(accessToken)
                .refreshToken(refreshToken)
             .build());//200
@@ -113,22 +116,31 @@ public class EmpRestController {
 		return ResponseEntity.ok().body(empDto);
    }
    
-	   @Autowired
-	   private AttachService attachService;
-	   
-	   @PostMapping("/upload")
-	   public Integer upload(@RequestParam MultipartFile empAttach) throws IllegalStateException, IOException {
-	      
-//	      if(empAttach.isEmpty()) {
-//	         int attachNo = attachService.save(empAttach);
-//	      }
-	      
-	      if(empAttach.isEmpty()) return null;
-	       //비어있으면 null 리턴
-	       return attachService.save(empAttach);
-	      //사진 하나만 올리고 저장!
-	       
-	   }
+	@Autowired
+    private AttachService attachService;
+    
+     //첨부파일수정
+     @PostMapping("/upload/{empNo}")
+     public ResponseEntity<?> insertEdit(@PathVariable int empNo, @RequestParam("attach") MultipartFile attach) 
+             throws IllegalStateException, IOException {
+         if (!attach.isEmpty()) {
+             boolean isFirst = false;
+             try {
+                 int attachNo = empDao.findAttach(empNo);
+                 attachService.remove(attachNo);
+                 int editAttachNo = attachService.save(attach);
+                 empDao.connect(empNo, editAttachNo);
+             } catch (Exception e) {
+                 isFirst = true;
+             } 
+             if (isFirst) {
+                 int inputAttachNo = attachService.save(attach);
+                 empDao.connect(empNo, inputAttachNo);
+             }
+             return ResponseEntity.ok().build();
+         }
+         return ResponseEntity.status(404).build();
+     }
 
    
    

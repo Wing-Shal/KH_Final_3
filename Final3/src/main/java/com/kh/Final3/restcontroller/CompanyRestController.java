@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.Final3.dao.CompanyDao;
+import com.kh.Final3.dao.PaymentDao;
 import com.kh.Final3.dto.CompanyDto;
 import com.kh.Final3.service.EmailService;
 import com.kh.Final3.service.JwtService;
@@ -32,6 +33,9 @@ public class CompanyRestController {
 	@Autowired
 	private EmailService emailService;
 	
+	@Autowired
+	private PaymentDao paymentDao;
+	
 	@PostMapping("/login")
 	public ResponseEntity<LoginVO> login(@RequestBody InputVO inputVO) {
 		CompanyDto findDto = companyDao.selectOne(Integer.parseInt(inputVO.getId()));
@@ -48,6 +52,7 @@ public class CompanyRestController {
 			return ResponseEntity.ok().body(LoginVO.builder()
 					.loginId(findDto.getCompanyNo())
 					.loginLevel("회사")
+					.isPaid(paymentDao.isPaid(findDto.getCompanyNo()))
 					.accessToken(accessToken)
 					.refreshToken(refreshToken)
 				.build());//200

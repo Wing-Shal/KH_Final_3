@@ -11,4 +11,6 @@ import lombok.Data;
 public class KakaoPayProperties {
 	private String key;
 	private String cid;
+	private String itemName;
+	private int totalAmount;
 }

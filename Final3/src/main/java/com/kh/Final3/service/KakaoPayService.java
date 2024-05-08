@@ -124,6 +124,21 @@ public class KakaoPayService {
 
 		return template.postForObject(uri, entity, KakaoPaySubscriptionResponseVO.class);
 	}
+	@Transactional
+	public void insertPayment(KakaoPaySubscriptionResponseVO responseVO) {
+		int paymentNo = paymentDao.paymentSequence();
+		PaymentDto paymentDto = PaymentDto.builder()
+				.paymentNo(paymentNo)
+				.paymentTime(responseVO.getCreatedAt())
+				.paymentName(responseVO.getItemName())
+				.paymentTotal(responseVO.getAmount().getTotal())
+				.companyNo(Integer.parseInt(responseVO.getPartnerUserId()))
+				.paymentTid(responseVO.getTid())
+				.paymentSid(responseVO.getSid())
+				.build();
+		paymentDao.insertPayment(paymentDto);
+	}
+	
 
 	//정기 결제 상태 확인
 	public KakaoPaySubscriptionStatusResponseVO subscriptionStatus(KakaoPaySubscriptionStatusRequestVO requestVO)
@@ -161,6 +176,6 @@ public class KakaoPayService {
 				.companyNo(companyNo)
 				.paymentSid(responseVO.getSid())
 				.build();
-		paymentDao.insertPayment(paymentDto);
+		paymentDao.cancelSubscription(paymentDto);
 	}
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kh.Final3.dao.AdminDao;
 import com.kh.Final3.dao.CompanyDao;
 import com.kh.Final3.dao.EmpDao;
+import com.kh.Final3.dao.PaymentDao;
 import com.kh.Final3.dto.AdminDto;
 import com.kh.Final3.dto.CompanyDto;
 import com.kh.Final3.dto.EmpDto;
@@ -30,6 +31,8 @@ public class RefreshRestController {
 	private CompanyDao companyDao;
 	@Autowired
 	private AdminDao adminDao;
+	@Autowired
+	private PaymentDao paymentDao;
 
 	@PostMapping("/")
 	public ResponseEntity<LoginVO> refresh(@RequestHeader("Authorization") String refreshToken) {
@@ -45,6 +48,7 @@ public class RefreshRestController {
 				String newRefreshToken = jwtService.createRefreshToken(adminDto);
 
 				return ResponseEntity.ok().body(LoginVO.builder().loginId(adminDto.getAdminId()).loginLevel("운영자")
+						.isPaid("운영자")
 						.accessToken(accessToken).refreshToken(newRefreshToken).build());
 			}
 			case "회사": {
@@ -56,6 +60,7 @@ public class RefreshRestController {
 				String newRefreshToken = jwtService.createRefreshToken(companyDto);
 
 				return ResponseEntity.ok().body(LoginVO.builder().loginId(companyDto.getCompanyNo()).loginLevel("회사")
+						.isPaid(paymentDao.isPaid(companyDto.getCompanyNo()))
 						.accessToken(accessToken).refreshToken(newRefreshToken).build());
 			}
 			default: {
@@ -72,6 +77,7 @@ public class RefreshRestController {
 
 				return ResponseEntity.ok()
 						.body(LoginVO.builder().loginId(empDto.getEmpNo()).loginLevel(empDto.getEmpType())
+								.isPaid(paymentDao.isPaid(empDto.getCompanyNo()))
 								.accessToken(accessToken).refreshToken(newRefreshToken).build());
 				}
 			}

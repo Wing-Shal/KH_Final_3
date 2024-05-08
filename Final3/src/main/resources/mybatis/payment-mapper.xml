@@ -39,4 +39,55 @@
 	<select id="paymentList" resultType="paymentDto">
 		select * from payment where company_no = #{companyNo} order by payment_no desc
 	</select>
+	
+	<!-- 정기 결제 중인 주문건 -->
+	<select id="selectActiveSubscription" resultType="paymentDto">
+		select 
+			payment_no, 
+			payment_time, 
+			payment_name, 
+			payment_total, 
+			company_no, 
+			payment_tid, 
+			payment_sid, 
+			payment_status  
+		from (
+			select
+				payment_no, 
+				payment_time, 
+				payment_name, 
+				payment_total, 
+				company_no, 
+				payment_tid, 
+				payment_sid, 
+				payment_status,
+				row_number() over (partition by company_no order by payment_no desc) as rn
+			from payment
+		) subquery
+		where rn=1 and payment_status='ACTIVE'
+	</select>
+	
+	<!-- 회사의 결제 상태 -->
+	<select id="isPaid" resultType="string">
+		select 
+			payment_status  
+		from (
+			select
+				payment_status,
+				row_number() over (partition by company_no order by payment_no desc) as rn
+			from payment
+			where company_no = #{companyNo}
+		)
+		where rn=1
+	</select>
+	
+	<!-- 회사 별 결제 기록 -->
+	<select id="selectHistory" resultType="PaymentHistoryVO">
+		select 
+			payment_time, payment_name, payment_total, payment_status 
+		from
+			payment 
+		where 
+			company_no = #{companyNo} order by payment_time asc
+	</select>
 </mapper>

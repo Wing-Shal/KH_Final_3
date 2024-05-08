@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class LoginVO {
 	private Integer loginId;
 	private String loginLevel;
+	private String isPaid;
 	private String accessToken;
 	private String refreshToken;
 }

@@ -13,12 +13,12 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
 	@Autowired
 	private Adminintercepter adminintercepter;
 
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(adminintercepter)
-						.addPathPatterns("/admin/**")
-						.excludePathPatterns("/admin/login");
-	}
+//	@Override
+//	public void addInterceptors(InterceptorRegistry registry) {
+//		registry.addInterceptor(adminintercepter)
+//						.addPathPatterns("/admin/**")
+//						.excludePathPatterns("/admin/login");
+//	}
 	
 	
 }
