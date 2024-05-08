@@ -19,13 +19,15 @@
 	<!-- Create(등록) -->
 	<insert id="save">
 
-		INSERT INTO board_blind(BLIND_NO, BLIND_TITLE, BLIND_CONTENT,
+		INSERT INTO board_blind(BLIND_NO, BLIND_TITLE,
+		BLIND_CONTENT,
 		BLIND_WRITER_NICK,
-		BLIND_WRITER_COMPANY, BLIND_WTIME, BLIND_ETIME, BLIND_VIEW, BLIND_PASSWORD, BLIND_EMP_NO)
+		BLIND_WRITER_COMPANY,
+		BLIND_VIEW, BLIND_PASSWORD, BLIND_EMP_NO)
 		VALUES
 		(#{blindNo}, #{blindTitle}, #{blindContent}, #{blindWriterNick},
-		#{blindWriterCompany}, #{blindWtime},
-		#{blindEtime}, #{blindView}, #{blindPassword}, #{blindEmpNo}
+		#{blindWriterCompany}, #{blindView},
+		#{blindPassword}, #{blindEmpNo})
 
 	</insert>
 
@@ -36,14 +38,18 @@
 
 	<select id="selectBlindList" resultType="BoardBlindDto">
 		SELECT
-		bb.blind_no, bb.blind_title, bb.blind_content, bb.blind_writer_nick,
-		c.company_name AS blind_writer_company, bb.blind_wtime,
+		bb.blind_no,
+		bb.blind_title, bb.blind_content, bb.blind_writer_nick,
+		c.company_name
+		AS blind_writer_company, bb.blind_wtime,
 		bb.blind_etime,
-		bb.blind_view, bb.blind_password, bb.blind_emp_no
+		bb.blind_view,
+		bb.blind_password, bb.blind_emp_no
 		FROM
 		board_blind bb
 		JOIN
-		emp e ON bb.blind_emp_no = e.emp_no
+		emp e ON
+		bb.blind_emp_no = e.emp_no
 		JOIN
 		company c ON e.company_no = c.company_no
 		ORDER BY
@@ -80,21 +86,21 @@
 
 
 
-	<!-- 사용자의 회사 번호 조회 -->
+	<!-- 사용자의 회사 이름 조회 -->
 	<select id="selectCompanyNoByToken" resultType="int">
 		SELECT
-		e.company_no
-		FROM
-		emp e
-		WHERE
-		e.emp_no = (
-		SELECT
-		emp_no
-		FROM
-		emp
-		WHERE
-		token = #{token}
+		c.company_name
+		FROM company c
+		WHERE c.company_no = (
+		SELECT e.company_no
+		FROM emp e
+		WHERE e.emp_no = (
+		SELECT emp_no
+		FROM emp
+		WHERE token = #{token}
 		)
+		)
+
 	</select>
 
 	<!-- 회사 번호로 회사 이름 조회 -->
