@@ -59,7 +59,7 @@ public class BoardBlindDao {
 		sqlSession.insert("boardBlind.save", boardBlindDto);
 	}
 
-	// 전체수정
+	// 전체수정 dd
 	public boolean edit(BoardBlindDto boardBlindDto) {
 		return sqlSession.update("boardBlind.edit", boardBlindDto) > 0;
 	}
