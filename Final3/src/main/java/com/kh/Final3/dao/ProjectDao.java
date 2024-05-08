@@ -69,6 +69,16 @@ public class ProjectDao {
 	public boolean delete(int projectNo) {
 		return sqlSession.delete("project.delete", projectNo) > 0;
 	}
+	
+	//프로젝트 Dto 넣기
+	public ProjectDto selectOne1(int projectNo) {
+		return sqlSession.selectOne("project.find2", projectNo);
+	}
+
+	// 프로젝트 번호로 상세정보를 조회
+	public ProjectDto projectFind(int projectNo) {
+		return sqlSession.selectOne("project.projectFind",projectNo);
+	}
 
 
 }

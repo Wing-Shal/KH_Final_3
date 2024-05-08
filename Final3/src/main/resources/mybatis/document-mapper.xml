@@ -47,10 +47,13 @@
 		document_no = #{documentNo}
 	</select>
 	
+	<!-- 프로젝트 Dto 넣기 -->
 		<select id="find2" resultType="DocumentDto">
-		select * from document where
+		select * from project where
 		project_no = #{projectNo}
 	</select>
+	
+
 
 	<!-- update 전체수정/ -->
 	<update id="edit">
