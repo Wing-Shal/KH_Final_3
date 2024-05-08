@@ -8,10 +8,17 @@
 
 	<!-- 사번 별 채팅방 목록 -->
 	<select id="listByEmpNo" resultType="ChatroomDto">
-		select ec.chatroom_no, c.chatroom_name
-			from emp_chatroom ec
+		select ec.chatroom_no, c.chatroom_name, m.message_no, m.message_sender, m.message_content, m.message_time
+				from emp_chatroom ec
 				join chatroom c on ec.chatroom_no = c.chatroom_no
+				left join (
+				    select chatroom_no, max(message_time) as last_message_time
+				    from message
+				    group by chatroom_no
+				) sub on c.chatroom_no = sub.chatroom_no
+				left join message m on sub.chatroom_no = m.chatroom_no and sub.last_message_time = m.message_time
 			where ec.emp_no = #{empNo}
+		order by m.message_time desc
 	</select>
 	
 	<!-- 채팅방에 누구누구 있는지 조회 -->
@@ -50,7 +57,13 @@
     	join emp_chatroom ec on e.emp_no = ec.emp_no
     	join grade g on e.grade_no = g.grade_no
     where ec.chatroom_no = #{chatroomNo}
-</select>
+	</select>
+	
+	<!-- 채팅방 초대할 때 이미 있는 사람인지 확인용-->
+	<select id="isEmpInChatroom" resultType="int">
+		select count(*) from emp_chatroom where emp_no = #{empNo} and chatroom_no = #{chatroomNo}
+	</select>
+	
 	
 	
 

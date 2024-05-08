@@ -49,10 +49,33 @@
 			) = 2
 	</select>
 	
+	<!-- 채팅방 별 최근 메시지 조회 -->
+	<select id="recentMessage">
+		select c.chatroom_no, c.chatroom_name, m.message_no, m.message_sender, m.message_content, m.message_time
+			from chatroom c
+				left join (
+					    select chatroom_no, max(message_time) as last_message_time
+					    from message
+					    group by chatroom_no
+					) sub on c.chatroom_no = sub.chatroom_no
+				left join message m on sub.chatroom_no = m.chatroom_no and sub.last_message_time = m.message_time
+		where c.chatroom_no = #{chatroomNo}
+	</select>
+	
 	<!-- 사원 채팅방 초대 => 해당 채팅방에 몇명이 참가중인지 -->
 	<select id="numberOfEmpInChatroom" resultType="Integer">
 		select count(*) emp_no from emp_chatroom where chatroom_no = #{chatroomNo}
 	</select>
+	
+	<!-- 채팅방 이름 개설할 때 설정용 -->
+	<select id="findEmpName" resultType="String">
+		select emp_name from emp where emp_no = #{empNo}
+	</select>
+	
+	<!-- 채팅방 번호로 채팅방 이름 찾기 -->
+	<select id="findChatroomName" resultType="String">
+        select chatroom_name from chatroom where chatroom_no = #{chatroomNo}
+    </select>
 	
 	<!-- 채팅방 번호로 채팅방 조회 -->
     <select id="findByChatroomNo" resultType="ChatroomDto">

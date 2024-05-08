@@ -23,6 +23,11 @@ public class ChatroomDao {
 		return sqlSession.selectList("empChatroom.listByEmpNo", empNo);
 	}
 	
+	//채팅방 이름 수정
+	public boolean editChatroomName(ChatroomDto chatroomDto) {
+		return sqlSession.update("chatroom.edit", chatroomDto) > 0;
+	}
+	
 	
 	// 채팅방 번호에 속해있는 사원 조회
 	public List<EmpChatroomDto> selectListEmpByChatroom(int chatroomNo){
@@ -80,6 +85,23 @@ public class ChatroomDao {
    
    public Integer numberOfParticipants(int chatroomNo) {
 	   return sqlSession.selectOne("chatroom.numberOfEmpInChatroom", chatroomNo);
+   }
+   
+   //채팅방 이름 설정용
+   public String findEmpName(int empNo) {
+	   return sqlSession.selectOne("chatroom.findEmpName", empNo);
+   }
+   
+   //채팅방 이름 설정용
+   public String findChatroomName(int chatroomNo) {
+	   return sqlSession.selectOne("chatroom.findChatroomName", chatroomNo);
+   }
+   
+   public Integer isEmpInChatroom(int empNo, int chatroomNo) {
+	    Map<String, Integer> info = new HashMap<>();
+	    info.put("empNo", empNo);
+	    info.put("chatroomNo", chatroomNo);
+	   return sqlSession.selectOne("empChatroom.isEmpInChatroom", info);
    }
    
    
