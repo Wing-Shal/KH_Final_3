@@ -3,10 +3,13 @@ package com.kh.Final3.restcontroller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -107,6 +110,16 @@ public class ChatRestController {
     public ChatroomDto invetEmp(@PathVariable int chatroomNo, @PathVariable int empNo) {
     	return chatroomService.inviteEmp(chatroomNo, empNo);
     }
+    
+    //채팅방 이름 변경
+	@PatchMapping("/")
+	public ResponseEntity<?> editUnit(@RequestBody ChatroomDto chtroomDto) {
+		boolean result = chatroomDao.editChatroomName(chtroomDto);
+		if(result == false) {
+			return ResponseEntity.status(404).build();
+		}
+		return ResponseEntity.ok().build();
+	}
 
 
 
