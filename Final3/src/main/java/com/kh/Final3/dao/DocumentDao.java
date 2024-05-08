@@ -49,10 +49,10 @@ public class DocumentDao {
 		return sqlSession.selectOne("document.find", documentNo);
 	}
 	
+	//프로젝트 Dto 넣기
 	public ProjectDto selectOne1(int projectNo) {
-		return sqlSession.selectOne("document.find2", projectNo);
+		return sqlSession.selectOne("project.find2", projectNo);
 	}
-	
 	
 	//시퀀스
 	public int sequence() {
@@ -81,7 +81,8 @@ public class DocumentDao {
 		return sqlSession.selectList("document.searchDocuments",keyword);
 	}
 	
-
+	//프로젝트이름 띄우기
+	
 
 }
 

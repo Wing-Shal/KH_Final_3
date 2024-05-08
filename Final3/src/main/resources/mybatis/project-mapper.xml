@@ -61,4 +61,16 @@ values (
 	</delete>
 
 
+	<!-- 프로젝트 Dto 넣기 -->
+		<select id="find2" resultType="DocumentDto">
+		select * from project where
+		project_no = #{projectNo}
+	</select>
+	
+	<!-- 프로젝트번호로 프로젝트 불러오기 -->
+	<select id="projectFind" resultType="ProjectDto">
+		select * from project where project_no = #{projectNo}
+	</select>
+	
+	
 </mapper>

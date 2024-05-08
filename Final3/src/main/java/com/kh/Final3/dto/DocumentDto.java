@@ -21,7 +21,6 @@ public class DocumentDto {
 	private Date documentLimitTime; //문서결재 마감일
 	private String documentWriter; //문서 작성자 
 	private String documentApprover; //문서 결재자
-	private String projectName; //프로젝트이름
 	private int empNo; //사원번호
 
 }

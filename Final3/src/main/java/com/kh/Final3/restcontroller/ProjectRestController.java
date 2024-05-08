@@ -69,6 +69,16 @@ public class ProjectRestController {
 				.build();
 	}
 	
+	//사번말고 프로젝트 번호로 상세정보를 조회하는 매핑을 구현(selectOne)
+	@GetMapping("/getProjectName/{projectNo}")
+	public String projectFind(@PathVariable int projectNo) {
+		ProjectDto projectDto = projectDao.selectOne(projectNo);
+
+		return projectDto.getProjectName();
+	}///
+
+	
+	
 	@GetMapping("/{empNo}")
 	public List<ProjectDto> myList(@PathVariable int empNo) {
 		return projectDao.myList(empNo);
@@ -144,43 +154,43 @@ public class ProjectRestController {
 		return ResponseEntity.ok().body(projectDao.selectOne(projectDto.getProjectNo()));
 		}
 	//삭제
-		@Operation(
-			description = "학생 정보 삭제",
-			responses = {
-				@ApiResponse(responseCode = "200",description = "삭제 완료",
-					content = @Content(
-							mediaType = "text/plain",
-							schema = @Schema(implementation = String.class),
-							examples = @ExampleObject("ok")
-					)
-				),
-				@ApiResponse(responseCode = "404",description = "학생 정보 없음",
-					content = @Content(
-							mediaType = "text/plain",
-							schema = @Schema(implementation = String.class), 
-							examples = @ExampleObject("not found")
-					)
-				),
-				@ApiResponse(responseCode = "500",description = "서버 오류",
-					content = @Content(
-							mediaType = "text/plain",
-							schema = @Schema(implementation = String.class), 
-							examples = @ExampleObject("server error")
-					)
-				),
-			}
-		)
+//		@Operation(
+//			description = "학생 정보 삭제",
+//			responses = {
+//				@ApiResponse(responseCode = "200",description = "삭제 완료",
+//					content = @Content(
+//							mediaType = "text/plain",
+//							schema = @Schema(implementation = String.class),
+//							examples = @ExampleObject("ok")
+//					)
+//				),
+//				@ApiResponse(responseCode = "404",description = "학생 정보 없음",
+//					content = @Content(
+//							mediaType = "text/plain",
+//							schema = @Schema(implementation = String.class), 
+//							examples = @ExampleObject("not found")
+//					)
+//				),
+//				@ApiResponse(responseCode = "500",description = "서버 오류",
+//					content = @Content(
+//							mediaType = "text/plain",
+//							schema = @Schema(implementation = String.class), 
+//							examples = @ExampleObject("server error")
+//					)
+//				),
+//			}
+//		)
 		
-	// 삭제
-	@DeleteMapping("/{projectNo}")
-	public ResponseEntity<?> delete(@PathVariable int projectNo) {
-		boolean result = projectDao.delete(projectNo);
-		if (result == false) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok().build();
-	}
-		
+//	// 삭제
+//	@DeleteMapping("/{projectNo}")
+//	public ResponseEntity<?> delete(@PathVariable int projectNo) {
+//		boolean result = projectDao.delete(projectNo);
+//		if (result == false) {
+//			return ResponseEntity.notFound().build();
+//		}
+//		return ResponseEntity.ok().build();
+//	}
+//		
 
 
 }

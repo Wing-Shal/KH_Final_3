@@ -23,6 +23,7 @@ import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.dto.ProjectDto;
 import com.kh.Final3.service.JwtService;
 import com.kh.Final3.vo.DocumentDataVO;
+import com.kh.Final3.vo.ProjectDocumentVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -82,7 +83,7 @@ public class DocumentRestController {
 			@Content(mediaType = "text/plain", schema = 
 			@Schema(implementation = String.class), examples = 
 			@ExampleObject("server error"))) })
-//
+
 //	@GetMapping("/{documentNo}")
 //	public ResponseEntity<DocumentDto> find(@PathVariable int documentNo) {
 //		DocumentDto documentDto = documentDao.selectOne(documentNo);
@@ -104,11 +105,16 @@ public class DocumentRestController {
 			 EmpDto empDto = empDao.selectOne(documentDto.getEmpNo());
 			 
 			 ProjectDto projectDto = projectDao.selectOne(documentDto.getProjectNo());
+			 
 			 System.out.println("프로젝트"+projectDto);
 			 int sequence = documentDao.sequence();
 			 documentDto.setDocumentNo(sequence);
-			 int sequence2 = projectDao.sequence();
-			 projectDto.setProjectNo(sequence);
+			 //int sequence2 = projectDao.sequence();
+			 //projectDto.setProjectNo(sequence);
+			 
+			 documentDto.setProjectNo(projectDto.getProjectNo());
+			 
+			// documentDto.setProjectName(projectDto.getProjectName());
 			 documentDto.setDocumentWriter(empDto.getEmpName());
 			 documentDto.setDocumentApprover(empDto.getEmpName());
 			 
@@ -177,6 +183,7 @@ public class DocumentRestController {
 		return documentDao.searchDocuments(keyword);
 	}
 	
+
 	
 }
 
