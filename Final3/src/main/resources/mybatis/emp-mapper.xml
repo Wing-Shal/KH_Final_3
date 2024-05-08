@@ -89,5 +89,14 @@
    <delete id="delete">
       delete emp where emp_no = #{empNo}
    </delete>
+   
+   <!-- attach랑 연결 -->
+   <insert id="connect">
+		insert into emp_attach (emp_no, attach_no) values (#{empNo}, #{attachNo})
+	</insert>
+	
+	<select id="findAttach" resultType="int">
+		select attach_no from emp_attach where emp_no = #{empNo}
+	</select>
       
 </mapper>

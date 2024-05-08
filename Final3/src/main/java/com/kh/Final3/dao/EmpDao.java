@@ -1,6 +1,8 @@
 package com.kh.Final3.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,5 +59,21 @@ public class EmpDao {
    public boolean delete(int empNo) {
       return sqlSession.delete("emp.delete", empNo) > 0;
    }
+   
+   
+   public EmpDto find (int empNo) {
+		return sqlSession.selectOne("emp.find", empNo);
+	}
+   
+   public void connect (int empNo, int attachNo) {
+		Map<String, Object> data = new HashMap<>();
+		data.put("empNo", empNo);
+		data.put("attachNo", attachNo);
+		sqlSession.insert("emp.connect", data);
+	}
+	
+	public int findAttach (int empNo) {
+		return sqlSession.selectOne("emp.findAttach", empNo);
+	}
 
 }
