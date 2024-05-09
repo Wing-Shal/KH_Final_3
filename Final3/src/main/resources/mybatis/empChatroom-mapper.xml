@@ -18,12 +18,18 @@
 				) sub on c.chatroom_no = sub.chatroom_no
 				left join message m on sub.chatroom_no = m.chatroom_no and sub.last_message_time = m.message_time
 			where ec.emp_no = #{empNo}
-		order by m.message_time desc
+		order by case when m.message_time is null then 1 else 0 end, m.message_time desc
 	</select>
 	
 	<!-- 채팅방에 누구누구 있는지 조회 -->
-	<select id="listByRoomNo" resultType="empChatroomDto">
+	<select id="listByRoomNo" resultType="EmpChatroomDto">
 		select emp_no from emp_chatroom where chatroom_no = #{chatroomNo}
+	</select>
+	
+	
+	<!-- 채팅방 인원 수 조회 -->
+	<select id="countChatroomMember" resultType="Integer">
+		select count(*) from emp_chatroom where chatroom_no = #{chatroomNo}
 	</select>
 	
 	<!-- 새로 방이 생성될 때 사원이랑 채팅방 연결하기 -->
@@ -31,6 +37,11 @@
 		insert into emp_chatroom (emp_no, chatroom_no) 
 		values (#{empNo}, #{chatroomNo})
 	</insert>
+	
+	<!-- 채팅방 나가기 -->
+	<delete id="outChatroom">
+		delete from emp_chatroom where emp_no = #{empNo} and chatroom_no = #{chatroomNo}
+	</delete>
 	
 	<!-- 이름찾기 -->
 	<select id="listSetName" resultType="string">
