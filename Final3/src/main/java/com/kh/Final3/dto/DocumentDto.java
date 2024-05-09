@@ -22,5 +22,6 @@ public class DocumentDto {
 	private String documentWriter; //문서 작성자 
 	private String documentApprover; //문서 결재자
 	private int empNo; //사원번호
+	private String documentProjectName; //프로젝트 이름
 
 }
