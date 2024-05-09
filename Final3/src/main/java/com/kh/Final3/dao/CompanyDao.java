@@ -26,6 +26,13 @@ public class CompanyDao {
       return sqlSession.selectOne("company.find", companyNo);
    }
    
+   public List<String> gradeList(int companyNo) {
+	   return sqlSession.selectList("company.gradeList", companyNo);
+   }
+   public List<String> deptList(int companyNo) {
+	   return sqlSession.selectList("company.deptList", companyNo);
+   }
+   
    public int sequence() {
       return sqlSession.selectOne("company.sequence");
    }

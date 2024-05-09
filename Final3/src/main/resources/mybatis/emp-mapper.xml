@@ -31,6 +31,26 @@
    <select id="listByDept" resultType="EmpDto">
       select * from emp where dept_no = #{deptNo} and company_no = #{companyNo} order by emp_no asc
    </select>
+   <select id="detailList" resultType="EmpInfoVO">
+		select 
+			e.emp_no,
+			e.emp_name,
+			g.grade_name,
+			d.dept_name,
+			e.emp_contact,
+			e.emp_email,
+			e.emp_status,
+			e.emp_join,
+			e.emp_exit
+		from
+			emp e
+		left join
+			grade g on e.grade_no = g.grade_no
+		left join
+			dept d on e.dept_no = d.dept_no
+		where
+			e.company_no = #{companyNo}
+   </select>
    
    <!-- 직급 이름 -->
    <select id="listSetGrade" resultType="string">
