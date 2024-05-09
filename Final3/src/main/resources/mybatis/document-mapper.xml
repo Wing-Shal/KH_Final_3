@@ -30,10 +30,21 @@
 	</insert>
 
 	<!--프로젝트 번호가 같은 문서 불러오기 -->
-	<select id="docuList" resultType="DocumentDto">
+	<!-- <select id="docuList" resultType="DocumentDto">
 		select * from document where
 		project_no = #{projectNo}
-	</select>
+	</select>  -->
+	
+	
+	<select id="docuList" resultType="DocumentDto">
+    SELECT d.*, p.project_name
+    FROM document d
+    JOIN project p ON d.project_no = p.project_no
+    WHERE d.project_no = #{projectNo}
+</select>
+	
+	
+	
 
 	<!-- Read 조회 -->
 	<select id="list" resultType="DocumentDto">
