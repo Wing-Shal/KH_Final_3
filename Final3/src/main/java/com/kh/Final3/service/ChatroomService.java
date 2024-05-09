@@ -31,7 +31,7 @@ public class ChatroomService {
             String empName1 = chatroomDao.findEmpName(empNo1);
             String empName2 = chatroomDao.findEmpName(empNo2);
             String newChatroomName = empName1 + ", " + empName2;
-            ChatroomDto newChatroomDto = new ChatroomDto(newChatroomNo, newChatroomName);
+            ChatroomDto newChatroomDto = new ChatroomDto(newChatroomNo, newChatroomName, empName2);
             chatroomDao.save(newChatroomDto);
             
             //사원-채팅방 연결 정보 저장
@@ -50,7 +50,7 @@ public class ChatroomService {
         Integer isEmpInChatroom = chatroomDao.isEmpInChatroom(empNo, chatroomNo);
 
         if (isEmpInChatroom >= 1) {
-            throw new IllegalArgumentException("이미 채팅방에 있음 ㅋㅋ");
+            throw new IllegalArgumentException("이미 채팅방에 있음 ㅋㅋ.");
         }
     	
     	//해당 채팅방에 몇명 있는지
@@ -71,12 +71,18 @@ public class ChatroomService {
                 if (chatroomNameBuilder.length() > 0) chatroomNameBuilder.append(", ");
                 chatroomNameBuilder.append(empName);
             }
+            //참가한 사람 이름
             String empName2 = chatroomDao.findEmpName(empNo);
             
             String newChatroomName = chatroomNameBuilder.toString() + ", " + empName2;
             
-            ChatroomDto newChatroomDto = new ChatroomDto(newChatroomNo, newChatroomName);
-            chatroomDao.save(newChatroomDto);
+            chatroomDao.save(newChatroomNo, newChatroomName);
+            
+            ChatroomDto newChatroomDto = new ChatroomDto();
+            newChatroomDto.setChatroomName(newChatroomName);
+            newChatroomDto.setChatroomNo(newChatroomNo);
+            newChatroomDto.setEmpName(empName2);
+            
             
             //기존 사원-채팅방 연결 정보 저장
             for(Integer existingEmpNo : originEmpNos) {
@@ -91,10 +97,14 @@ public class ChatroomService {
     		chatroomDao.connectEmpChatroom(empNo, chatroomNo);
     		
     		//사원 이름 찾기
-//            String empName = chatroomDao.findEmpName(empNo);
+            String empName = chatroomDao.findEmpName(empNo);
     		String chatroomName = chatroomDao.findChatroomName(chatroomNo);
     		
-    		ChatroomDto inviteChatroomDto = new ChatroomDto(chatroomNo, chatroomName);
+    		ChatroomDto inviteChatroomDto = new ChatroomDto();
+    		inviteChatroomDto.setChatroomName(chatroomName);
+    		inviteChatroomDto.setChatroomName(chatroomName);
+    		inviteChatroomDto.setEmpName(empName);
+    				
     		
             return inviteChatroomDto;
     	}

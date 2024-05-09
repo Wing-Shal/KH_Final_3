@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.Final3.dto.MessageDto;
 
@@ -63,6 +64,20 @@ public class MessageDao {
 	// 메시지 총 개수 조회
 	public Integer count(int chatroomNo) {
 	    return sqlSession.selectOne("message.count", chatroomNo);
+	}
+	
+	//리드카운트
+	@Transactional
+	public void updateReadCount(int messageNo) {
+		sqlSession.update("message.updateReadCount", messageNo);
+	}
+	
+	@Transactional
+	public void checkReadMessage(int messageNo, int empNo) {
+		Map<String, Integer> data = new HashMap<>();
+        data.put("messageNo", messageNo);
+        data.put("empNo", empNo);
+	    sqlSession.insert("message.insertMessageRead", data);
 	}
 	
 	

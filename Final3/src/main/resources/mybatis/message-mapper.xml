@@ -90,6 +90,23 @@
 	<select id="find" resultType="MessageDto">
 		select * from message where message_no = #{messageNo}
 	</select>
+	
+	<!-- 메시지 지우기 -->
+	<delete id="deleteMessage">
+		delete message where chatroom_no = #{chatroomNo}
+	</delete>
+	
+	<!-- readCount -->
+	<update id="updateReadCount" parameterType="int">
+	    update message
+	   		set read_count = read_count + 1
+	    where message_no = #{messageNo}
+	</update>
+	
+	<insert id="insertMessageRead">
+	    insert into message_read (message_no, emp_no)
+	    values (#{messageNo}, #{empNo})
+	</insert>
 
 
 </mapper>

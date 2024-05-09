@@ -19,7 +19,6 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kh.Final3.dao.ChatroomDao;
 import com.kh.Final3.dao.MessageDao;
 import com.kh.Final3.dto.ChatroomDto;
 import com.kh.Final3.dto.MessageDto;

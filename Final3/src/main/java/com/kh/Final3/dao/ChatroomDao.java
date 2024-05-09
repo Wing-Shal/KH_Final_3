@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.Final3.dto.ChatroomDto;
 import com.kh.Final3.dto.EmpChatroomDto;
-import com.kh.Final3.dto.MessageDto;
+import com.kh.Final3.vo.RecentMessageVO;
 
 @Repository
 public class ChatroomDao {
@@ -26,6 +26,11 @@ public class ChatroomDao {
 	//채팅방 이름 수정
 	public boolean editChatroomName(ChatroomDto chatroomDto) {
 		return sqlSession.update("chatroom.edit", chatroomDto) > 0;
+	}
+	
+	//채팅방 별 최근 메시지 조회
+	public List<RecentMessageVO> selectLastMessageList(int chatroomNo){
+		return sqlSession.selectList("chatroom.recentMessage", chatroomNo);
 	}
 	
 	
@@ -70,6 +75,13 @@ public class ChatroomDao {
        sqlSession.insert("chatroom.save", chatroomDto);
    }
    
+   public void save(int chatroomNo, String chatroomName) {
+	   Map<String, Object> info = new HashMap<>();
+	    info.put("chatroomNo", chatroomNo);
+	    info.put("chatroomName", chatroomName);
+       sqlSession.insert("chatroom.save", info);
+   }
+   
    // 채팅방 번호로 채팅방 조회(?)
    public ChatroomDto findByChatroomNo(int chatroomNo) {
        return sqlSession.selectOne("chatroom.findByChatroomNo", chatroomNo);
@@ -104,6 +116,27 @@ public class ChatroomDao {
 	   return sqlSession.selectOne("empChatroom.isEmpInChatroom", info);
    }
    
+   //채팅방 나가기
+   public boolean outChatroom(int empNo, int chatroomNo) {
+	    Map<String, Integer> info = new HashMap<>();
+	    info.put("empNo", empNo);
+	    info.put("chatroomNo", chatroomNo);
+	    
+	    int out = sqlSession.delete("empChatroom.outChatroom", info);
+
+	   boolean outResult = out > 0;
+	   
+	   //참여자 수 확인
+	   Integer participantCount = sqlSession.selectOne("empChatroom.countChatroomMember", chatroomNo);
+	   
+	   //참여자가 없거나 null이면 채팅방 삭제
+	    if (participantCount != null && participantCount == 0) {
+	    	sqlSession.delete("message.deleteMessage", chatroomNo);
+	        sqlSession.delete("chatroom.delete", chatroomNo);
+	    }
+	   
+	   return outResult;
+   }
    
 
    

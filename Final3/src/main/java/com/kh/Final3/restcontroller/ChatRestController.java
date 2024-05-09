@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import com.kh.Final3.service.ChatroomService;
 import com.kh.Final3.service.JwtService;
 import com.kh.Final3.vo.ChatDataVO;
 import com.kh.Final3.vo.LoginVO;
+import com.kh.Final3.vo.RecentMessageVO;
 
 @CrossOrigin
 @RestController
@@ -92,6 +94,13 @@ public class ChatRestController {
 		return chatroomDao.selectListEmpByChatroom(chatroomNo);
 	}
 	
+	//chatroomNo별 마지막 메시지
+	@GetMapping("/recentMessageList/{chatroomNo}")
+	public List<RecentMessageVO> lastMessageList(@PathVariable int chatroomNo){
+		return chatroomDao.selectLastMessageList(chatroomNo);
+	}
+	
+	
 	
 
 	//새로 채팅방을 열지, 만들지
@@ -117,6 +126,19 @@ public class ChatRestController {
 		boolean result = chatroomDao.editChatroomName(chtroomDto);
 		if(result == false) {
 			return ResponseEntity.status(404).build();
+		}
+		return ResponseEntity.ok().build();
+	}
+	
+	//채팅방 나가기
+	@DeleteMapping("/outChatroom/{empNo}/{chatroomNo}")
+	public ResponseEntity<?> delete(@RequestHeader("Authorization") String token, @PathVariable int chatroomNo) {
+//	public ResponseEntity<?> delete(@PathVariable int empNo, @PathVariable int chatroomNo) {
+		LoginVO loginVO = jwtService.parse(token);
+		int empNo = loginVO.getLoginId();
+		boolean result = chatroomDao.outChatroom(empNo, chatroomNo);
+		if(result == false) {
+			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok().build();
 	}
