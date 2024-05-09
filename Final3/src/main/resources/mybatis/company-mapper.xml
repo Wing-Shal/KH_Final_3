@@ -29,6 +29,14 @@
    <select id="find" resultType="companyDto">
       select * from company where company_no = #{companyNo}
    </select>
+   
+  	<select id="gradeList" resultType="String">
+  		select grade_name from grade where company_no = #{companyNo}
+  	</select>
+  	
+  	<select id="deptList" resultType="String">
+  		select dept_name from dept where company_no = #{companyNo}
+  	</select>
 
    
    <!-- Update -->

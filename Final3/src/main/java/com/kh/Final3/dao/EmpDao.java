@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.Final3.dto.DeptDto;
 import com.kh.Final3.dto.EmpDto;
+import com.kh.Final3.vo.EmpInfoVO;
 
 @Repository
 public class EmpDao {
@@ -31,6 +32,10 @@ public class EmpDao {
    public List<EmpDto> selectListByDept(DeptDto deptDto) {
          return sqlSession.selectList("emp.listByDept", deptDto);
       }
+   
+   public List<EmpInfoVO> detailList(int companyNo) {
+	   return sqlSession.selectList("emp.detailList", companyNo);
+   }
 
    public EmpDto selectOne(int empNo) {
 	   EmpDto empDto = sqlSession.selectOne("emp.find", empNo);

@@ -4,6 +4,7 @@ import java.net.URISyntaxException;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,7 +41,7 @@ public class KakaoPayRestctroller {
 	private JwtService jwtService;
 	
 	@GetMapping("/purchase")
-	public PaymentInitiationInfoVO purchase(@RequestHeader("Authorization") String token) throws URISyntaxException {
+	public ResponseEntity<PaymentInitiationInfoVO> purchase(@RequestHeader("Authorization") String token) throws URISyntaxException {
 		LoginVO loginVO = jwtService.parse(token);
 		
 		//주문번호를 생성
@@ -58,7 +59,7 @@ public class KakaoPayRestctroller {
 		paymentInitiationInfoVO.setTid(responseVO.getTid());
 		paymentInitiationInfoVO.setNextRedirectPcUrl(responseVO.getNextRedirectPcUrl());
 		
-		return paymentInitiationInfoVO;
+		return ResponseEntity.ok().body(paymentInitiationInfoVO);
 	}
 	@PostMapping("/purchase/success")
 	public void success(@RequestBody PaymentConfirmationRequestVO paymentConfirmationRequestVO) throws URISyntaxException {
