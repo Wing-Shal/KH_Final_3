@@ -9,5 +9,23 @@
 	<select id="find" resultType="AdminDto">
 		select * from admin where admin_id = #{adminId}
 	</select>
+	
+	<select id="sequence" resultType="int">
+      select admin_attach_seq.nextval from dual
+   </select>
+	
+	<insert id="connAttach">
+		insert into admin_attach(
+			admin_attach_no, 
+			attach_no
+		) values (
+			#{adminAttachNo},
+			#{attachNo}
+		)
+	</insert>
+	
+	<select id="selectAttachNoByAdminNo" resultType="int">
+		select attach_no where admin_attach_no = #{adminAttachNo}
+	</select>
 		
 </mapper>
