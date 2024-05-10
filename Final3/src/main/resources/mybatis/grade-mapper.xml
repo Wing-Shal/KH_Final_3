@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="grade">
+
+   <select id="find" resultType="int">
+      select grade_no from grade where company_no = #{companyNo} and grade_name = #{gradeName}
+   </select>
+      
+</mapper>

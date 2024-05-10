@@ -17,8 +17,8 @@ public class DeptDao {
       return sqlSession.selectList("dept.list");
    }
 
-   public DeptDto selectOne(int deptNo) {
-      return sqlSession.selectOne("dept.find", deptNo);
+   public int findDeptNo(DeptDto deptDto) {
+      return sqlSession.selectOne("dept.find", deptDto);
    }
    
    public int sequence() {

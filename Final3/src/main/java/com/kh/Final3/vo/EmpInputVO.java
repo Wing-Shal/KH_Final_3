@@ -8,15 +8,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class EmpInfoVO {
-	private int companyNo;
-	private int empNo;
+public class EmpInputVO {
 	private String empName;
+	private String deptName;
+	private String gradeName;
 	private String empContact;
 	private String empEmail;
-	private String gradeName;
-	private String deptName;
 	private String empType;
-	private Date empJoin;
-	private Date empExit;
 }

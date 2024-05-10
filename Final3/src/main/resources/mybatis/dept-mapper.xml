@@ -22,8 +22,8 @@
    
    <!-- Read -->
 
-   <select id="find" resultType="deptDto">
-      select * from dept where dept_no = #{deptNo}
+   <select id="find" resultType="int">
+      select dept_no from dept where company_no = #{companyNo} and dept_name = #{deptName}
    </select>
    
    <select id="list" resultType="deptDto">

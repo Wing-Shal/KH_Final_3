@@ -12,12 +12,12 @@
    </select>
    <insert id="save">
       insert into emp(
-         emp_no, emp_pw, emp_name, emp_contact, emp_email, emp_pr, emp_type, 
-         grade_no, company_no, dept_no, emp_status, emp_join, emp_exit
+         emp_no, emp_pw, emp_name, emp_contact, emp_email, emp_type, 
+         grade_no, company_no, dept_no, emp_status, emp_join
       )
       values(
-         #{empNo}, #{empPw}, #{empName}, #{empContact}, #{empEmail}, #{empPr}, #{empType}, #{gradeNo}, #{companyNo}, 
-         #{deptNo}, #{empStatus}, #{empJoin}, #{empExit} 
+         #{empNo}, #{empPw}, #{empName}, #{empContact}, #{empEmail}, #{empType}, #{gradeNo}, #{companyNo}, 
+         #{deptNo}, #{empStatus}, sysdate
       )
    </insert>
    
@@ -32,7 +32,8 @@
       select * from emp where dept_no = #{deptNo} and company_no = #{companyNo} order by emp_no asc
    </select>
    <select id="detailList" resultType="EmpInfoVO">
-		select 
+		select
+			e.company_no,
 			e.emp_no,
 			e.emp_name,
 			g.grade_name,

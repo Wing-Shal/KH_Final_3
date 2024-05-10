@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -141,10 +142,40 @@ public class EmpRestController {
          }
          return ResponseEntity.status(404).build();
      }
-
-   
-   
+     
+   //수정
+     @Operation(
+         description = "사원 정보 변경",
+         responses = {
+             @ApiResponse(responseCode = "200",description = "변경 완료",
+                 content = @Content(
+                     mediaType = "application/json",
+                     schema = @Schema(implementation = EmpDto.class)
+                 )
+             ),
+             @ApiResponse(responseCode = "404",description = "사원 정보 없음",
+                 content = @Content(
+                         mediaType = "text/plain",
+                         schema = @Schema(implementation = String.class), 
+                         examples = @ExampleObject("not found")
+                 )
+             ),
+             @ApiResponse(responseCode = "500",description = "서버 오류",
+                 content = @Content(
+                         mediaType = "text/plain",
+                         schema = @Schema(implementation = String.class), 
+                         examples = @ExampleObject("server error")
+                 )
+             ),
+         }
+     )
+     
+     @PatchMapping("/edit")
+     public ResponseEntity<EmpDto> editUnit(@RequestBody EmpDto empDto) {
+         boolean result = empDao.editUnit(empDto);
+         if(result == false) return ResponseEntity.notFound().build();
+         return ResponseEntity.ok().body(empDao.selectOne(empDto.getEmpNo()));//수정 완료된 결과를 조회하여 반환
+     }
   
-   
    
 }
