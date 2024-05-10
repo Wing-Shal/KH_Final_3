@@ -44,7 +44,7 @@
 	
 	
 	<!-- 메시지 총 개수 조회 -->
-	<select id="count" resultType="int">
+	<select id="count" resultType="Integer">
 	    select count(*) from message where chatroom_no = #{chatroomNo}
 	</select>
 	
@@ -67,7 +67,7 @@
 
 	
 	<!-- 이름찾기 -->
-	<select id="listSetName" resultType="string">
+	<select id="listSetName" resultType="String">
 		select e.emp_name 
 			from emp e 
 			join message m 
@@ -76,7 +76,7 @@
 	</select>
 	
 	<!-- 직책찾기 -->
-	<select id="listSetGrade" resultType="string">
+	<select id="listSetGrade" resultType="String">
 		select g.grade_name
 			from emp e
 			join grade g on e.grade_no = g.grade_no
@@ -90,6 +90,7 @@
 	<select id="find" resultType="MessageDto">
 		select * from message where message_no = #{messageNo}
 	</select>
+	
 	
 	<!-- 메시지 지우기 -->
 	<delete id="deleteMessage">
@@ -107,6 +108,41 @@
 	    insert into message_read (message_no, emp_no)
 	    values (#{messageNo}, #{empNo})
 	</insert>
+	
+	<select id="isReadMessage" resultType="Integer">
+		select count(*) from message_read where message_no = #{messageNo} and emp_no = #{empNo}
+	</select>
+	
+	<select id="unreadMessage" resultType="MessageInfoVO">
+		select 
+		    m.message_no,
+		    m.chatroom_no,
+		    m.message_content,
+		    m.message_time,
+		    coalesce((select count(distinct emp_no) 
+		              from emp_chatroom 
+		              where chatroom_no = m.chatroom_no) - 
+		             count(distinct r.emp_no), 
+		             (select count(distinct emp_no) 
+		              from emp_chatroom 
+		              where chatroom_no = m.chatroom_no)) as unread_count
+		from 
+		    message m
+		left join 
+		    message_read r on m.message_no = r.message_no
+		group by 
+		    m.message_no, m.chatroom_no, m.message_content, m.message_time
+		order by 
+		    m.message_time desc
+	</select>
+	
+	<select id="countUnreadMessages" resultType="int">
+	    select count(*)
+		    from message m
+		    left join message_read mr on m.message_no = mr.message_no and mr.emp_no = #{empNo}
+	    where m.chatroom_no = #{chatroomNo} and mr.message_no is null
+	</select>
+	
 
 
 </mapper>

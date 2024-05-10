@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.Final3.dto.MessageDto;
+import com.kh.Final3.vo.CountUnreadMessageVO;
+import com.kh.Final3.vo.MessageInfoVO;
 
 @Repository
 public class MessageDao {
@@ -72,6 +74,14 @@ public class MessageDao {
 		sqlSession.update("message.updateReadCount", messageNo);
 	}
 	
+	public boolean isReadMessage(int messageNo, int empNo) {
+		Map<String, Integer> data = new HashMap<>();
+	    data.put("messageNo", messageNo);
+	    data.put("empNo", empNo);
+	    Integer count = sqlSession.selectOne("message.isReadMessage", data);
+	    return count != null && count > 0;
+	}
+	
 	@Transactional
 	public void checkReadMessage(int messageNo, int empNo) {
 		Map<String, Integer> data = new HashMap<>();
@@ -79,6 +89,14 @@ public class MessageDao {
         data.put("empNo", empNo);
 	    sqlSession.insert("message.insertMessageRead", data);
 	}
+	
+    public List<MessageInfoVO> getUnreadMessages() {
+        return sqlSession.selectList("message.unreadMessage");
+    }
+    
+    public int countUnreadMessages(int empNo, int chatroomNo) {
+        return sqlSession.selectOne("message.countUnreadMessages", new CountUnreadMessageVO(empNo, chatroomNo));
+    }
 	
 	
 }

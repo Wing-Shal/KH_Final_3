@@ -22,8 +22,10 @@ import com.kh.Final3.dto.EmpChatroomDto;
 import com.kh.Final3.dto.MessageDto;
 import com.kh.Final3.service.ChatroomService;
 import com.kh.Final3.service.JwtService;
+import com.kh.Final3.service.MessageService;
 import com.kh.Final3.vo.ChatDataVO;
 import com.kh.Final3.vo.LoginVO;
+import com.kh.Final3.vo.MessageInfoVO;
 import com.kh.Final3.vo.RecentMessageVO;
 
 @CrossOrigin
@@ -142,6 +144,25 @@ public class ChatRestController {
 		}
 		return ResponseEntity.ok().build();
 	}
+	
+    @Autowired
+    private MessageService messageService;
+
+    //안읽은메세지
+    @GetMapping("/unreadMessage")
+    public ResponseEntity<List<MessageInfoVO>> getUnreadMessages() {
+        List<MessageInfoVO> unreadMessages = messageService.retrieveUnreadMessages();
+        return ResponseEntity.ok(unreadMessages);
+    }
+    
+    //특정 채팅방에 대한 사용자의 안 읽은 메시지 수 조회
+    @GetMapping("/unread/{chatroomNo}")
+    public ResponseEntity<Integer> getUnreadMessageCount(@RequestHeader("Authorization") String token, @PathVariable int chatroomNo) {
+        LoginVO loginVO = jwtService.parse(token);
+        int empNo = loginVO.getLoginId();
+        int unreadCount = messageService.countUnreadMessages(empNo, chatroomNo);
+        return ResponseEntity.ok(unreadCount);
+    }
 
 
 
