@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kh.Final3.dao.ChatroomDao;
 import com.kh.Final3.dao.MessageDao;
 import com.kh.Final3.dto.ChatroomDto;
 import com.kh.Final3.dto.MessageDto;
@@ -38,6 +39,8 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
 	@Autowired
 	private MessageDao messageDao;
 	
+	@Autowired
+	private ChatroomDao chatroomDao;
 	
 	@Autowired
 	private JwtService jwtService;
@@ -91,15 +94,20 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
 	    
 	    int empNo = jwtService.parse(readRequestVO.getToken()).getLoginId();
 
-	    // 메시지가 이미 읽힌 상태인지 확인
+	    //메시지가 이미 읽힌 상태인지 확인
 	    boolean isAlreadyRead = messageDao.isReadMessage(readRequestVO.getReadMessageNo(), empNo);
+	    
+	    //본인 메시지인지
+	    boolean isMyMessage = empNo == readRequestVO.getMessageSender();
 	    
 	    if (!isAlreadyRead) {
 	        //메시지 읽음 카운트 업데이트
 	        messageDao.updateReadCount(readRequestVO.getReadMessageNo());
-	        //읽음 상태 기록 (예: 읽은 시간 업데이트 등)
-	        messageDao.checkReadMessage(readRequestVO.getReadMessageNo(), empNo);
 	    } 
+	    else if(isAlreadyRead && !isMyMessage) {
+	    	//읽음 상태 기록 (예: 읽은 시간 업데이트 등)
+	    	messageDao.checkReadMessage(readRequestVO.getReadMessageNo(), empNo);
+	    }
 	    else {
 //	        System.out.println("메시지 " + readRequestVO.getReadMessageNo() + "는(은) 이미 읽음 처리되었습니다.");
 	    	return;
@@ -205,8 +213,19 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
 
 	        String senderName = sqlSession.selectOne("message.listSetName", messageDto.getMessageNo());
 	        String senderGrade = sqlSession.selectOne("message.listSetGrade", messageDto.getMessageNo());
+	        
+//	        System.out.println(requestVO.getChatroomNo());
+	        
+	        Integer readCountForChatroom = chatroomDao.numberOfParticipants(requestVO.getChatroomNo()) - 1;
+	        
+	        System.out.println(readCountForChatroom);
+	        System.out.println(messageDto.getReadCount());
+	        
 	        messageDto.setMessageSenderName(senderName);
 	        messageDto.setMessageSenderGrade(senderGrade);
+	        messageDto.setReadCountForChatroom(readCountForChatroom - messageDto.getReadCount());
+	        
+	        System.out.println(messageDto.getReadCountForChatroom());
 
 	        String json = new ObjectMapper().writeValueAsString(messageDto);
 	        TextMessage response = new TextMessage(json);

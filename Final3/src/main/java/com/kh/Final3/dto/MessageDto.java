@@ -19,6 +19,8 @@ public class MessageDto {
 //	private Integer messageReply;
 	private int readCount;
 	
+	private int readCountForChatroom;
+	
 	private String messageSenderName;
 	private String messageSenderGrade;
 	

@@ -82,6 +82,7 @@ public class MessageDao {
 	    return count != null && count > 0;
 	}
 	
+	
 	@Transactional
 	public void checkReadMessage(int messageNo, int empNo) {
 		Map<String, Integer> data = new HashMap<>();
