@@ -97,14 +97,17 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
 	    //메시지가 이미 읽힌 상태인지 확인
 	    boolean isAlreadyRead = messageDao.isReadMessage(readRequestVO.getReadMessageNo(), empNo);
 	    
+//	    System.out.println(isAlreadyRead);
+	    
 	    //본인 메시지인지
 	    boolean isMyMessage = empNo == readRequestVO.getMessageSender();
+//	    System.out.println("보내는사람" + readRequestVO.getMessageSender());
 	    
-	    if (!isAlreadyRead) {
+	    if (!isAlreadyRead && !isMyMessage) {
 	        //메시지 읽음 카운트 업데이트
 	        messageDao.updateReadCount(readRequestVO.getReadMessageNo());
 	    } 
-	    else if(isAlreadyRead && !isMyMessage) {
+	    else if(!isAlreadyRead) {
 	    	//읽음 상태 기록 (예: 읽은 시간 업데이트 등)
 	    	messageDao.checkReadMessage(readRequestVO.getReadMessageNo(), empNo);
 	    }
@@ -117,44 +120,44 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
 	@Autowired
 	private AttachService attachService;
 
-	@Override
-	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {
-	    try {
-	        ObjectMapper mapper = new ObjectMapper();
-	        
-	        ByteBuffer byteBuffer = message.getPayload();
-	        byte[] payload;
-	        if (byteBuffer.hasArray()) {
-	            payload = byteBuffer.array();
-	        } 
-	        else {
-	            payload = new byte[byteBuffer.remaining()];
-	            byteBuffer.get(payload);
-	        }
-	        String payloadString = new String(payload, StandardCharsets.UTF_8);
-	        
-	        JsonNode rootNode = mapper.readTree(payloadString);
-	        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-	        
-	        if (rootNode.has("readMessageNo")) {
-	            ReadMessageRequestVO readRequestVO = mapper.treeToValue(rootNode, ReadMessageRequestVO.class);
-	            handleMessageRead(session, readRequestVO);
-	            return; // 읽음 처리 후 함수 종료
-	        }
-	        
-	        ChatRequestVO requestVO = mapper.treeToValue(rootNode, ChatRequestVO.class);
-	        processNewMessage(session, requestVO);
-	    } 
-	    catch (JsonProcessingException e) {
-	        System.err.println("JSON parsing error: " + e.getMessage());
-	    } 
-	    catch (IOException e) {
-	        System.err.println("Failed to process binary message: " + e.getMessage());
-	    } 
-	    catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	@Override
+//	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) {
+//	    try {
+//	        ObjectMapper mapper = new ObjectMapper();
+//	        
+//	        ByteBuffer byteBuffer = message.getPayload();
+//	        byte[] payload;
+//	        if (byteBuffer.hasArray()) {
+//	            payload = byteBuffer.array();
+//	        } 
+//	        else {
+//	            payload = new byte[byteBuffer.remaining()];
+//	            byteBuffer.get(payload);
+//	        }
+//	        String payloadString = new String(payload, StandardCharsets.UTF_8);
+//	        
+//	        JsonNode rootNode = mapper.readTree(payloadString);
+//	        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+//	        
+////	        if (rootNode.has("readMessageNo")) {
+////	            ReadMessageRequestVO readRequestVO = mapper.treeToValue(rootNode, ReadMessageRequestVO.class);
+////	            handleMessageRead(session, readRequestVO);
+////	            return; // 읽음 처리 후 함수 종료
+////	        }
+//	        
+//	        ChatRequestVO requestVO = mapper.treeToValue(rootNode, ChatRequestVO.class);
+//	        processNewMessage(session, requestVO);
+//	    } 
+//	    catch (JsonProcessingException e) {
+//	        System.err.println("JSON parsing error: " + e.getMessage());
+//	    } 
+////	    catch (IOException e) {
+////	        System.err.println("Failed to process binary message: " + e.getMessage());
+////	    } 
+//	    catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 	
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -167,7 +170,7 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
 		    if (rootNode.has("readMessageNo")) {
 		        ReadMessageRequestVO readRequestVO = mapper.treeToValue(rootNode, ReadMessageRequestVO.class);
 		        handleMessageRead(session, readRequestVO);
-		        return; //읽음 처리 후 함수 종료
+		        return;
 		    }
 		    
 		    ChatRequestVO requestVO = mapper.treeToValue(rootNode, ChatRequestVO.class);
@@ -218,14 +221,14 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
 	        
 	        Integer readCountForChatroom = chatroomDao.numberOfParticipants(requestVO.getChatroomNo()) - 1;
 	        
-	        System.out.println(readCountForChatroom);
-	        System.out.println(messageDto.getReadCount());
+//	        System.out.println(readCountForChatroom);
+//	        System.out.println(messageDto.getReadCount());
 	        
 	        messageDto.setMessageSenderName(senderName);
 	        messageDto.setMessageSenderGrade(senderGrade);
 	        messageDto.setReadCountForChatroom(readCountForChatroom - messageDto.getReadCount());
 	        
-	        System.out.println(messageDto.getReadCountForChatroom());
+//	        System.out.println(messageDto.getReadCountForChatroom());
 
 	        String json = new ObjectMapper().writeValueAsString(messageDto);
 	        TextMessage response = new TextMessage(json);
@@ -235,7 +238,8 @@ public class EmpWebsocketServer extends TextWebSocketHandler {
 	                user.sendMessage(response);
 	            }
 	        }
-	    } catch (Exception e) {
+	    } 
+	    catch (Exception e) {
 	        System.err.println("Failed to process new message: " + e.getMessage());
 	        e.printStackTrace();
 	    }

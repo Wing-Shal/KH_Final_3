@@ -31,5 +31,14 @@ public class MessageDto {
         }
         return ""; 
     }
+    
+    public void setReadCountForChatroom(int readCountForChatroom) {
+        if (readCountForChatroom < -1) {
+            this.readCountForChatroom = 0;
+        } 
+        else {
+            this.readCountForChatroom = readCountForChatroom;
+        }
+    }
 
 }

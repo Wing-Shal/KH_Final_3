@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="calendar">
+	<select id="sequence" resultType="int">
+		select calendar_seq.nextval from dual
+	</select>
+	
+
+<insert id="save">
+    insert into calendar (
+        calendar_no, calendar_writer, calendar_title, calendar_content, calendar_start, calendar_end
+    )
+    values
+    (#{calendarNo}, #{calendarWriter}, #{calendarTitle}, #{calendarContent}, to_date(#{calendarStart}, 'YYYY-MM-DD HH24'), to_date(#{calendarEnd}, 'YYYY-MM-DD HH24'))
+</insert>
+
+	
+	<!-- read -->
+	<select id="list" resultType="CalendarDto">
+		select * from calendar order by calendar_no desc
+	</select>
+	<select id="find" resultType="CalendarDto">
+		select * from calendar where calendar_no = #{calendarNo}
+	</select>
+	
+	<!-- 작성자 이름설정 -->
+	<select id="setEmpName" resultType="String">
+		select e.emp_name 
+			from calendar c join emp e on c.calendar_writer = e.emp_no 
+		where calendar_no = #{calendarNo}
+	</select>
+	
+	<!-- 작성자 직급설정 -->
+	<select id="setEmpGrade" resultType="String">
+		select g.grade_name
+			from calendar c
+			join emp e on c.calendar_writer = e.emp_no
+			join grade g on e.grade_no = g.grade_no
+		where c.calendar_no = #{calendarNo}
+	</select>
+	
+	<!-- Update : 작성자는 수정할 수 없음 그냥 그렇게 함-->
+	<update id="editAll">
+		update calendar
+		set 
+			calendar_title = #{calendarTitle},
+			calendar_content = #{calendarContent},
+			calendar_start = #{calendarStart}
+			calendar_end = #{calendarEnd}
+		where calendar_no = #{calendarNo}
+	</update>
+	
+	<update id="editUnit">
+		update calendar
+		<set>
+			<if test="calendarTitle != null">calendar_title = #{calendarTitle},</if>
+			<if test="calendarContent != null">calendar_content = #{calendarContent},</if>
+			<if test="calendarStart != null">calendar_start = #{calendarStart},</if>
+			<if test="calendarEnd != null">calendar_end = #{calendarEnd}</if>
+		</set>
+		where calendar_no = #{calendarNo}
+	</update>
+	
+	<!-- Delete  -->
+	<delete id="delete">
+		delete calendar where calendar_no = #{calendarNo}
+	</delete>
+	
+</mapper>
