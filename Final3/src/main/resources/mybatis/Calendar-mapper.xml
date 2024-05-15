@@ -15,7 +15,7 @@
         calendar_no, calendar_writer, calendar_title, calendar_content, calendar_start, calendar_end
     )
     values
-    (#{calendarNo}, #{calendarWriter}, #{calendarTitle}, #{calendarContent}, to_date(#{calendarStart}, 'YYYY-MM-DD HH24'), to_date(#{calendarEnd}, 'YYYY-MM-DD HH24'))
+    (#{calendarNo}, #{calendarWriter}, #{calendarTitle}, #{calendarContent}, to_date(#{calendarStart}, 'YYYY-MM-DD HH24:MI'), to_date(#{calendarEnd}, 'YYYY-MM-DD HH24:MI'))
 </insert>
 
 	
@@ -25,6 +25,19 @@
 	</select>
 	<select id="find" resultType="CalendarDto">
 		select * from calendar where calendar_no = #{calendarNo}
+	</select>
+	
+	<!-- 부서별로 -->
+	<select id="listByDept" resultType="CalendarDto">
+		select c.calendar_no, c.calendar_writer, c.calendar_title, c.calendar_content, c.calendar_start, c.calendar_end
+			from calendar c
+			join emp e on c.calendar_writer = e.emp_no
+		where e.dept_no = (select dept_no from emp where emp_no = #{empNo})
+	</select>
+	
+	<!-- 본인거만 -->
+	<select id="listOnlyMe" resultType="CalendarDto">
+		select * from calendar where calendar_writer = #{empNo}
 	</select>
 	
 	<!-- 작성자 이름설정 -->
@@ -49,8 +62,8 @@
 		set 
 			calendar_title = #{calendarTitle},
 			calendar_content = #{calendarContent},
-			calendar_start = #{calendarStart}
-			calendar_end = #{calendarEnd}
+			calendar_start = to_date(#{calendarStart}, 'YYYY-MM-DD HH24:MI')
+			calendar_end = to_date(#{calendarEnd}, 'YYYY-MM-DD HH24:MI')
 		where calendar_no = #{calendarNo}
 	</update>
 	
@@ -59,8 +72,8 @@
 		<set>
 			<if test="calendarTitle != null">calendar_title = #{calendarTitle},</if>
 			<if test="calendarContent != null">calendar_content = #{calendarContent},</if>
-			<if test="calendarStart != null">calendar_start = #{calendarStart},</if>
-			<if test="calendarEnd != null">calendar_end = #{calendarEnd}</if>
+			<if test="calendarStart != null">calendar_start = to_date(#{calendarStart}, 'YYYY-MM-DD HH24:MI'),</if>
+			<if test="calendarEnd != null">calendar_end = to_date(#{calendarEnd}, 'YYYY-MM-DD HH24:MI')</if>
 		</set>
 		where calendar_no = #{calendarNo}
 	</update>

@@ -106,6 +106,24 @@ public class CalendarRestController {
 		return ResponseEntity.ok().body(list);
 	}
 	
+	@GetMapping("/listByDept/{empNo}")
+//	public ResponseEntity<List<CalendarDto>> listByDept(@RequestHeader("Authorization") String token) {
+	public List<CalendarDto> listByDept(@RequestHeader("Authorization") String token) {
+        LoginVO loginVO = jwtService.parse(token);
+        int empNo = loginVO.getLoginId();
+//		List<CalendarDto> list = calendarDao.selectListByDept(empNo);
+//		return ResponseEntity.ok().body(list);
+        return calendarDao.selectListByDept(empNo);
+	}
+	
+	@GetMapping("/listOnlyMe/{empNo}")
+	public List<CalendarDto> listOnlyMe(@RequestHeader("Authorization") String token) {
+        LoginVO loginVO = jwtService.parse(token);
+        int empNo = loginVO.getLoginId();
+        return calendarDao.selectListOnlyMe(empNo);
+	}
+	
+	
 	//상세
 	@Operation(
 		description = "일정 상세 정보 조회",

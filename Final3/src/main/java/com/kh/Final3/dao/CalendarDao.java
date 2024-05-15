@@ -27,6 +27,32 @@ public class CalendarDao {
 		return calendarList;
 	}
 	
+	//부서별로!
+	public List<CalendarDto> selectListByDept(int empNo){
+		List<CalendarDto> calendarList = sqlSession.selectList("calendar.listByDept", empNo);
+		
+	    for (CalendarDto calendarDto : calendarList) {
+	    	String empName = sqlSession.selectOne("calendar.setEmpName", calendarDto.getCalendarNo());
+	    	String empGrade = sqlSession.selectOne("calendar.setEmpGrade", calendarDto.getCalendarNo());
+	        calendarDto.setEmpName(empName);
+	        calendarDto.setEmpGrade(empGrade);
+	    }
+		return calendarList;
+	}
+	
+	//본인거만
+	public List<CalendarDto> selectListOnlyMe(int empNo){
+		List<CalendarDto> calendarList = sqlSession.selectList("calendar.listOnlyMe", empNo);
+		
+	    for (CalendarDto calendarDto : calendarList) {
+	    	String empName = sqlSession.selectOne("calendar.setEmpName", calendarDto.getCalendarNo());
+	    	String empGrade = sqlSession.selectOne("calendar.setEmpGrade", calendarDto.getCalendarNo());
+	        calendarDto.setEmpName(empName);
+	        calendarDto.setEmpGrade(empGrade);
+	    }
+		return calendarList;
+	}
+	
 	//하나만보기
 	public CalendarDto selectOne(int calendarNo) {
 		CalendarDto calendarDto =  sqlSession.selectOne("calendar.find", calendarNo);
