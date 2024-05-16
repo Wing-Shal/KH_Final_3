@@ -7,27 +7,32 @@
 <mapper namespace="replyBlind">
     
     <!-- Create -->
+    <!-- 시퀀스 생성 -->
     <select id="sequence" resultType="int">
         select reply_blind_seq.nextval from dual
     </select>
+    
+    <!-- 댓글 등록 -->
     <insert id="save">
         insert into reply_blind(
-            reply_blind_no, reply_blind_content, reply_blind_nick, 
-            reply_blind_company, reply_blind_time, reply_blind_taget,
-            reply_blind_group, blind_no
+            reply_blind_no, reply_blind_content, reply_blind_nick, reply_blind_company, 
+           reply_emp_no, blind_no
         )
         values(
-            #{replyBlindNo}, #{replyBlindContent}, #{replyBlindNick},
-             #{replyBlindCompany}, #{replyBlindTime}, #{replyBlindTaget},
-              #{replyBlindGroup}, #{blindNo}        )
+            #{replyBlindNo}, #{replyBlindContent},
+             #{replyBlindNick}, #{replyBlindCompany},
+             #{replyEmpNo}, #{blindNo}
+             )
     </insert>
     
     <!-- Read -->
     <select id="list" resultType="ReplyBlindDto">
         select * from reply_blind order by reply_blind_no asc
     </select>
+    
+    
     <select id="find" resultType="ReplyBlindDto">
-        select * from reply_blind where reply_blind_no = #{replyBlindNo}
+        select * from reply_blind where blind_no = #{blindNo}
     </select>
     
     <!-- update 전체수정-->
@@ -49,5 +54,33 @@
     <delete id="delete">
         delete reply_blind where reply_blind_no = #{replyBlindNo}
     </delete>
+        
+        <!-- 사용자의 회사 이름 조회 -->
+	<select id="selectCompanyNoByToken" resultType="int">
+		SELECT
+		c.company_name
+		FROM company c
+		WHERE c.company_no = (
+		SELECT e.company_no
+		FROM emp e
+		WHERE e.emp_no = (
+		SELECT emp_no
+		FROM emp
+		WHERE token = #{token}
+		)
+		)
+
+	</select>
+
+	<!-- 회사 번호로 회사 이름 조회 -->
+	<select id="selectCompanyNameByCompanyNo" resultType="String">
+		SELECT
+		company_name
+		FROM
+		company
+		WHERE
+		company_no = #{companyNo}
+	</select>
+        
         
 </mapper>

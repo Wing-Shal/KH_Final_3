@@ -16,12 +16,14 @@ public class BoardBlindDao {
 	private SqlSession sqlSession;
 
 
-//	// 조회
+	// 조회
 //	public List<BoardBlindDto> selectList() {
 //		                            
 //		return sqlSession.selectList("boardBlind.list");
 //		
 //	}
+	
+	
 	
 	 // 게시글 목록 가져오기
     public List<BoardBlindDto> selectBlindList() {
