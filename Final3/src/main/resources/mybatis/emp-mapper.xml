@@ -3,121 +3,246 @@
 <!DOCTYPE mapper
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
+
 <mapper namespace="emp">
-   
-   <!-- Create -->
-   <select id="sequence" resultType="int">
-      select emp_seq.nextval from dual
-   </select>
-   <insert id="save">
-      insert into emp(
-         emp_no, emp_pw, emp_name, emp_contact, emp_email, emp_type, 
-         grade_no, company_no, dept_no, emp_status, emp_join
-      )
-      values(
-         #{empNo}, #{empPw}, #{empName}, #{empContact}, #{empEmail}, #{empType}, #{gradeNo}, #{companyNo}, 
-         #{deptNo}, #{empStatus}, sysdate
-      )
-   </insert>
-   
-   <!-- Read -->
-   <select id="find" resultType="EmpDto">
-      select * from emp where emp_no = #{empNo}
-   </select>
-   <select id="listByCompany" resultType="EmpDto">
-      select * from emp where company_no = #{companyNo} order by emp_no asc
-   </select>
-   <select id="listByDept" resultType="EmpDto">
-      select * from emp where dept_no = #{deptNo} and company_no = #{companyNo} order by emp_no asc
-   </select>
-   <select id="detailList" resultType="EmpInfoVO">
-		select
-			e.company_no,
-			e.emp_no,
-			e.emp_name,
-			g.grade_name,
-			d.dept_name,
-			e.emp_contact,
-			e.emp_email,
-			e.emp_status,
-			e.emp_join,
-			e.emp_exit
-		from
-			emp e
-		left join
-			grade g on e.grade_no = g.grade_no
-		left join
-			dept d on e.dept_no = d.dept_no
-		where
-			e.company_no = #{companyNo}
-   </select>
-   
-   <!-- 직급 이름 -->
-   <select id="listSetGrade" resultType="string">
-		select g.grade_name
-			from emp e
-			join grade g on e.grade_no = g.grade_no
-		where e.emp_no = #{empNo}
-   </select>
-   
-   <select id="setDeptName" resultType="string">
-		select d.dept_name
-			from emp e
-			join dept d on e.dept_no = d.dept_no
-		where e.emp_no = #{empNo}
-   </select>
-   
-   <!-- Update -->
-   <update id="editAll">
-      update emp
-      set 
-         emp_pw = #{empPw},
-         emp_name = #{empName},
-         emp_contact = #{empContact},
-         emp_email = #{empEmail},
-         emp_pr = #{empPr},
-         emp_type = #{empType},
-         grade_no = #{gradeNo},
-         company_no = #{companyNo},
-         dept_no = #{deptNo},
-         emp_status = #{empStatus},
-         emp_join = #{empJoin}
-         emp_exit = #{empExit}
-      where emp_no = #{empNo}
-   </update>
-   
-   <update id="editUnit">
-      update emp
-      <set>
-         <if test="empPw != null">emp_pw = #{empPw},</if>
-         <if test="empName != null">emp_name = #{empName},</if>
-         <if test="empContact != null">emp_contact = #{empContact},</if>
-         <if test="empEmail != null">emp_email = #{empEmail},</if>
-         <if test="empPr != null">emp_pr = #{empPr},</if>
-         <if test="empType != null">emp_type = #{empType},</if>
-         <if test="gradeNo > 0">grade_no = #{gradeNo},</if>
-         <if test="companyNo > 0">company_no = #{companyNo},</if>
-         <if test="deptNo > 0">dept_no = #{deptNo},</if>
-         <if test="empStatus != null">emp_status = #{empStatus},</if>
-         <if test="empJoin != null">emp_join = #{empJoin},</if>
-         <if test="empExit != null">emp_exit = #{empExit}</if>
-      </set>
-      where emp_no = #{empNo}
-   </update>
-   
-   <!-- Delete -->
-   <delete id="delete">
-      delete emp where emp_no = #{empNo}
-   </delete>
-   
-   <!-- attach랑 연결 -->
-   <insert id="connect">
-		insert into emp_attach (emp_no, attach_no) values (#{empNo}, #{attachNo})
-	</insert>
-	
-	<select id="findAttach" resultType="int">
-		select attach_no from emp_attach where emp_no = #{empNo}
+
+	<!-- Create -->
+	<select id="sequence" resultType="int">
+		select emp_seq.nextval from
+		dual
 	</select>
-      
+	<insert id="save">
+		insert into emp(
+		emp_no, emp_pw, emp_name,
+		emp_contact, emp_email, emp_type,
+		grade_no, company_no, dept_no,
+		emp_status, emp_join
+		)
+		values(
+		#{empNo}, #{empPw}, #{empName},
+		#{empContact}, #{empEmail}, #{empType},
+		#{gradeNo}, #{companyNo},
+		#{deptNo}, #{empStatus}, sysdate
+		)
+	</insert>
+
+	<!-- Read -->
+	<select id="find" resultType="EmpDto">
+		select * from emp where emp_no =
+		#{empNo}
+	</select>
+	<select id="listByCompany" resultType="EmpDto">
+		select * from emp where
+		company_no = #{companyNo} order by emp_no asc
+	</select>
+	<select id="listByDept" resultType="EmpDto">
+		select * from emp where
+		dept_no = #{deptNo} order by emp_no asc
+	</select>
+	<select id="listByGrade" resultType="EmpDto">
+		select * from emp where
+		grade_no = #{gradeNo} order by emp_no asc
+	</select>
+	<select id="detailList" resultType="EmpInfoVO">
+		select
+		e.company_no,
+		e.emp_no,
+		e.emp_name,
+		g.grade_name,
+		d.dept_name,
+		e.emp_contact,
+		e.emp_email,
+		e.emp_status,
+		e.emp_join,
+		e.emp_exit
+		from
+		emp e
+		left join
+		grade g on
+		e.grade_no = g.grade_no
+		left join
+		dept d on e.dept_no = d.dept_no
+		where
+		e.company_no = #{companyNo}
+	</select>
+	<select id="detailListByPaging" resultType="EmpInfoVO">
+		<include refid="top-n-header"></include>
+		select
+		e.company_no,
+		e.emp_no,
+		e.emp_name,
+		g.grade_name,
+		d.dept_name,
+		e.emp_contact,
+		e.emp_email,
+		e.emp_status,
+		e.emp_join,
+		e.emp_exit
+		from
+		emp e
+		left join
+		grade g on e.grade_no = g.grade_no
+		left join
+		dept d on
+		e.dept_no = d.dept_no
+		where
+		e.company_no = #{companyNo}
+		<include refid="top-n-footer"></include>
+	</select>
+
+	<select id="detailListByPagingAndSearch" resultType="EmpInfoVO">
+		<include refid="top-n-header"></include>
+		select
+		e.company_no,
+		e.emp_no,
+		e.emp_name,
+		g.grade_name,
+		d.dept_name,
+		e.emp_contact,
+		e.emp_email,
+		e.emp_type,
+		e.emp_join,
+		e.emp_exit
+		from
+		emp e
+		left join
+		grade g on e.grade_no = g.grade_no
+		left join
+		dept d on
+		e.dept_no = d.dept_no
+		where
+		e.company_no = #{companyNo}
+		<if test="search != null and search != ''">
+			and (
+			e.emp_no LIKE '%' || #{search} || '%' OR
+			e.emp_name LIKE '%' || #{search} || '%' OR
+			g.grade_name LIKE '%' || #{search} || '%' OR
+			d.dept_name LIKE '%' || #{search} || '%' OR
+			e.emp_contact LIKE '%' || #{search} || '%' OR
+			e.emp_email LIKE '%' || #{search} || '%'
+			)
+		</if>
+		<include refid="top-n-footer"></include>
+	</select>
+
+	<select id="count" resultType="int">
+		select count(*) from emp where
+		company_no = #{companyNo}
+	</select>
+
+	<select id="countWithSearch" resultType="int">
+    select count(*) from (
+        select
+        e.emp_no,
+        e.emp_name,
+        g.grade_name,
+        d.dept_name,
+        e.emp_contact,
+        e.emp_email
+        from
+        emp e
+        left join
+        grade g on e.grade_no = g.grade_no
+        left join
+        dept d on e.dept_no = d.dept_no
+        where
+        e.company_no = #{companyNo}
+        <if test="search != null and search != ''">
+            and (
+            e.emp_no LIKE '%' || #{search} || '%' OR
+            e.emp_name LIKE '%' || #{search} || '%' OR
+            g.grade_name LIKE '%' || #{search} || '%' OR
+            d.dept_name LIKE '%' || #{search} || '%' OR
+            e.emp_contact LIKE '%' || #{search} || '%' OR
+            e.emp_email LIKE '%' || #{search} || '%'
+            )
+        </if>
+		)
+</select>
+
+	<!-- 직급 이름 -->
+	<select id="listSetGrade" resultType="string">
+		select g.grade_name
+		from emp
+		e
+		join grade g on e.grade_no = g.grade_no
+		where e.emp_no = #{empNo}
+	</select>
+
+	<select id="setDeptName" resultType="string">
+		select d.dept_name
+		from emp e
+		join dept d on e.dept_no = d.dept_no
+		where e.emp_no = #{empNo}
+	</select>
+
+	<!-- Update -->
+	<update id="editAll">
+		update emp
+		set
+		emp_pw = #{empPw},
+		emp_name = #{empName},
+		emp_contact = #{empContact},
+		emp_email = #{empEmail},
+		emp_pr = #{empPr},
+		emp_type = #{empType},
+		grade_no = #{gradeNo},
+		company_no = #{companyNo},
+		dept_no = #{deptNo},
+		emp_status = #{empStatus},
+		emp_join = #{empJoin}
+		emp_exit = #{empExit}
+		where emp_no = #{empNo}
+	</update>
+
+	<update id="editUnit">
+		update emp
+		<set>
+			<if test="empPw != null">emp_pw = #{empPw},</if>
+			<if test="empName != null">emp_name = #{empName},</if>
+			<if test="empContact != null">emp_contact = #{empContact},</if>
+			<if test="empEmail != null">emp_email = #{empEmail},</if>
+			<if test="empPr != null">emp_pr = #{empPr},</if>
+			<if test="empType != null">emp_type = #{empType},</if>
+			<if test="gradeNo > 0">grade_no = #{gradeNo},</if>
+			<if test="companyNo > 0">company_no = #{companyNo},</if>
+			<if test="deptNo > 0">dept_no = #{deptNo},</if>
+			<if test="empStatus != null">emp_status = #{empStatus},</if>
+			<if test="empJoin != null">emp_join = #{empJoin},</if>
+			<if test="empExit != null">emp_exit = #{empExit}</if>
+		</set>
+		where emp_no = #{empNo}
+	</update>
+
+	<!-- Delete -->
+	<delete id="delete">
+		delete emp where emp_no = #{empNo}
+	</delete>
+
+	<!-- attach랑 연결 -->
+	<insert id="connect">
+		insert into emp_attach (emp_no, attach_no) values
+		(#{empNo}, #{attachNo})
+	</insert>
+
+	<select id="findAttach" resultType="int">
+		select attach_no from
+		emp_attach where emp_no = #{empNo}
+	</select>
+
+
+	<sql id="top-n-header">
+		<if test="beginRow != null and endRow != null">
+			select * from (
+			select rownum rn, TMP.* from (
+		</if>
+	</sql>
+
+	<sql id="top-n-footer">
+		<if test="beginRow != null and endRow != null">
+			)TMP
+			) where rn between #{beginRow} and #{endRow}
+		</if>
+	</sql>
+
 </mapper>

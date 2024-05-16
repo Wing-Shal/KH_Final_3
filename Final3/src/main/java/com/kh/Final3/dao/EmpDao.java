@@ -29,14 +29,51 @@ public class EmpDao {
 	   }
          return empList;
       }
-   public List<EmpDto> selectListByDept(DeptDto deptDto) {
-         return sqlSession.selectList("emp.listByDept", deptDto);
-      }
+   public List<EmpDto> selectListByDept(int deptNo) {
+     return sqlSession.selectList("emp.listByDept", deptNo);
+  }
+   public List<EmpDto> selectListByGrade(int gradeNo) {
+	     return sqlSession.selectList("emp.listByGrade", gradeNo);
+	  }
    
+   //회사-사원 리스트
    public List<EmpInfoVO> detailList(int companyNo) {
 	   return sqlSession.selectList("emp.detailList", companyNo);
    }
-
+   //회사-사원 리스트(페이징)
+   public List<EmpInfoVO> detailListByPaging(int page, int size, int companyNo) {
+	   int beginRow = page * size - (size-1);
+		int endRow = page * size;
+		
+		Map<String, Object> data = new HashMap<>();
+		data.put("beginRow", beginRow);
+		data.put("endRow", endRow);
+		data.put("companyNo", companyNo);
+		return sqlSession.selectList("emp.detailListByPaging", data);
+   }
+   //회사-사원 리스트(페이징, 검색)
+   public List<EmpInfoVO> detailListByPagingAndSearch(int page, int size, int companyNo, String search) {
+	   int beginRow = page * size - (size-1);
+		int endRow = page * size;
+		
+		Map<String, Object> data = new HashMap<>();
+		data.put("beginRow", beginRow);
+		data.put("endRow", endRow);
+		data.put("companyNo", companyNo);
+		data.put("search", search);
+		return sqlSession.selectList("emp.detailListByPagingAndSearch", data);	
+   }
+   
+   public int count(int companyNo) {
+	   return sqlSession.selectOne("emp.count", companyNo);
+   }
+   public int countWithSearch(int companyNo, String search) {
+	   Map<String, Object> data = new HashMap<>();
+	   data.put("companyNo", companyNo);
+	   data.put("search", search);
+	   return sqlSession.selectOne("emp.countWithSearch", data);
+   }
+   
    public EmpDto selectOne(int empNo) {
 	   EmpDto empDto = sqlSession.selectOne("emp.find", empNo);
 

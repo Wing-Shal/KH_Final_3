@@ -2,6 +2,7 @@ package com.kh.Final3.service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,10 +12,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.kh.Final3.configuration.KakaoPayProperties;
+import com.kh.Final3.dao.CompanyDao;
 import com.kh.Final3.dao.PaymentDao;
+import com.kh.Final3.dto.CompanyDto;
 import com.kh.Final3.dto.PaymentDto;
 import com.kh.Final3.kakaoPayVo.KakaoPayApproveRequestVO;
 import com.kh.Final3.kakaoPayVo.KakaoPayReadyRequestVO;
@@ -87,6 +89,8 @@ public class KakaoPayService {
 	// DB등록
 	@Autowired
 	private PaymentDao paymentDao;
+	@Autowired
+	private CompanyDao companyDao;
 
 	@Transactional
 	public void insertPayment(KakaoPayApproveResponseVO responseVO) {
@@ -101,6 +105,12 @@ public class KakaoPayService {
 				.paymentSid(responseVO.getSid())
 				.build();
 		paymentDao.insertPayment(paymentDto);
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		CompanyDto companyDto = CompanyDto.builder()
+				.companyNo(Integer.parseInt(responseVO.getPartnerUserId()))
+				.companyChecked(timestamp)
+				.build();
+		companyDao.editUnit(companyDto);
 	}
 
 	// 정기 결제 준비(2회차)
@@ -177,5 +187,11 @@ public class KakaoPayService {
 				.paymentSid(responseVO.getSid())
 				.build();
 		paymentDao.cancelSubscription(paymentDto);
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		CompanyDto companyDto = CompanyDto.builder()
+				.companyNo(companyNo)
+				.companyChecked(timestamp)
+				.build();
+		companyDao.editUnit(companyDto);
 	}
 }
