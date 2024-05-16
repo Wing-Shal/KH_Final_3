@@ -79,5 +79,14 @@
    <delete id="delete">
       delete company where company_no = #{companyNo}
    </delete>
+   
+   <!-- attach랑 연결 -->
+   <insert id="connect">
+		insert into company_attach (company_no, attach_no) values (#{companyNo}, #{attachNo})
+	</insert>
+	
+	<select id="findAttach" resultType="int">
+		select attach_no from company_attach where company_no = #{companyNo}
+	</select>
       
 </mapper>

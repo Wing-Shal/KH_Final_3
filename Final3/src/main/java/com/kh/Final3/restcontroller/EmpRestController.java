@@ -108,11 +108,12 @@ public class EmpRestController {
 		}
 	)
    
-   @GetMapping("/{empNo}")
+   @GetMapping("/")
    public ResponseEntity<EmpDto> find(@RequestHeader("Authorization") String token){
 		LoginVO loginVO = jwtService.parse(token);
 		int empNo = loginVO.getLoginId();
 		EmpDto empDto = empDao.selectOne(empNo);
+		
 		if(empDto == null) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(empDto);
    }

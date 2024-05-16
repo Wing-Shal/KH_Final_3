@@ -1,6 +1,8 @@
 package com.kh.Final3.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +55,17 @@ public class CompanyDao {
    public boolean delete(int companyNo) {
       return sqlSession.delete("company.delete", companyNo) > 0;
    }
+   
+   //파일첨부
+   public void connect (int companyNo, int attachNo) {
+		Map<String, Object> data = new HashMap<>();
+		data.put("companyNo", companyNo);
+		data.put("attachNo", attachNo);
+		sqlSession.insert("company.connect", data);
+	}
+	
+	public int findAttach (int companyNo) {
+		return sqlSession.selectOne("company.findAttach", companyNo);
+	}
    
 }
