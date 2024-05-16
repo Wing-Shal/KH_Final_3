@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="projectEmpList">
+
+	
+	<!-- Create(등록) -->
+	<insert id="save">
+		insert into projectEmpList(
+		project_no, emp_no, project_emp, project_emp_list_no
+		)
+		values (
+		#{projectNo}, #{empNo}, #{projectEmp}, #{projectEmpListNo}
+		)
+	</insert>
+
+
+	<!-- Read 조회 -->
+	<select id="list" resultType="projectEmpListDto">
+		select * from projectEmpList order by
+		project_no desc
+	</select>
+
+	<select id="find" resultType="ProjectDto">
+		select * from projectEmpList where
+		project_no = #{projectNo}
+	</select>
+
+	
+
+	<!-- update 전체수정 
+	<update id="edit">
+		update projectEmpList
+		<set>
+			<if test="projectEmp != null">project_name = #{projectNo},</if>
+			<if test="projectStartTime != null">project_start_time = #{projectStartTime},</if>
+			<if test="projectLimitTime != null">project_limit_time = #{projectLimitTime},</if>
+		</set>
+		where project_no = #{projectNo}
+	</update>
+-->
+	<!-- Delete -->
+	<delete id="delete">
+		delete projectEmpList where project_no = #{projectNo}
+	</delete>
+
+
+
+
+	<!-- 프로젝트에 참여한 사원목록 -->
+	<select id="projectEmpList" resultType="ProjectEmpListVO">
+		SELECT
+		p.projectNo,
+		p.projectName,
+		e.empNo,
+		e.empName,
+		pel.projectEmpListNo,
+		pel.projectEmp
+		FROM
+		project p
+		JOIN
+		projectEmpList pel ON p.projectNo = pel.projectNo
+		JOIN
+		emp e ON e.empNo = pel.empNo;
+	</select>
+
+
+
+</mapper>
