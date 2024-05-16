@@ -54,7 +54,7 @@
 
 
 	<!-- 프로젝트에 참여한 사원목록 -->
-	<select id="projectEmpList" resultType="ProjectEmpListVO">
+	<select id="projectEmpList" resultType="ProjectEmpListDto">
 		SELECT
 		p.projectNo,
 		p.projectName,
