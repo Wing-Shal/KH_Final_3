@@ -29,24 +29,25 @@
 		where chatroom_no = #{chatroomNo}
 	</update>
 	
-	<!-- 채팅하기 눌렀을 때 단 둘이 있는 채팅방만 찾기 -->
+	<!-- 채팅하기 눌렀을 때 단 둘이 있는 채팅방 찾기 -->
 	<select id="findOnlyTwo" resultType="Integer">
-		select chatroom_no
-			from (
-			    select chatroom_no
-			    from emp_chatroom
-			    where emp_no = #{empNo1}
-			) A
-			where chatroom_no IN (
-			    select chatroom_no
-			    from emp_chatroom
-			    where emp_no = #{empNo2}
-			)
-			and (
-			    select count(*)
-			    from emp_chatroom
-			    where chatroom_no = A.chatroom_no
-			) = 2
+	    select chatroom_no
+	    from (
+	        select chatroom_no
+	        from emp_chatroom
+	        where emp_no = #{empNo1}
+	    ) A
+	    where chatroom_no IN (
+	        select chatroom_no
+	        from emp_chatroom
+	        where emp_no = #{empNo2}
+	    )
+	    and (
+	        select count(*)
+	        from emp_chatroom
+	        where chatroom_no = A.chatroom_no
+	    ) = 2
+	    order by chatroom_no asc
 	</select>
 	
 	<!-- 채팅방 별 최근 메시지 조회 -->

@@ -106,7 +106,7 @@ public class ChatRestController {
 	
 
 	//새로 채팅방을 열지, 만들지
-    @PostMapping("/findOrCreate/{loginId}/{empNo}")
+    @PostMapping("/findOrCreate/{empNo}")
     public ChatroomDto findOrCreateChatroom(@RequestHeader("Authorization") String token,
 //    public ChatroomDto findOrCreateChatroom(@PathVariable int loginId, 
     													@PathVariable int empNo) {
