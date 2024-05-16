@@ -25,7 +25,6 @@ import com.kh.Final3.dto.ProjectEmpListDto;
 import com.kh.Final3.service.JwtService;
 import com.kh.Final3.vo.LoginVO;
 import com.kh.Final3.vo.ProjectDataVO;
-import com.kh.Final3.vo.ProjectEmpListVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -183,8 +182,8 @@ public class ProjectRestController {
 		
 		
 		//프로젝트 참여자 사원 등록
-		@PostMapping("/")
-		public void insert(@RequestBody ProjectEmpListDto projectEmpListDto) {						
+		@PostMapping("/projectMember") //여기 매핑 주소 바꿔줘야함
+		public void insertEmp(@RequestBody ProjectEmpListDto projectEmpListDto) {						
 			 projectEmpListDao.insert(projectEmpListDto);
 						
 		}
@@ -202,11 +201,11 @@ public class ProjectRestController {
 //			return result;
 //		}
 		
-		//프로젝트 참여자 사원 목록
-		@GetMapping("/{empNo}")
-		public List<ProjectEmpListDto> projectEmpList(@PathVariable int empNo) {
-			return projectDao.projectEmpList(empNo);
-		}
+//		//프로젝트 참여자 사원 목록
+//		@GetMapping("/{empNo}")
+//		public List<ProjectEmpListDto> projectEmpList(@PathVariable int empNo) {
+//			return projectDao.projectEmpList(empNo);
+//		}
 		
 		
 	//삭제

@@ -78,8 +78,8 @@
 		project_no = #{projectNo}
 	</select>
 
-	<!-- 프로젝트에 참여한 사원목록 -->
-	<select id="projectEmpList" resultType="ProjectEmpListVO">
+	<!-- 프로젝트에 참여한 사원목록 -
+	<select id="projectEmpList" resultType="ProjectEmpListDto">
 		SELECT
 		p.projectNo,
 		p.projectName,
@@ -93,7 +93,7 @@
 		projectEmpList pel ON p.projectNo = pel.projectNo
 		JOIN
 		emp e ON e.empNo = pel.empNo;
-	</select>
+	</select>-->
 
 
 
