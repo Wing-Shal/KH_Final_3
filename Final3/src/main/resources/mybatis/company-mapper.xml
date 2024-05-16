@@ -30,13 +30,13 @@
       select * from company where company_no = #{companyNo}
    </select>
    
-  	<select id="gradeList" resultType="String">
-  		select grade_name from grade where company_no = #{companyNo}
-  	</select>
-  	
-  	<select id="deptList" resultType="String">
-  		select dept_name from dept where company_no = #{companyNo}
-  	</select>
+  <select id="gradeList" resultType="String">
+  select grade_name from grade where company_no = #{companyNo}
+  </select>
+  
+  <select id="deptList" resultType="String">
+  select dept_name from dept where company_no = #{companyNo}
+  </select>
 
    
    <!-- Update -->
@@ -72,12 +72,21 @@
    </update>
    
    <update id="approveCompany">
-   	 update company set company_checked = sysdate where company_no = #{companyNo}
+    update company set company_checked = sysdate where company_no = #{companyNo}
    </update>
    
    <!-- Delete -->
    <delete id="delete">
       delete company where company_no = #{companyNo}
    </delete>
+   
+   <!-- attach랑 연결 -->
+   <insert id="connect">
+insert into company_attach (company_no, attach_no) values (#{companyNo}, #{attachNo})
+</insert>
+
+<select id="findAttach" resultType="int">
+select attach_no from company_attach where company_no = #{companyNo}
+</select>
       
 </mapper>
