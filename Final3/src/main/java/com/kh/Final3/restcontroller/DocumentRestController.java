@@ -1,6 +1,8 @@
 
+
 package com.kh.Final3.restcontroller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.Final3.dao.DocumentDao;
 import com.kh.Final3.dao.EmpDao;
@@ -26,6 +29,7 @@ import com.kh.Final3.dao.ProjectDao;
 import com.kh.Final3.dto.DocumentDto;
 import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.dto.ProjectDto;
+import com.kh.Final3.service.AttachService;
 import com.kh.Final3.service.JwtService;
 import com.kh.Final3.vo.DocumentDataVO;
 import com.kh.Final3.vo.LoginVO;
@@ -157,25 +161,51 @@ public class DocumentRestController {
 		return ResponseEntity.ok().build();
 	}
 	
-//	//결재자 사원목록
-//	@GetMapping("/companyEmployees/{empNo}")
-//	public ResponseEntity<List<EmpDto>> getCompanyEmployeesInfo(@RequestHeader("Authorization") String token) {
-//	    // 토큰을 검증하고 사용자 정보를 가져오는 로직을 구현합니다.
-//		LoginVO loginVO = jwtService.parse(token);
-//		int loginId = loginVO.getLoginId();
-//		System.out.println("문서 1번 수행 로그인ID(사번) : "+loginId);
-//	    // 사원의 사번을 통해 회사 번호를 조회합니다.
-//	    EmpDto emp = empDao.selectOne(loginId);
-//	    int companyNo = emp.getCompanyNo();
-//	    System.out.println("2번 수행 회사 번호 조회 : "+companyNo);
-//	    // 회사 번호를 통해 해당 회사의 사원 목록을 조회합니다.
-//	    List<EmpDto> employees = empDao.getEmployeesByCompanyNo(companyNo);
-//	    System.out.println("사원목록 : "+employees);
-//	    
-//	    
-//	    return ResponseEntity.ok().body(employees);
-//	}
+	//결재자 사원목록
+	@GetMapping("/companyEmployees/{empNo}")
+	public ResponseEntity<List<EmpDto>> getCompanyEmployeesInfo(@RequestHeader("Authorization") String token) {
+	    // 토큰을 검증하고 사용자 정보를 가져오는 로직을 구현합니다.
+		LoginVO loginVO = jwtService.parse(token);
+		int loginId = loginVO.getLoginId();
+		System.out.println("문서 1번 수행 로그인ID(사번) : "+loginId);
+	    // 사원의 사번을 통해 회사 번호를 조회합니다.
+	    EmpDto emp = empDao.selectOne(loginId);
+	    int companyNo = emp.getCompanyNo();
+	    System.out.println("2번 수행 회사 번호 조회 : "+companyNo);
+	    // 회사 번호를 통해 해당 회사의 사원 목록을 조회합니다.
+	    List<EmpDto> employees = empDao.getEmployeesByCompanyNo(companyNo);
+	    System.out.println("사원목록 : "+employees);
+	    
+	    
+	    return ResponseEntity.ok().body(employees);
+	}
 
+	@Autowired
+    private AttachService attachService;
+    
+     //첨부파일수정
+     @PostMapping("/upload/{documentNo}")
+     public ResponseEntity<?> insertEdit(@PathVariable int documentNo, @RequestParam("attach") MultipartFile attach) 
+             throws IllegalStateException, IOException {
+         if (!attach.isEmpty()) {
+             boolean isFirst = false;
+             try {
+                 int attachNo = empDao.findAttach(documentNo);
+                 attachService.remove(attachNo);
+                 int editAttachNo = attachService.save(attach);
+                 empDao.connect(documentNo, editAttachNo);
+             } catch (Exception e) {
+                 isFirst = true;
+             } 
+             if (isFirst) {
+                 int inputAttachNo = attachService.save(attach);
+                 empDao.connect(documentNo, inputAttachNo);
+             }
+             return ResponseEntity.ok().build();
+         }
+         return ResponseEntity.status(404).build();
+     }
+     
 
 
 	}

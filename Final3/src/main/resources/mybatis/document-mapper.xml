@@ -40,7 +40,8 @@
     SELECT d.*, p.project_name
     FROM document d
     JOIN project p ON d.project_no = p.project_no
-    WHERE d.project_no = #{projectNo}
+    WHERE d.project_no = #{projectNo} order by
+		document_no desc
 </select>
 	
 	
@@ -127,5 +128,13 @@ WHERE
     e.company_no = #{companyNo}
 </select>
 	
+	 <!-- attach랑 연결 -->
+   <insert id="connect">
+		insert into emp_attach (document_no, attach_no) values (#{documentNo}, #{attachNo})
+	</insert>
+	
+	<select id="findAttach" resultType="int">
+		select attach_no from emp_attach where document_no = #{documentNo}
+	</select>
 
 </mapper>

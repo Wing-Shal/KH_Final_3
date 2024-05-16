@@ -1,3 +1,4 @@
+
 package com.kh.Final3.dao;
 
 import java.util.HashMap;
@@ -87,7 +88,18 @@ public class DocumentDao {
 	    return sqlSession.selectList("document.detailList", companyNo);
 	}
 	
-	//같은 회사의 사원리스트 불러오기
+	//파일첨부
+	
+	   public void connect (int documentNo, int attachNo) {
+			Map<String, Object> data = new HashMap<>();
+			data.put("documentNo", documentNo);
+			data.put("attachNo", attachNo);
+			sqlSession.insert("document.connect", data);
+		}
+		
+		public int findAttach (int documentNo) {
+			return sqlSession.selectOne("document.findAttach", documentNo);
+		}
 	
 }
 
