@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.Final3.dao.EmpDao;
 import com.kh.Final3.dao.PaymentDao;
-import com.kh.Final3.dto.ChatroomDto;
 import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.service.AttachService;
 import com.kh.Final3.service.JwtService;
@@ -108,11 +107,12 @@ public class EmpRestController {
 		}
 	)
    
-   @GetMapping("/{empNo}")
+   @GetMapping("/")
    public ResponseEntity<EmpDto> find(@RequestHeader("Authorization") String token){
 		LoginVO loginVO = jwtService.parse(token);
 		int empNo = loginVO.getLoginId();
 		EmpDto empDto = empDao.selectOne(empNo);
+		
 		if(empDto == null) return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(empDto);
    }
