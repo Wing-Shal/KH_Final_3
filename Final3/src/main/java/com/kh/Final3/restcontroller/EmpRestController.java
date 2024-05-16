@@ -1,3 +1,4 @@
+
 package com.kh.Final3.restcontroller;
 
 import java.io.IOException;
@@ -6,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -132,7 +134,7 @@ public class EmpRestController {
 		return ResponseEntity.ok().body(empDao.selectOne(empDto.getEmpNo()));// 수정 완료된 결과를 조회하여 반환
 	}
 
-//   사원 리스트
+	//사원 리스트
 	// 해당 경로로 GET 요청이 오면,
 	@GetMapping("/company/{empNo}")
 	public ResponseEntity<List<EmpDto>> findCompanyEmpList(@PathVariable int empNo) {
@@ -147,5 +149,4 @@ public class EmpRestController {
 		// 조회된 사원 목록을 ResponseEntity로 감싸서 응답합니다.
 		return ResponseEntity.ok().body(empList);
 	}
-
 }

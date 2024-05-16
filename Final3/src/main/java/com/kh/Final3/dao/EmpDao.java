@@ -1,3 +1,4 @@
+
 package com.kh.Final3.dao;
 
 import java.util.HashMap;
@@ -118,6 +119,19 @@ public class EmpDao {
 	
 	public int findAttach (int empNo) {
 		return sqlSession.selectOne("emp.findAttach", empNo);
+	}
+	
+	//문서 결재자 사원 목록
+	public List<EmpDto> getEmployeesByCompanyNo(int companyNo) {
+		
+		return sqlSession.selectList("emp.detailList", companyNo);
+	}
+	
+	//프로젝트 참여자 사원 목록
+	public int getProjectEmpList(int empNo){
+		return sqlSession.selectOne("project.projectEmpList", empNo);
+	
+
 	}
 
 }
