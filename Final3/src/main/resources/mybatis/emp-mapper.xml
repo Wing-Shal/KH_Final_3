@@ -52,7 +52,7 @@
 		d.dept_name,
 		e.emp_contact,
 		e.emp_email,
-		e.emp_status,
+		e.emp_type,
 		e.emp_join,
 		e.emp_exit
 		from
@@ -75,7 +75,7 @@
 		d.dept_name,
 		e.emp_contact,
 		e.emp_email,
-		e.emp_status,
+		e.emp_type,
 		e.emp_join,
 		e.emp_exit
 		from
