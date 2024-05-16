@@ -11,7 +11,7 @@
 
 	<!-- 시퀀스 생성 -->
 	<select id="sequence" resultType="int">
-		select notice_seq.nextval from
+		select blind_seq.nextval from
 		dual
 	</select>
 
@@ -76,7 +76,7 @@
 			<if test="blindContent != null">blind_content = #{blindContent},</if>
 			<if test="blindEtime != null">blind_etime = #{blindEtime},</if>
 		</set>
-		where board_blind_no = #{blindNo}
+		where blind_no = #{blindNo}
 	</update>
 
 	<!-- Delete -->
