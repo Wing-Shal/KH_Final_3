@@ -257,17 +257,11 @@
 		SELECT
 		p.company_no,
 		p.emp_no,
-		e.emp_name,
-		g.grade_name,
-		d.dept_name
+		e.emp_name
 		FROM
 		project p
 		LEFT JOIN
 		emp e ON p.emp_no = e.emp_no
-		LEFT JOIN
-		grade g ON e.grade_no = g.grade_no
-		LEFT JOIN
-		dept d ON e.dept_no = d.dept_no
 		WHERE
 		p.company_no = #{companyNo}
 	</select>
