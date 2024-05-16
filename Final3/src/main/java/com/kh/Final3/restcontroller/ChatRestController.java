@@ -83,7 +83,7 @@ public class ChatRestController {
 
 	
 	//empNo가 속한 채팅방 목록
-	@GetMapping("/list/{empNo}")
+	@GetMapping("/list")
 	public List<ChatroomDto> chatroomList(@RequestHeader("Authorization") String token) {
 		LoginVO loginVO = jwtService.parse(token);
 		int empNo = loginVO.getLoginId();
@@ -133,7 +133,7 @@ public class ChatRestController {
 	}
 	
 	//채팅방 나가기
-	@DeleteMapping("/outChatroom/{empNo}/{chatroomNo}")
+	@DeleteMapping("/outChatroom/{chatroomNo}")
 	public ResponseEntity<?> delete(@RequestHeader("Authorization") String token, @PathVariable int chatroomNo) {
 //	public ResponseEntity<?> delete(@PathVariable int empNo, @PathVariable int chatroomNo) {
 		LoginVO loginVO = jwtService.parse(token);

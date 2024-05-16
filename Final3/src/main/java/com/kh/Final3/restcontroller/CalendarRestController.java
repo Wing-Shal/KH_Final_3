@@ -106,7 +106,7 @@ public class CalendarRestController {
 		return ResponseEntity.ok().body(list);
 	}
 	
-	@GetMapping("/listByDept/{empNo}")
+	@GetMapping("/listByDept")
 //	public ResponseEntity<List<CalendarDto>> listByDept(@RequestHeader("Authorization") String token) {
 	public List<CalendarDto> listByDept(@RequestHeader("Authorization") String token) {
         LoginVO loginVO = jwtService.parse(token);
@@ -116,7 +116,7 @@ public class CalendarRestController {
         return calendarDao.selectListByDept(empNo);
 	}
 	
-	@GetMapping("/listOnlyMe/{empNo}")
+	@GetMapping("/listOnlyMe")
 	public List<CalendarDto> listOnlyMe(@RequestHeader("Authorization") String token) {
         LoginVO loginVO = jwtService.parse(token);
         int empNo = loginVO.getLoginId();

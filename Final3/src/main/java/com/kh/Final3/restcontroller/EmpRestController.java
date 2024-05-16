@@ -65,9 +65,9 @@ public class EmpRestController {
 		}
 	}
 
-	@GetMapping("/list/{empNo}")
+	@GetMapping("/list")
 	public ResponseEntity<List<EmpDto>> list(@RequestHeader("Authorization") String token) {
-		LoginVO loginVO = jwtService.parse(token);
+		LoginVO loginVO = jwtService.parse(token);	
 		int empNo = loginVO.getLoginId();
 		EmpDto empDto = empDao.selectOne(empNo);
 		int companyNo = empDto.getCompanyNo();
