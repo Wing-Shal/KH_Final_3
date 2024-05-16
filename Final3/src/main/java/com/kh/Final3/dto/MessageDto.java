@@ -19,6 +19,8 @@ public class MessageDto {
 //	private Integer messageReply;
 	private int readCount;
 	
+	private int readCountForChatroom;
+	
 	private String messageSenderName;
 	private String messageSenderGrade;
 	
@@ -28,6 +30,15 @@ public class MessageDto {
             return formatter.format(messageTime);
         }
         return ""; 
+    }
+    
+    public void setReadCountForChatroom(int readCountForChatroom) {
+        if (readCountForChatroom < -1) {
+            this.readCountForChatroom = 0;
+        } 
+        else {
+            this.readCountForChatroom = readCountForChatroom;
+        }
     }
 
 }

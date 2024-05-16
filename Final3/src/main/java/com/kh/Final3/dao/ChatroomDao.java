@@ -95,6 +95,7 @@ public class ChatroomDao {
 	    sqlSession.insert("empChatroom.save", info);
 	}
    
+
    public Integer numberOfParticipants(int chatroomNo) {
 	   return sqlSession.selectOne("chatroom.numberOfEmpInChatroom", chatroomNo);
    }

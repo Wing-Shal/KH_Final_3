@@ -19,6 +19,9 @@ public class MessageDao {
 	@Autowired
 	private SqlSession sqlSession;
 	
+	@Autowired
+	private ChatroomDao chatroomDao;
+	
 	public MessageDto insert(MessageDto messageDto) {
 		int sequence = sqlSession.selectOne("message.sequence");
 		messageDto.setMessageNo(sequence);
@@ -56,6 +59,10 @@ public class MessageDao {
 	        String senderGrade = sqlSession.selectOne("message.listSetGrade", messageDto.getMessageNo());
 	        messageDto.setMessageSenderName(senderName);
 	        messageDto.setMessageSenderGrade(senderGrade);
+	        
+	        int readCountForChatroom = chatroomDao.numberOfParticipants(chatroomNo) - 1 - messageDto.getReadCount();
+	        messageDto.setReadCountForChatroom(readCountForChatroom);
+	        
 	    }
 	    
 	    return messageList;
@@ -81,6 +88,7 @@ public class MessageDao {
 	    Integer count = sqlSession.selectOne("message.isReadMessage", data);
 	    return count != null && count > 0;
 	}
+	
 	
 	@Transactional
 	public void checkReadMessage(int messageNo, int empNo) {
