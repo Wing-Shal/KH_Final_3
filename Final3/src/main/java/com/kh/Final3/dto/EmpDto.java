@@ -28,5 +28,4 @@ public class EmpDto {
 	
 	private String empGrade; //직급명 출력용
 	private String empDept; //부서명 출력용
-	
 }

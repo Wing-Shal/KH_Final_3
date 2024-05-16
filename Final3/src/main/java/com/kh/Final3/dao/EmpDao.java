@@ -79,6 +79,8 @@ public class EmpDao {
 
 	  //부서 이름 설정
 	   String empDept = sqlSession.selectOne("emp.setDeptName", empNo);
+	   if(empDept == null) return empDto;
+	   
 	   empDto.setEmpDept(empDept);
 	   
       return empDto;

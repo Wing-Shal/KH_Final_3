@@ -3,6 +3,7 @@ package com.kh.Final3.restcontroller;
 import java.io.IOException;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,6 +35,7 @@ import com.kh.Final3.vo.EmpDataVO;
 import com.kh.Final3.vo.EmpInfoVO;
 import com.kh.Final3.vo.EmpInputVO;
 import com.kh.Final3.vo.InputVO;
+import com.kh.Final3.vo.JoinVO;
 import com.kh.Final3.vo.LoginVO;
 
 import io.swagger.v3.oas.annotations.Parameter;
@@ -85,15 +87,40 @@ public class CompanyRestController {
 		}
 	}
 	
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	@PostMapping("/join")
-	public ResponseEntity<CompanyDto> insert(
+	public ResponseEntity<?> insert(
 			@Parameter(description = "회사 생성에 대한 입력값", required = true, schema = @Schema(implementation = CompanyDto.class))
-			@RequestBody CompanyDto companyDto) {
+			@RequestBody JoinVO joinVO) {
+		CompanyDto companyDto = modelMapper.map(joinVO, CompanyDto.class);
 		int sequence = companyDao.sequence();
 		companyDto.setCompanyNo(sequence);
 		companyDao.insert(companyDto);
+		
+		List<DeptDto> depts = joinVO.getDepts();
+		for(DeptDto deptDto : depts) {
+			deptDto.setCompanyNo(sequence);
+			
+			int deptNo = deptDao.sequence();
+			deptDto.setDeptNo(deptNo);
+			
+			deptDao.insert(deptDto);
+		};
+		
+		List<GradeDto> grades = joinVO.getGrades();
+		for(GradeDto gradeDto : grades) {
+			gradeDto.setCompanyNo(sequence);
+			
+			int gradeNo = gradeDao.sequence();
+			gradeDto.setGradeNo(gradeNo);
+			
+			gradeDao.insert(gradeDto);
+		}
+		
 		emailService.sendVerifyMail(companyDto);
-		return ResponseEntity.ok().body(companyDao.selectOne(sequence));
+		return ResponseEntity.ok().build();
 	}
 	
 	@GetMapping("/")
