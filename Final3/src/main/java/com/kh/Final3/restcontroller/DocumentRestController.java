@@ -60,7 +60,7 @@ public class DocumentRestController {
 			@ApiResponse(responseCode = "500", description = "서버 오류", content = {
 					@Content(mediaType = "text/plain", schema = @Schema(implementation = String.class), examples = @ExampleObject("server error")) }) })
 
-	// 조회 (무한스크롤)
+	// 조회 (무한스크롤)..
 	@GetMapping("/")
 	public List<DocumentDto> list() {
 		return documentDao.selectList();

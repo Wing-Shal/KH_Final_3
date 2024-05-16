@@ -72,7 +72,7 @@ public class ProjectRestController {
 				.build();
 	}
 	
-	//사번말고 프로젝트 번호로 상세정보를 조회하는 매핑을 구현(selectOne)
+	//사번말고 프로젝트 번호로 상세정보를 조회하는 매핑을 구현(selectOne)..
 	@GetMapping("/getProjectName/{projectNo}")
 	public String projectFind(@PathVariable int projectNo) {
 		ProjectDto projectDto = projectDao.selectOne(projectNo);

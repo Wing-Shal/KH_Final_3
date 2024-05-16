@@ -28,7 +28,7 @@ values (
 	</insert> 
 	
 
-	<!--  Read 조회 -->
+	<!--  Read 조회 ..-->
 	<select id="list" resultType="ProjectDto">
 		select * from project order by project_no desc
 	</select>

@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 
 
@@ -117,7 +116,7 @@
 		delete document where document_no = #{documentNo}
 	</delete>
 	
-	<!-- 같은 회사 사원 가져오기 프로젝트 -->
+	<!-- 같은 회사 사원 가져오기 프로젝트.. -->
 	<select id="detailList" resultType="EmpDto">
     SELECT
     e.emp_no,

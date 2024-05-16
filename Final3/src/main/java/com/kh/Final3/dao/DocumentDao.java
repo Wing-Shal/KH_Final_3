@@ -78,7 +78,7 @@ public class DocumentDao {
 		return sqlSession.delete("document.delete", documentNo) > 0;
 	}
 
-	//통합검색
+	//통합검색..
 	public List<DocumentDto>searchDocuments(String keyword){
 		return sqlSession.selectList("document.searchDocuments",keyword);
 	}

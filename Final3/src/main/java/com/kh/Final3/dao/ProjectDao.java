@@ -28,7 +28,7 @@ public class ProjectDao {
 	
 	//무한 스크롤을 위한 페이징 메소드
 		//- 받아야 하는 정보 : 페이지번호, 페이지크기
-		//- 반환해야 하는 정보 : 문서 목록, List<ProjectDto>
+		//- 반환해야 하는 정보 : 문서 목록, List<ProjectDto>..
 	public List<ProjectDto> selectListByPaging(int page, int size) {
 		int beginRow = page * size - (size-1);
 		int endRow = page * size;
