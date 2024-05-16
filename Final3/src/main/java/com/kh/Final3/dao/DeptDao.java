@@ -13,12 +13,16 @@ public class DeptDao {
    @Autowired
    private SqlSession sqlSession;
 
-   public List<DeptDto> selectList() {
-      return sqlSession.selectList("dept.list");
+   public List<DeptDto> selectList(int companyNo) {
+      return sqlSession.selectList("dept.list", companyNo);
    }
 
    public int findDeptNo(DeptDto deptDto) {
       return sqlSession.selectOne("dept.find", deptDto);
+   }
+   
+   public String selectNameByNo(int deptNo) {
+	   return sqlSession.selectOne("dept.selectNameByNo", deptNo);
    }
    
    public int sequence() {

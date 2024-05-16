@@ -99,7 +99,7 @@ public class KakaoPayRestctroller {
 		KakaoPaySubscriptionInactiveResponseVO responseVO = kakaoPayService.subscriptionInactive(requestVO);
 		
 		//DB에 추가		
-		kakaoPayService.insertInactivePayment(responseVO, companyNo);
+		kakaoPayService.insertInactivePayment(responseVO, companyNo);	
 		
 	}
 	
