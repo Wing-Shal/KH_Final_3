@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.Final3.dto.DocumentDto;
+import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.dto.ProjectDto;
+import com.kh.Final3.vo.EmpInfoVO;
+import com.kh.Final3.vo.ProjectEmpVO;
 
 @Repository
 public class ProjectDao {
@@ -80,7 +83,18 @@ public class ProjectDao {
 		return sqlSession.selectOne("project.projectFind",projectNo);
 	}
 
+	//프로젝트 생성시 사원리스트
+//	public EmpDto selectOne3(int companyNo) {
+//		
+//		return sqlSession.selectOne("emp.find",companyNo);
+//	}
 
+	// 프로젝트 생성 시 회사의 사원 목록 조회
+	public List<ProjectEmpVO> getCompanyEmployeesInfo(int companyNo) {
+	    return sqlSession.selectList("project.detailList", companyNo);
+	}
+
+	
 }
 
 

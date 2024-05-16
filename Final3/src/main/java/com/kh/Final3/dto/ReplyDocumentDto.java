@@ -16,4 +16,5 @@ public class ReplyDocumentDto {
 	private Date replyDocumentTime; //댓글작성시각
 	private int replyDocumentTarget; //댓글 타겟(기존댓글)
 	private int replyDocumentGroup; //그룹
+	private int documnetNo; //문서번호
 }

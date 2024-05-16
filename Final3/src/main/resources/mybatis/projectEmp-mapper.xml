@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="projectEmp">
+
+	<!-- Create(등록) -->
+	<insert id="save">
+		insert into project_emp(
+		project_no, emp_no
+		)
+		values (
+		#{projectNo},#{empNo}
+		)
+	</insert>
+
+
+	<!-- Read 조회 -->
+	<select id="list" resultType="ProjectEmpDto">
+		select * from project order by
+		project_no desc
+	</select>
+
+	<select id="find" resultType="ProjectEmpDto">
+		select * from project where
+		project_no = #{projectNo}
+	</select>
+
+	<select id="myList" resultType="ProjectEmpDto">
+		select * from project where
+		emp_no = #{empNo}
+	</select>
+
+	<!-- Delete -->
+	<delete id="delete">
+		delete project where project_no = #{projectNo}
+	</delete>
+
+
+
+
+
+
+</mapper>

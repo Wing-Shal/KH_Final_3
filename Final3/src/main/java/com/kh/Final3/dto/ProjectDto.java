@@ -21,6 +21,8 @@ public class ProjectDto {
 	private String projectWriter; //프로젝트 작성자
 	private int empNo;
 	private String token;
+	private String referencePerson; //참조자
+//	private String approver; //결재자
 	//private String empName;
 
 }

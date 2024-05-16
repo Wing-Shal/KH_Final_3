@@ -17,9 +17,9 @@
             reply_document_group, document_no
         )
         values(
-            #{replydocumentNo}, #{replydocumentContent}, #{replydocumentNick},
-             #{replydocumentCompany}, #{replydocumentTime}, #{replydocumentTaget},
-              #{replydocumentGroup}, #{documentNo}        )
+            #{replyDocumentNo}, #{replyDocumentContent}, #{replyDocumentNick},
+             #{replyDocumentCompany}, #{replyDocumentTime}, #{replyDocumentTaget},
+              #{replyDocumentGroup}, #{documentNo}        )
     </insert>
     
     <!-- Read -->

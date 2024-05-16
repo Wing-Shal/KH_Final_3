@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.Final3.dao.DocumentDao;
@@ -21,6 +23,7 @@ import com.kh.Final3.dto.DocumentDto;
 import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.dto.ProjectDto;
 import com.kh.Final3.service.JwtService;
+import com.kh.Final3.vo.LoginVO;
 import com.kh.Final3.vo.ProjectDataVO;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -153,44 +156,43 @@ public class ProjectRestController {
 			return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(projectDao.selectOne(projectDto.getProjectNo()));
 		}
-	//삭제
-//		@Operation(
-//			description = "학생 정보 삭제",
-//			responses = {
-//				@ApiResponse(responseCode = "200",description = "삭제 완료",
-//					content = @Content(
-//							mediaType = "text/plain",
-//							schema = @Schema(implementation = String.class),
-//							examples = @ExampleObject("ok")
-//					)
-//				),
-//				@ApiResponse(responseCode = "404",description = "학생 정보 없음",
-//					content = @Content(
-//							mediaType = "text/plain",
-//							schema = @Schema(implementation = String.class), 
-//							examples = @ExampleObject("not found")
-//					)
-//				),
-//				@ApiResponse(responseCode = "500",description = "서버 오류",
-//					content = @Content(
-//							mediaType = "text/plain",
-//							schema = @Schema(implementation = String.class), 
-//							examples = @ExampleObject("server error")
-//					)
-//				),
-//			}
-//		)
+
 		
-//	// 삭제
-//	@DeleteMapping("/{projectNo}")
-//	public ResponseEntity<?> delete(@PathVariable int projectNo) {
-//		boolean result = projectDao.delete(projectNo);
-//		if (result == false) {
-//			return ResponseEntity.notFound().build();
-//		}
-//		return ResponseEntity.ok().build();
-//	}
-//		
+		//사원리스트
+		// 프로젝트 생성 시 회사의 사원 목록 조회
+//	    @GetMapping("/companyEmployees/{empNo}")
+//	    public ResponseEntity<List<EmpDto>> getCompanyEmployees(@PathVariable int empNo) {
+//	    	 // empNo를 통해 해당 사원의 회사 번호를 조회합니다.
+//	        EmpDto emp = empDao.selectOne(empNo);
+//	        System.out.println(emp);
+//	        int companyNo = emp.getCompanyNo();
+//	        System.out.println(companyNo);
+//	        // 회사 번호를 통해 해당 회사의 사원 목록을 조회합니다.
+//	        List<EmpDto> employees = empDao.getEmployeesByCompanyNo(companyNo);
+//	        
+//	        
+//	        System.out.println(employees);
+//	        return ResponseEntity.ok().body(employees);
+//	    }
+	    
+		@GetMapping("/companyEmployees/{empNo}")
+		public ResponseEntity<List<EmpDto>> getCompanyEmployeesInfo(@RequestHeader("Authorization") String token) {
+		    // 토큰을 검증하고 사용자 정보를 가져오는 로직을 구현합니다.
+			LoginVO loginVO = jwtService.parse(token);
+			int loginId = loginVO.getLoginId();
+			System.out.println("1번 수행 로그인ID(사번) : "+loginId);
+		    // 사원의 사번을 통해 회사 번호를 조회합니다.
+		    EmpDto emp = empDao.selectOne(loginId);
+		    int companyNo = emp.getCompanyNo();
+		    System.out.println("2번 수행 회사 번호 조회 : "+companyNo);
+		    // 회사 번호를 통해 해당 회사의 사원 목록을 조회합니다.
+		    List<EmpDto> employees = empDao.getEmployeesByCompanyNo(companyNo);
+		    System.out.println("사원목록 : "+employees);
+		    
+		    
+		    return ResponseEntity.ok().body(employees);
+		}
+
 
 
 }

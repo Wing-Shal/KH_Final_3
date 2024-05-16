@@ -119,5 +119,45 @@
 	<select id="findAttach" resultType="int">
 		select attach_no from emp_attach where emp_no = #{empNo}
 	</select>
+	
+	<!-- 프로젝트 같은회사 사원 불러오기 -->
+	 <select id="EmpNoByCompanyProject" resultType="EmpInfoVO">
+		select
+			e.company_no,
+			e.emp_no,
+			e.emp_name,
+			g.grade_name,
+			d.dept_name
+		from
+			emp e
+		left join
+			grade g on e.grade_no = g.grade_no
+		left join
+			dept d on e.dept_no = d.dept_no
+		where
+			e.company_no = #{companyNo}
+   </select>
+	
+	<!-- 같은 회사 사원 가져오기 프로젝트 -->
+	<select id="getCompanyEmployeesInfo" resultType="EmpDto">
+    SELECT
+        p.company_no,
+        p.emp_no,
+        e.emp_name,
+        g.grade_name,
+        d.dept_name
+    FROM
+        project p
+    LEFT JOIN
+        emp e ON p.emp_no = e.emp_no
+    LEFT JOIN
+        grade g ON e.grade_no = g.grade_no
+    LEFT JOIN
+        dept d ON e.dept_no = d.dept_no
+    WHERE
+        p.company_no = #{companyNo}
+</select>
+	
+	
       
 </mapper>

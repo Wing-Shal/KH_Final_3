@@ -19,11 +19,11 @@
 	<insert id="save">
 		insert into project(
 			project_no, project_name, project_start_time , project_limit_time, company_no,
-			project_writer, emp_no			
+			project_writer, emp_no,	reference_person,approver	
 		)
 values (
     #{projectNo}, #{projectName}, #{projectStartTime}, #{projectLimitTime}, #{companyNo},
-    #{projectWriter}, #{empNo}
+    #{projectWriter}, #{empNo},#{referencePerson},#{approver}
 )
 	</insert> 
 	
@@ -71,6 +71,20 @@ values (
 	<select id="projectFind" resultType="ProjectDto">
 		select * from project where project_no = #{projectNo}
 	</select>
+	
+	
+	<!-- 같은 회사 사원 가져오기 프로젝트 -->
+	<select id="detailList" resultType="EmpDto">
+    SELECT
+    e.emp_no,
+    e.emp_name
+FROM
+    emp e
+WHERE
+    e.company_no = #{companyNo}
+</select>
+
+
 	
 	
 </mapper>

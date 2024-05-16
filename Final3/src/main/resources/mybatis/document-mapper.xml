@@ -99,10 +99,33 @@
     empNo LIKE CONCAT('%', #{keyword}, '%');
 </select>
 
+<!-- 사원이름 찾기 -->
+ <select id="findEmp" parameterType="int" resultType="String">
+    SELECT emp_name
+    FROM emp
+    WHERE emp_no = #{empNo}
+  </select>
+  
+  <!-- 회사 내 사원 리스트 출력 -->
+  <select id="listByCompany" resultType="EmpDto">
+      select * from emp where company_no = #{companyNo} order by emp_no asc
+   </select>
+
 	<!-- Delete -->
 	<delete id="delete">
 		delete document where document_no = #{documentNo}
 	</delete>
-
+	
+	<!-- 같은 회사 사원 가져오기 프로젝트 -->
+	<select id="detailList" resultType="EmpDto">
+    SELECT
+    e.emp_no,
+    e.emp_name
+FROM
+    emp e
+WHERE
+    e.company_no = #{companyNo}
+</select>
+	
 
 </mapper>
