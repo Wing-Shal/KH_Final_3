@@ -19,87 +19,90 @@ public class DocumentDao {
 	@Autowired
 	private SqlSession sqlSession;
 
-	
-	//문서 조회 (무한스크롤)
+	// 문서 조회 (무한스크롤)
 	public List<DocumentDto> selectList() {
 		return sqlSession.selectList("document.list");
 	}
-	
-	//무한 스크롤을 위한 페이징 메소드//
-		//- 받아야 하는 정보 : 페이지번호, 페이지크기
-		//- 반환해야 하는 정보 : 문서 목록, List<DocumentDto>
+
+	// 무한 스크롤을 위한 페이징 메소드//
+	// - 받아야 하는 정보 : 페이지번호, 페이지크기
+	// - 반환해야 하는 정보 : 문서 목록, List<DocumentDto>
 	public List<DocumentDto> selectListByPaging(int page, int size) {
-		int beginRow = page * size - (size-1);
+		int beginRow = page * size - (size - 1);
 		int endRow = page * size;
-		
+
 		Map<String, Object> data = new HashMap<>();
 		data.put("beginRow", beginRow);
 		data.put("endRow", endRow);
 		return sqlSession.selectList("document.listByPaging", data);
-	
-		
+
 	}
-	//해당 프로젝트에 맞는 문서 조회
-	public List<DocumentDto> docuList(int projectNo){
-		return sqlSession.selectList("document.docuList",projectNo);
+
+	// 해당 프로젝트에 맞는 문서 조회
+	public List<DocumentDto> docuList(int projectNo) {
+		return sqlSession.selectList("document.docuList", projectNo);
 	}
+
 	public int count() {
 		return sqlSession.selectOne("document.count");
 	}
 
-	//조회
+	// 조회
 	public DocumentDto selectOne(int documentNo) {
 		return sqlSession.selectOne("document.find", documentNo);
 	}
-	
-	//프로젝트 Dto 넣기
+
+	// 프로젝트 Dto 넣기
 	public ProjectDto selectOne1(int projectNo) {
 		return sqlSession.selectOne("project.find2", projectNo);
 	}
-	
-	//시퀀스
+
+	// 시퀀스
 	public int sequence() {
 		return sqlSession.selectOne("document.sequence");
 	}
-	
-	//등록
+
+	// 등록
 	public void insert(DocumentDto documentDto) {
 		System.out.println(documentDto);
 		sqlSession.insert("document.save", documentDto);
 	}
 
-	//전체수정
+	// 전체수정
 	public boolean edit(DocumentDto documentDto) {
 		return sqlSession.update("document.edit", documentDto) > 0;
 	}
-	
-	
-	//삭제
+
+	// 삭제
 	public boolean delete(int documentNo) {
 		return sqlSession.delete("document.delete", documentNo) > 0;
 	}
 
-	//통합검색
-	public List<DocumentDto>searchDocuments(String keyword){
-		return sqlSession.selectList("document.searchDocuments",keyword);
+	// 통합검색
+	public List<DocumentDto> searchDocuments(String keyword) {
+		return sqlSession.selectList("document.searchDocuments", keyword);
 	}
 
 	public List<ProjectEmpVO> getCompanyEmployeesInfo(int companyNo) {
-	    return sqlSession.selectList("document.detailList", companyNo);
+		return sqlSession.selectList("document.detailList", companyNo);
 	}
-	
-	//파일첨부
-	
-	   public void connect (int documentNo, int attachNo) {
-			Map<String, Object> data = new HashMap<>();
-			data.put("documentNo", documentNo);
-			data.put("attachNo", attachNo);
-			sqlSession.insert("document.connect", data);
-		}
-		
-		public int findAttach (int documentNo) {
-			return sqlSession.selectOne("document.findAttach", documentNo);
-		}
-	
-}
 
+	// 파일첨부
+
+	public void connect(int documentNo, int attachNo) {
+		Map<String, Object> data = new HashMap<>();
+		data.put("documentNo", documentNo);
+		data.put("attachNo", attachNo);
+		sqlSession.insert("document.connect", data);
+	}
+
+	public int findAttach(int documentNo) {
+		return sqlSession.selectOne("document.findAttach", documentNo);
+	}
+
+	public Integer findDocumentNo(int empNo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("document.findEmpNo", empNo);
+	}
+
+}

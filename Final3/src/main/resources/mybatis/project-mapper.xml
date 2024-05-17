@@ -19,11 +19,14 @@
 	<!-- Create(등록) -->
 	<insert id="save">
 		insert into project(
-		project_no, project_name, project_start_time , project_limit_time, company_no,
-		project_writer, emp_no
+		project_no, project_name,
+		project_start_time , project_limit_time, company_no,
+		project_writer,
+		emp_no
 		)
 		values (
-		#{projectNo}, #{projectName}, #{projectStartTime}, #{projectLimitTime},
+		#{projectNo}, #{projectName}, #{projectStartTime},
+		#{projectLimitTime},
 		#{companyNo},
 		#{projectWriter}, #{empNo}
 		)
@@ -78,23 +81,26 @@
 		project_no = #{projectNo}
 	</select>
 
-	<!-- 프로젝트에 참여한 사원목록 -
-	<select id="projectEmpList" resultType="ProjectEmpListDto">
-		SELECT
-		p.projectNo,
-		p.projectName,
-		e.empNo,
-		e.empName,
-		pel.projectEmpListNo,
-		pel.projectEmp
-		FROM
-		project p
-		JOIN
-		projectEmpList pel ON p.projectNo = pel.projectNo
-		JOIN
-		emp e ON e.empNo = pel.empNo;
-	</select>-->
+	<!-- 프로젝트에 참여한 사원등록 -->
+	<insert id="save2">
+		INSERT INTO project_emp (project_no, emp_no)
+		Values(#{projectNo},#{empNo})
+		
+	</insert>
 
 
+<select id="detailList" resultType="EmpInfoVO">
+	SELECT
+    e.emp_no,
+    e.emp_name,
+    g.grade_name,
+    d.dept_name
+FROM
+    emp e
+    LEFT JOIN grade g ON e.grade_no = g.grade_no
+    LEFT JOIN dept d ON e.dept_no = d.dept_no
+WHERE
+    e.company_no = #{companyNo}
+	</select>
 
 </mapper>

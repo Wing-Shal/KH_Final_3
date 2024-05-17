@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.Final3.dto.DocumentDto;
 import com.kh.Final3.dto.ProjectDto;
+import com.kh.Final3.vo.EmpInfoVO;
+import com.kh.Final3.vo.ProjectEmpVO;
 
 @Repository
 public class ProjectDao {
@@ -80,6 +82,12 @@ public class ProjectDao {
 		return sqlSession.selectOne("project.projectFind",projectNo);
 	}
 
+	//프로젝트 참여자 등록
+	public void insertEmp(List<ProjectEmpVO> projectEmpVO) {
+	 
+	        sqlSession.insert("project.save2", projectEmpVO);
+	    
+	}
 
 
 
