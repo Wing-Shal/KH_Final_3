@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.Final3.dao.BoardNoticeDao;
@@ -19,6 +20,7 @@ import com.kh.Final3.dao.EmpDao;
 import com.kh.Final3.dto.BoardNoticeDto;
 import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.service.JwtService;
+import com.kh.Final3.vo.BoardNoticePageVO;
 import com.kh.Final3.vo.LoginVO;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -94,6 +96,46 @@ public class BoardNoticeRestController {
 
 	    List<BoardNoticeDto> notices = boardNoticeDao.selectList(companyNo);
 	    return ResponseEntity.ok(notices);
+	}
+	
+	
+	@GetMapping("/page/{page}/size/{size}")
+	public ResponseEntity<BoardNoticePageVO> listByPaging(
+	    @RequestHeader("Authorization") String token, 
+	    @PathVariable int page, 
+	    @PathVariable int size, 
+	    @RequestParam(required = false) String column, 
+	    @RequestParam(required = false) String keyword) {
+
+	    LoginVO loginVO = jwtService.parse(token);
+
+	    if (loginVO == null || loginVO.getLoginLevel() == null || loginVO.getLoginId() == null) {
+	        return ResponseEntity.status(403).build();
+	    }
+
+	    int companyNo;
+	    if ("회사".equals(loginVO.getLoginLevel())) {
+	        companyNo = loginVO.getLoginId();
+	    } else {
+	        Integer empNo = loginVO.getLoginId();
+	        EmpDto empDto = empDao.selectOne(empNo);
+	        if (empDto == null) {
+	            return ResponseEntity.status(403).build();
+	        }
+	        companyNo = empDto.getCompanyNo();
+	    }
+
+	    List<BoardNoticeDto> notices = boardNoticeDao.selectListByPaging(companyNo, page, size, column, keyword);
+	    int count = boardNoticeDao.noticeCount(companyNo, column, keyword);
+
+	    BoardNoticePageVO pageVO = BoardNoticePageVO.builder()
+														        .list(notices)
+														        .count(count)
+														        .blockSize(10)
+														        .page(page)
+														        .size(size)
+													        .build();
+	    return ResponseEntity.ok(pageVO);
 	}
 
 	
