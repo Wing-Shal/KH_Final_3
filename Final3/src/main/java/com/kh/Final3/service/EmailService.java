@@ -21,25 +21,36 @@ public class EmailService {
 	private CompanyDao companyDao;
 	
 	public void sendApproveMail(CompanyDto companyDto) {
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo(companyDto.getCompanyEmail());
-		message.setSubject(
-				"[Planet] <<" + companyDto.getCompanyName() + 
-				">>의 가입이 승인되었습니다.");
-		message.setText("가입해주셔서 감사합니다 자세한 이용방법은 어쩌고저쩌고");
-		
-		sender.send(message);
-	}
-	
-	public void sendVerifyMail(CompanyDto companyDto) {
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo(companyDto.getCompanyEmail());
-		message.setSubject("[Planet]가입을 위한 인증을 완료해 주세요");
-		message.setText("[Planet] <<" + companyDto.getCompanyName() + 
-				">>의 가입을 완료하시려면 사업자 등록증을 이 메일로 첨부하신 후 발송 해주세요"
-				+ "해당 자료는 가입 인증 이후 폐기됩니다.");
-		sender.send(message);
-	}
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(companyDto.getCompanyEmail());
+        message.setSubject("[Planet] <<" + companyDto.getCompanyName() + ">>의 가입이 승인되었습니다.");
+        message.setText(
+                "안녕하세요, " + companyDto.getCompanyName() + ".\n\n" +
+                "Planet 가입이 승인되었습니다. 가입해 주셔서 감사합니다.\n\n" +
+                "실제 시스템을 이용하시려면 다음 단계를 따라주세요:\n" +
+                "1. 플래닛 페이지로 이동합니다.\n" +
+                "2. 승인된 계정으로 로그인합니다.\n" +
+                "3. 정기결제를 진행합니다.\n\n" +
+                "문의사항이 있으시면 언제든지 고객센터로 연락해 주세요.\n\n" +
+                "감사합니다.\n" +
+                "Planet 팀 드림"
+        );
+        sender.send(message);
+    }
+
+    public void sendVerifyMail(CompanyDto companyDto) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(companyDto.getCompanyEmail());
+        message.setSubject("[Planet] 가입을 위한 인증을 완료해 주세요");
+        message.setText(
+                "안녕하세요, " + companyDto.getCompanyName() + "님.\n\n" +
+                "Planet 가입을 완료하시려면 사업자 등록증을 이 메일로 첨부하신 후 발송해 주세요.\n\n" +
+                "해당 자료는 가입 인증 이후 폐기됩니다.\n\n" +
+                "감사합니다.\n" +
+                "Planet 팀 드림"
+        );
+        sender.send(message);
+    }
 	
 	@Autowired
 	private CertDao certDao;

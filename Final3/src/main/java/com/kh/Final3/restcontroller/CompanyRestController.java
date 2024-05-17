@@ -1,6 +1,7 @@
 package com.kh.Final3.restcontroller;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -19,11 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.Final3.dao.CertDao;
 import com.kh.Final3.dao.CompanyDao;
 import com.kh.Final3.dao.DeptDao;
 import com.kh.Final3.dao.EmpDao;
 import com.kh.Final3.dao.GradeDao;
 import com.kh.Final3.dao.PaymentDao;
+import com.kh.Final3.dto.CertDto;
 import com.kh.Final3.dto.CompanyDto;
 import com.kh.Final3.dto.DeptDto;
 import com.kh.Final3.dto.EmpDto;
@@ -37,7 +40,6 @@ import com.kh.Final3.vo.EmpInputVO;
 import com.kh.Final3.vo.InputVO;
 import com.kh.Final3.vo.JoinVO;
 import com.kh.Final3.vo.LoginVO;
-
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -85,6 +87,22 @@ public class CompanyRestController {
 		else {
 			return ResponseEntity.status(401).build();
 		}
+	}
+	
+	@Autowired
+	CertDao certDao;
+	
+	@PostMapping("/sendCert")
+	public ResponseEntity<?> sendCert(@RequestBody CompanyDto companyDto) {
+        emailService.sendCert(companyDto);
+        return ResponseEntity.ok().build();
+    }
+	
+	@PostMapping("/verifyCert")
+	public ResponseEntity<?> verifyCert(@RequestBody CertDto certDto) {
+		CertDto storedCert = certDao.selectOne(certDto.getCertEmail());
+		boolean isValid = storedCert != null && storedCert.getCertNumber().equals(certDto.getCertNumber());
+		return ResponseEntity.ok().body(Collections.singletonMap("valid", isValid));
 	}
 	
 	@Autowired
@@ -364,4 +382,27 @@ public class CompanyRestController {
 	public ResponseEntity<?> deleteGrade(@PathVariable int gradeNo) {
 		return ResponseEntity.ok().body(gradeDao.delete(gradeNo));
 	}
+	
+	@GetMapping("/isChecked")
+	public ResponseEntity<?> isChecked(@RequestHeader("Authorization") String token) {
+		LoginVO loginVO = jwtService.parse(token);
+		int companyNo = loginVO.getLoginId();
+		
+		CompanyDto companyDto = companyDao.selectOne(companyNo);
+		System.out.println(companyDto.getCompanyChecked());
+		if(companyDto.getCompanyChecked() == null) { //인증이 안된 회사
+			return ResponseEntity.status(401).build();
+		}
+		return ResponseEntity.ok().body("Checked");
+	}
+	@GetMapping("/info")
+    public ResponseEntity<CompanyDto> info(@RequestHeader("Authorization") String token){
+         LoginVO loginVO = jwtService.parse(token);
+         int empNo = loginVO.getLoginId();
+         EmpDto loginDto = empDao.selectOne(empNo);
+         CompanyDto companyDto = companyDao.selectOne(loginDto.getCompanyNo());
+         
+         if(companyDto == null) return ResponseEntity.notFound().build();
+         return ResponseEntity.ok().body(companyDto);
+    }
 }
