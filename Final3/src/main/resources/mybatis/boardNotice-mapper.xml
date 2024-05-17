@@ -26,14 +26,49 @@
 	<select id="list" resultType="boardNoticeDto">
 		select * from board_notice where company_no = #{companyNo} order by notice_no desc
 	</select>
+	
+	
 	<select id="find" resultType="boardNoticeDto">
 		select * from board_notice where notice_no = #{noticeNo}
 	</select>
 	
 	<!-- 페이지네이션용 -->
-	<select id="noticeCount" resultType="int">
-		select count(*) from board_notice where company_no = #{companyNo}
+	<select id="noticeCount" parameterType="map" resultType="int">
+	    select count(*)
+	    from board_notice
+	    where company_no = #{companyNo}
+	    <if test="column != null and column != '' and keyword != null and keyword != ''">
+	        and ${column} like '%' || #{keyword} || '%'
+	    </if>
 	</select>
+	
+	<select id="listByPaging" parameterType="map" resultType="boardNoticeDto">
+	    <include refid="top-n-header" />
+	        select *
+	        from board_notice
+	        where company_no = #{companyNo}
+	        <if test="column != null and column != '' and keyword != null and keyword != ''">
+	            and ${column} like '%' || #{keyword} || '%'
+	        </if>
+	        order by notice_no desc
+	    <include refid="top-n-footer" />
+	</select>
+	
+	<!-- 상단 -->
+	<sql id="top-n-header">
+	    <if test="beginRow != null and endRow != null">
+	        select * from (
+	        select rownum rn, TMP.* from (
+	    </if>
+	</sql>
+	
+	<!-- 하단 -->
+	<sql id="top-n-footer">
+	    <if test="beginRow != null and endRow != null">
+	        ) TMP
+	        ) where rn between #{beginRow} and #{endRow}
+	    </if>
+	</sql>
 	
 	<!-- update -->
 	<update id="editUnit">
