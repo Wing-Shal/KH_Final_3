@@ -51,6 +51,7 @@ public class AdminRestController {
                .loginId(findDto.getAdminId())
                .loginLevel("운영자")
                .isPaid("운영자")
+               .isChecked("")
                .accessToken(accessToken)
                .refreshToken(refreshToken)
             .build());//200
