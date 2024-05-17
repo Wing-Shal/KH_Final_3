@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,13 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kh.Final3.dao.DocumentDao;
 import com.kh.Final3.dao.EmpDao;
 import com.kh.Final3.dao.ProjectDao;
+import com.kh.Final3.dao.ProjectEmpDao;
 import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.dto.ProjectDto;
+import com.kh.Final3.dto.ProjectEmpDto;
 import com.kh.Final3.service.JwtService;
 import com.kh.Final3.vo.EmpInfoVO;
 import com.kh.Final3.vo.LoginVO;
 import com.kh.Final3.vo.ProjectDataVO;
-import com.kh.Final3.vo.ProjectEmpVO;
+import com.kh.Final3.vo.ProjectEmpAddVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -46,7 +47,8 @@ public class ProjectRestController {
 	private EmpDao empDao;
 	@Autowired
 	private DocumentDao documentDao;
-
+@Autowired
+private ProjectEmpDao projectEmpDao;
 
 	
 	// 문서용 설정 추가
@@ -173,9 +175,28 @@ public class ProjectRestController {
 			
 		//프로젝트 참여자 사원 등록
 		@PostMapping("/projectEmp") //여기 매핑 주소 바꿔줘야함
-		public void insertEmp(@RequestBody List<ProjectEmpVO> projectEmpVO) {
-		   System.out.println("프로젝트 참여자"+projectEmpVO);
-		        projectDao.insertEmp(projectEmpVO);
+		//public void insertEmp(@RequestBody List<EmpInfoVO> empInfoVOList) {
+		public void insertEmp(@RequestBody ProjectEmpAddVO vo) {
+			
+			//ProjectDto를 empNoList 개수만큼 만들어서 insert
+			int projectNo = vo.getProjectNo();//vo에 들어있는 프로젝트 번호를 꺼내고
+			for(int empNo : vo.getEmpNoList()) {//vo의 empNoList에 담긴 번호를 꺼내서 empNo라고 부르고
+				ProjectEmpDto projectEmpDto = ProjectEmpDto.builder()
+							.projectNo(projectNo).empNo(empNo)
+						.build();				
+				projectEmpDao.insertEmp(projectEmpDto);
+			}
+			
+			
+//			다큐먼트에 있는 프로젝트 번호 가져오기
+//			for(EmpInfoVO empInfoVO : empInfoVOList) {
+//				int empNo = empInfoVO.getEmpNo();
+//				int documentNo = documentDao.findDocumentNo(empNo);
+//				DocumentDto documentDto = documentDao.selectOne(documentNo);
+//				int projectNo = documentDto.getProjectNo();
+//			}
+//			
+//		        projectEmpDao.insertEmp(projectEmpDto);
 		    }
 		
 //		//프로젝트 참여자 사원 삭제
