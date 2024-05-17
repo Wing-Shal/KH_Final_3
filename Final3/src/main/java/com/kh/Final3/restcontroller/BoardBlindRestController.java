@@ -26,6 +26,7 @@ import com.kh.Final3.dto.DocumentDto;
 import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.dto.ProjectDto;
 import com.kh.Final3.service.JwtService;
+import com.kh.Final3.vo.BoardBlindDataVO;
 import com.kh.Final3.vo.LoginVO;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -95,18 +96,27 @@ public class BoardBlindRestController {
 			    return ResponseEntity.ok().body(insertedBoard);
 			}
 
-
-			
-			
 			
 //			//조회
-//			
 			@GetMapping("/")
 			public List<BoardBlindDto> selectBlindList() {
-				
 				return boardBlindDao.selectBlindList();
-				
 			}
+			
+			//무한스크롤
+			@GetMapping("/page/{page}/size/{size}")
+			public BoardBlindDataVO list(@PathVariable int page, @PathVariable int size) {
+				List<BoardBlindDto> list = boardBlindDao.selectListByPaging(page, size);
+				int count = boardBlindDao.count();
+				int endRow = page * size;
+				boolean last = endRow >= count;
+				return BoardBlindDataVO.builder()
+							.list(list)//화면에 표시할 목록
+							.count(count)//총 데이터 개수
+							.last(last)//마지막 여부
+						.build();
+			}
+			
 			
 			
 //			상세조회
@@ -114,35 +124,6 @@ public class BoardBlindRestController {
 			public List<BoardBlindDto> find(@PathVariable int blindNo){
 				return boardBlindDao.find(blindNo);
 			}
-			
-//		    @GetMapping("/{empNo}")
-//		    public List<BoardBlindDto> docuList(@PathVariable int blindEmpNo) {
-//		    	 System.out.println("보드정보"+blindEmpNo);
-//		    	
-//
-//		    	return boardBlindDao.docuList(blindEmpNo);
-//		    }
-			
-//			@GetMapping("/")
-//			public List<BoardBlindDto> list() {
-//			    List<BoardBlindDto> boardBlindList = boardBlindDao.selectList();
-//
-//			    // 각 게시글의 작성자의 회사 이름을 가져와서 BoardBlindDto에 설정합니다.
-//			    for (BoardBlindDto boardBlind : boardBlindList) {
-//			        int empNo = boardBlind.getBlindEmpNo();
-//			        EmpDto empDto = empDao.selectOne(empNo);
-//			        int companyNo = empDto.getCompanyNo();
-//			        CompanyDto companyDto = companyDao.selectOne(companyNo);
-//			        String companyName = companyDto.getCompanyName();
-//			        boardBlind.setCompanyName(companyName);
-//			    }
-//
-//			    return boardBlindList;
-//			}
-
-			
-			
-			
 			
 		// 수정
 			@Operation(
