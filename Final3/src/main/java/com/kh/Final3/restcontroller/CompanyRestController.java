@@ -75,11 +75,16 @@ public class CompanyRestController {
 		if(isValid) {
 			String accessToken = jwtService.createAccessToken(findDto);
 			String refreshToken = jwtService.createRefreshToken(findDto);
+			String isChecked = "Checked";
+			if(findDto.getCompanyChecked() == null) {//인증이 안된 회사
+				isChecked = "UnChecked";
+			}
 			
 			return ResponseEntity.ok().body(LoginVO.builder()
 					.loginId(findDto.getCompanyNo())
 					.loginLevel("회사")
 					.isPaid(paymentDao.isPaid(findDto.getCompanyNo()))
+					.isChecked(isChecked)
 					.accessToken(accessToken)
 					.refreshToken(refreshToken)
 				.build());//200
@@ -383,26 +388,25 @@ public class CompanyRestController {
 		return ResponseEntity.ok().body(gradeDao.delete(gradeNo));
 	}
 	
-	@GetMapping("/isChecked")
-	public ResponseEntity<?> isChecked(@RequestHeader("Authorization") String token) {
-		LoginVO loginVO = jwtService.parse(token);
-		int companyNo = loginVO.getLoginId();
-		
-		CompanyDto companyDto = companyDao.selectOne(companyNo);
-		System.out.println(companyDto.getCompanyChecked());
-		if(companyDto.getCompanyChecked() == null) { //인증이 안된 회사
-			return ResponseEntity.status(401).build();
-		}
-		return ResponseEntity.ok().body("Checked");
-	}
 	@GetMapping("/info")
     public ResponseEntity<CompanyDto> info(@RequestHeader("Authorization") String token){
          LoginVO loginVO = jwtService.parse(token);
          int empNo = loginVO.getLoginId();
          EmpDto loginDto = empDao.selectOne(empNo);
          CompanyDto companyDto = companyDao.selectOne(loginDto.getCompanyNo());
-         
          if(companyDto == null) return ResponseEntity.notFound().build();
          return ResponseEntity.ok().body(companyDto);
     }
+	@GetMapping("/companyImage")
+	public ResponseEntity<Integer> getCompanyAttachNo(@RequestHeader("Authorization") String token) {
+		LoginVO loginVO = jwtService.parse(token);
+        int companyNo = loginVO.getLoginId();
+        
+        int attachNo = attachService.getAttachNoByCompanyNo(companyNo);
+        if(attachNo == 0) {
+        	return ResponseEntity.status(404).build();
+        }
+        
+        return ResponseEntity.ok().body(attachNo);
+	}
 }

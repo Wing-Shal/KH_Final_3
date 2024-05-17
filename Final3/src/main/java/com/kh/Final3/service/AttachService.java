@@ -42,4 +42,13 @@ public class AttachService {
       attachDao.delete(attachNo);
    }
    
+   public int getAttachNoByEmpNo(int empNo) {
+	   return attachDao.findByEmpNo(empNo);
+   }
+   
+   public int getAttachNoByCompanyNo(int companyNo) {
+	   return attachDao.findByCompanyNo(companyNo);
+	   
+   }
+   
 }

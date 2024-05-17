@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -61,6 +62,7 @@ public class EmpRestController {
 			return ResponseEntity.ok().body(LoginVO.builder().loginId(findDto.getEmpNo())// 사원아이디
 					.loginLevel(findDto.getEmpType())// 사원등급(사원,임원)
 					.isPaid(paymentDao.isPaid(findDto.getCompanyNo())).accessToken(accessToken)
+					.isChecked("")
 					.refreshToken(refreshToken).build());// 200
 		} else {
 			return ResponseEntity.status(401).build();// 401
@@ -140,13 +142,41 @@ public class EmpRestController {
 	public ResponseEntity<List<EmpDto>> findCompanyEmpList(@PathVariable int empNo) {
 		// 주어진 사원 번호에 해당하는 사원 정보를 데이터베이스에서 조회합니다.
 		EmpDto empDto = empDao.selectOne(empNo);
-		System.out.println("empDto" + empDto);
 		// 조회된 사원의 회사 번호를 가져옵니다.
 		int companyNo = empDto.getCompanyNo();
-		System.out.println("companyNo" + companyNo);
 		// 해당 회사 번호에 속하는 사원들의 목록을 데이터베이스에서 조회합니다.
 		List<EmpDto> empList = empDao.selectListByCompany(companyNo);
 		// 조회된 사원 목록을 ResponseEntity로 감싸서 응답합니다.
 		return ResponseEntity.ok().body(empList);
+	}
+		
+	@GetMapping("/company/image")
+	public ResponseEntity<Integer> getCompanyAttachNo(@RequestHeader("Authorization") String token) {
+		LoginVO loginVO = jwtService.parse(token);
+        int empNo = loginVO.getLoginId();
+        EmpDto empDto = empDao.selectOne(empNo);
+        int companyNo = empDto.getCompanyNo();
+        
+        int attachNo = attachService.getAttachNoByCompanyNo(companyNo);
+        if(attachNo == 0) {
+        	return ResponseEntity.status(404).build();
+        }
+        
+        return ResponseEntity.ok().body(attachNo);
+	}
+	
+	@GetMapping("/image")
+	public ResponseEntity<Integer> getAttachNo(@RequestHeader("Authorization") String token) {
+		LoginVO loginVO = jwtService.parse(token);
+        int empNo = loginVO.getLoginId();
+        
+        int attachNo = attachService.getAttachNoByEmpNo(empNo);
+        
+        System.out.println(attachNo);
+        if(attachNo == 0) {
+        	return ResponseEntity.status(404).build();
+        }
+        
+        return ResponseEntity.ok().body(attachNo);
 	}
 }

@@ -28,12 +28,14 @@ public class AttachDao {
       return sqlSession.delete("attach.delete", attachNo) > 0;
    }
    
-   public AttachDto findByEmpNo(int empNo) {
-	   return sqlSession.selectOne("attach.findByEmpNo", empNo);
+   public int findByEmpNo(int empNo) {
+	   Integer result =  sqlSession.selectOne("attach.findByEmpNo", empNo);
+	   return result != null ? result : 0; // 결과가 null일 경우 0을 반환
    }
    
-   public AttachDto findByCompanyNo(int companyNo) {
-	   return sqlSession.selectOne("attach.findByCompanyNo", companyNo);
+   public int findByCompanyNo(int companyNo) {
+	   Integer result = sqlSession.selectOne("attach.findByCompanyNo", companyNo);
+	    return result != null ? result : 0; // 결과가 null일 경우 0을 반환
    }
    
  
