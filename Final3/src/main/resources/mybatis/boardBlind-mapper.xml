@@ -112,4 +112,57 @@
 		WHERE
 		company_no = #{companyNo}
 	</select>
+	
+	
+	<select id="listByPaging" resultType="BoardBlindDto">
+		<include refid="top-n-header"></include>
+		SELECT
+		bb.blind_no,
+		bb.blind_title, bb.blind_content, bb.blind_writer_nick,
+		c.company_name
+		AS blind_writer_company, bb.blind_wtime,
+		bb.blind_etime,
+		bb.blind_view,
+		bb.blind_password, bb.blind_emp_no
+		FROM
+		board_blind bb
+		JOIN
+		emp e ON
+		bb.blind_emp_no = e.emp_no
+		JOIN
+		company c ON e.company_no = c.company_no
+		ORDER BY
+		bb.blind_no DESC
+		<include refid="top-n-footer"></include>
+	</select>
+	
+	
+	<!-- 
+    	Top N Query 적용
+	    - 결국 홈페이지의 목록에는 페이징이라는 개념이 포함된다
+	    - 어떻게 구현하느냐에 따라서 네비게이터나 무한스크롤 형태가 됨
+	    - 모든 조회에 똑같이 들어가는 구문이므로 어딘가에 보관해두고 불러온다면?
+	 -->
+	<!-- 상단 -->
+	<sql id="top-n-header">
+	    <if test="beginRow != null and endRow != null">
+	    select * from (
+	        select rownum rn, TMP.* from (
+	    </if>
+	</sql>
+	
+	<!-- 하단 -->
+	<sql id="top-n-footer">
+	    <if test="beginRow != null and endRow != null">
+	        )TMP
+	    ) where rn between #{beginRow} and #{endRow}
+	    </if>
+	</sql>
+	
+	<select id="count" resultType="int">
+		select count(*) from board_blind
+	</select>
+	
+	
+	
 </mapper>
