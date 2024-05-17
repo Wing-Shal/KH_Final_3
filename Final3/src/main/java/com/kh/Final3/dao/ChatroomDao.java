@@ -57,13 +57,14 @@ public class ChatroomDao {
 	}
 	
 	
-	//단둘이 있는 채팅방만 조회
-	public Integer findOnlyTwo(int empNo1, int empNo2) {
+	// 단둘이 있는 채팅방 목록 조회
+	public List<Integer> findOnlyTwo(int empNo1, int empNo2) {
 	    Map<String, Integer> emp = new HashMap<>();
 	    emp.put("empNo1", empNo1);
 	    emp.put("empNo2", empNo2);
-	    return sqlSession.selectOne("chatroom.findOnlyTwo", emp);
+	    return sqlSession.selectList("chatroom.findOnlyTwo", emp);
 	}
+
 
 	//채팅방 시퀀스
    public int sequence() {

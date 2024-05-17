@@ -16,14 +16,14 @@ public class ChatroomService {
     @Autowired
     private ChatroomDao chatroomDao;
 
-    //채팅방 찾기 또는 생성
+ //채팅방 찾기 또는 생성
     public ChatroomDto findOrCreateChatroom(int empNo1, int empNo2) {
-    	//여기서 empNo1은 로그인한 아이디, empNo2는 채팅하기 누른 상대
-        Integer chatroomNo = chatroomDao.findOnlyTwo(empNo1, empNo2);
-        if (chatroomNo != null) {
+        //여기서 empNo1은 로그인한 아이디, empNo2는 채팅하기 누른 상대
+        List<Integer> chatroomNos = chatroomDao.findOnlyTwo(empNo1, empNo2);
+        if (!chatroomNos.isEmpty()) {
+            Integer chatroomNo = chatroomNos.get(0);
             return chatroomDao.findByChatroomNo(chatroomNo);
-        } 
-        else {
+        } else {
             //채팅방 번호 생성
             int newChatroomNo = chatroomDao.sequence();
             
@@ -41,6 +41,7 @@ public class ChatroomService {
             return newChatroomDto;
         }
     }
+
     
     //그룹 초대
     public ChatroomDto inviteEmp(int chatroomNo, int empNo) {

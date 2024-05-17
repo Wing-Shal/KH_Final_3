@@ -15,8 +15,8 @@ public class BoardNoticeDao {
 	private SqlSession sqlSession;
 	
 	//조회
-	public List<BoardNoticeDto> selectList(){
-		return sqlSession.selectList("boardNotice.list");
+	public List<BoardNoticeDto> selectList(int companyNo){
+		return sqlSession.selectList("boardNotice.list", companyNo);
 	}
 	
 	//등록
@@ -26,15 +26,15 @@ public class BoardNoticeDao {
 	public void insert(BoardNoticeDto boardNoticeDto) {
 		sqlSession.insert("boardNotice.save", boardNoticeDto);
 	}
-	
-	//삭제
-	public boolean delete(int noticeNo) {
-		return sqlSession.delete("boardNotice.delete", noticeNo) > 0;
-	}
 
 	//상세조회
 	public BoardNoticeDto selectOne(int noticeNo) {
 		return sqlSession.selectOne("boardNotice.find", noticeNo);
+	}
+	
+	//수정
+	public boolean editUnit(BoardNoticeDto boardNoticeDto) {
+		return sqlSession.update("boardNotice.editUnit", boardNoticeDto) > 0;
 	}
 
 }
