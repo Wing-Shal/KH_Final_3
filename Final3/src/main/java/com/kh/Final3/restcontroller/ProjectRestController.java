@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kh.Final3.dao.DocumentDao;
 import com.kh.Final3.dao.EmpDao;
 import com.kh.Final3.dao.ProjectDao;
-import com.kh.Final3.dao.ProjectEmpListDao;
 import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.dto.ProjectDto;
-import com.kh.Final3.dto.ProjectEmpListDto;
 import com.kh.Final3.service.JwtService;
+import com.kh.Final3.vo.EmpInfoVO;
 import com.kh.Final3.vo.LoginVO;
 import com.kh.Final3.vo.ProjectDataVO;
+import com.kh.Final3.vo.ProjectEmpVO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -47,8 +47,6 @@ public class ProjectRestController {
 	@Autowired
 	private DocumentDao documentDao;
 
-	@Autowired
-	private ProjectEmpListDao projectEmpListDao;
 
 	
 	// 문서용 설정 추가
@@ -113,7 +111,6 @@ public class ProjectRestController {
 		)
 	@PostMapping("/")
 	public ResponseEntity<ProjectDto> insert(
-			//@Parameter(description = "생성할 학생 정보에 대한 입력값", required = true, schema = @Schema(implementation = ProjectDto.class))
 			@RequestBody ProjectDto projectDto) {
 			
 			 EmpDto empDto = empDao.selectOne(projectDto.getEmpNo());
@@ -160,53 +157,35 @@ public class ProjectRestController {
 			return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().body(projectDao.selectOne(projectDto.getProjectNo()));
 		}
-//		
-//		//초대 사원 목록
-//		@GetMapping("/companyEmployees/{empNo}")
-//		public ResponseEntity<List<EmpDto>> getProjectList(@RequestHeader("Authorization") String token) {
-//		    // 토큰을 검증하고 사용자 정보를 가져오는 로직을 구현합니다.
-//			LoginVO loginVO = jwtService.parse(token);
-//			int loginId = loginVO.getLoginId();
-//			System.out.println("문서 1번 수행 로그인ID(사번) : "+loginId);
-//		    // 사원의 사번을 통해 회사 번호를 조회합니다.
-//		    EmpDto emp = empDao.selectOne(loginId);
-//		    int companyNo = emp.getCompanyNo();
-//		    System.out.println("2번 수행 회사 번호 조회 : "+companyNo);
-//		    // 회사 번호를 통해 해당 회사의 사원 목록을 조회합니다.
-//		    List<EmpDto> employees = empDao.getEmployeesByCompanyNo(companyNo);
-//		    System.out.println("사원목록 : "+employees);
-//		    
-//		    
-//		    return ResponseEntity.ok().body(employees);
-//		}
 		
 		
+		//결재자 사원목록
+		@GetMapping("/companyEmployees")
+		public ResponseEntity<List<EmpInfoVO>> getCompanyEmployeesInfo(@RequestHeader("Authorization") String token) {
+		    // 토큰을 검증하고 사용자 정보를 가져오는 로직을 구현합니다.
+			LoginVO loginVO = jwtService.parse(token);
+			int loginId = loginVO.getLoginId();
+			EmpDto empDto = empDao.selectOne(loginId);
+			int companyNo = empDto.getCompanyNo();
+		    // 사원의 사번을 통해 회사 번호를 조회합니다.
+		    return ResponseEntity.ok().body(empDao.getProjectEmpList(companyNo));
+		}
+			
 		//프로젝트 참여자 사원 등록
-		@PostMapping("/projectMember") //여기 매핑 주소 바꿔줘야함
-		public void insertEmp(@RequestBody ProjectEmpListDto projectEmpListDto) {						
-			 projectEmpListDao.insert(projectEmpListDto);
-						
-		}
-		//프로젝트 참여자 사원 삭제
-		@DeleteMapping("{projectEmpListNo}")
-		public boolean delete(@PathVariable int projectEmpListNo) {
-			return projectEmpListDao.delete(projectEmpListNo);
-		}
+		@PostMapping("/projectEmp") //여기 매핑 주소 바꿔줘야함
+		public void insertEmp(@RequestBody List<ProjectEmpVO> projectEmpVO) {
+		   System.out.println("프로젝트 참여자"+projectEmpVO);
+		        projectDao.insertEmp(projectEmpVO);
+		    }
 		
-		
-//		//프로젝트 참여자 사원 수정
-//		@PutMapping("/")
-//		public boolean update(@RequestBody ProjectEmpListDto projectEmpListDto) {
-//			boolean result = ProjectEmpListDao.update(projectEmpListDto);
-//			return result;
+//		//프로젝트 참여자 사원 삭제
+//		@DeleteMapping("{projectEmpDelete}")
+//		public boolean delete(@PathVariable int empNo) {
+//			return projectEmpListDao.delete(empNo);
 //		}
+//		
 		
-//		//프로젝트 참여자 사원 목록
-//		@GetMapping("/{empNo}")
-//		public List<ProjectEmpListDto> projectEmpList(@PathVariable int empNo) {
-//			return projectDao.projectEmpList(empNo);
-//		}
-		
+
 		
 	//삭제
 //		@Operation(

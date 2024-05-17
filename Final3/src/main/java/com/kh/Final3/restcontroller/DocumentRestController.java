@@ -161,24 +161,7 @@ public class DocumentRestController {
 		return ResponseEntity.ok().build();
 	}
 	
-	//결재자 사원목록
-	@GetMapping("/companyEmployees/{empNo}")
-	public ResponseEntity<List<EmpDto>> getCompanyEmployeesInfo(@RequestHeader("Authorization") String token) {
-	    // 토큰을 검증하고 사용자 정보를 가져오는 로직을 구현합니다.
-		LoginVO loginVO = jwtService.parse(token);
-		int loginId = loginVO.getLoginId();
-		System.out.println("문서 1번 수행 로그인ID(사번) : "+loginId);
-	    // 사원의 사번을 통해 회사 번호를 조회합니다.
-	    EmpDto emp = empDao.selectOne(loginId);
-	    int companyNo = emp.getCompanyNo();
-	    System.out.println("2번 수행 회사 번호 조회 : "+companyNo);
-	    // 회사 번호를 통해 해당 회사의 사원 목록을 조회합니다.
-	    List<EmpDto> employees = empDao.getEmployeesByCompanyNo(companyNo);
-	    System.out.println("사원목록 : "+employees);
-	    
-	    
-	    return ResponseEntity.ok().body(employees);
-	}
+
 
 	@Autowired
     private AttachService attachService;
@@ -190,16 +173,16 @@ public class DocumentRestController {
          if (!attach.isEmpty()) {
              boolean isFirst = false;
              try {
-                 int attachNo = empDao.findAttach(documentNo);
+                 int attachNo = documentDao.findAttach(documentNo);
                  attachService.remove(attachNo);
                  int editAttachNo = attachService.save(attach);
-                 empDao.connect(documentNo, editAttachNo);
+                 documentDao.connect(documentNo, editAttachNo);
              } catch (Exception e) {
                  isFirst = true;
              } 
              if (isFirst) {
                  int inputAttachNo = attachService.save(attach);
-                 empDao.connect(documentNo, inputAttachNo);
+                 documentDao.connect(documentNo, inputAttachNo);
              }
              return ResponseEntity.ok().build();
          }

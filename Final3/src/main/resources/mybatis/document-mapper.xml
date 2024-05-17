@@ -130,11 +130,11 @@ WHERE
 	
 	 <!-- attach랑 연결 -->
    <insert id="connect">
-		insert into emp_attach (document_no, attach_no) values (#{documentNo}, #{attachNo})
+		insert into document_attach (document_no, attach_no) values (#{documentNo}, #{attachNo})
 	</insert>
 	
 	<select id="findAttach" resultType="int">
-		select attach_no from emp_attach where document_no = #{documentNo}
+		select attach_no from document_attach where document_no = #{documentNo}
 	</select>
 
 </mapper>
