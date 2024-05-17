@@ -30,6 +30,11 @@
 		select * from board_notice where notice_no = #{noticeNo}
 	</select>
 	
+	<!-- 페이지네이션용 -->
+	<select id="noticeCount" resultType="int">
+		select count(*) from board_notice where company_no = #{companyNo}
+	</select>
+	
 	<!-- update -->
 	<update id="editUnit">
 	    update board_notice

@@ -208,9 +208,13 @@ public class BoardNoticeRestController {
 	    if (!isCompanyId && !isSameCompany) {
 	        return ResponseEntity.status(403).body("수정권한 없음.");
 	    }
+	    int companyNo = loginVO.getLoginId();
+		boardNoticeDto.setCompanyNo(companyNo);
+		
 	    
 		boolean result = boardNoticeDao.editUnit(boardNoticeDto);
-		
+//		System.out.println(boardNoticeDto);
+//		System.out.println(result);
 		if(result == false) {
 			//return ResponseEntity.notFound().build();
 			return ResponseEntity.status(404).build();
