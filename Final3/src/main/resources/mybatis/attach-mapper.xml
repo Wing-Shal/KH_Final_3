@@ -20,6 +20,14 @@
       select * from attach where attach_no = #{attachNo}
    </select>
    
+   <select id="findByEmpNo" resultType="AttachDto">
+   	select * from emp_attach where emp_no = #{empNo}
+   </select>
+   
+   <select id="findByCompanyNo" resultType="AttachDto">
+   	select * from company_attach where company_no = #{companyNo}
+   </select>
+   
    <delete id="delete">
       delete attach where attach_no = #{attachNo}
    </delete>
