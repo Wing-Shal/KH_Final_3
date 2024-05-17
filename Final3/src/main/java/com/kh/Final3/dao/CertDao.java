@@ -30,8 +30,8 @@ public class CertDao {
       return sqlSession.delete("cert.delete", certEmail) > 0;
    }
    
-   public boolean deleteLegacy(String certEmail) {
-	      return sqlSession.delete("cert.delete", certEmail) > 0;
+   public boolean deleteLegacy() {
+	      return sqlSession.delete("cert.delete") > 0;
 	   }
    
 }

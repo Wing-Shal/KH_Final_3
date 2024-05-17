@@ -11,7 +11,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.kh.Final3.configuration.KakaoPayProperties;
+import com.kh.Final3.dao.CertDao;
 import com.kh.Final3.dao.PaymentDao;
+import com.kh.Final3.dto.CertDto;
 import com.kh.Final3.dto.PaymentDto;
 import com.kh.Final3.kakaoPayVo.KakaoPaySubscriptionRequestVO;
 import com.kh.Final3.kakaoPayVo.KakaoPaySubscriptionResponseVO;
@@ -21,6 +23,8 @@ import com.kh.Final3.kakaoPayVo.KakaoPaySubscriptionResponseVO;
 public class ScheduleService {
 	@Autowired
 	private PaymentDao paymentDao;
+	@Autowired
+	private CertDao certDao;
 	@Autowired
 	private KakaoPayService kakaoPayService;
 	@Autowired
@@ -58,6 +62,9 @@ public class ScheduleService {
 				kakaoPayService.insertPayment(responseVO);
 			}
 		}
-		
 	}
+	@Scheduled(cron = "0 0 0 * * *")
+    public void cleanCertTable() {
+		certDao.deleteLegacy();
+    }
 }
