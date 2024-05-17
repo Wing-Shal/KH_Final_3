@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.Final3.dto.DeptDto;
 import com.kh.Final3.dto.EmpDto;
 import com.kh.Final3.vo.EmpInfoVO;
+import com.kh.Final3.vo.ProjectEmpVO;
 
 @Repository
 public class EmpDao {
@@ -121,17 +122,10 @@ public class EmpDao {
 		return sqlSession.selectOne("emp.findAttach", empNo);
 	}
 	
-	//문서 결재자 사원 목록
-	public List<EmpDto> getEmployeesByCompanyNo(int companyNo) {
+	//프로젝트 사원 목록
+	public List<EmpInfoVO> getProjectEmpList(int companyNo) {
 		
-		return sqlSession.selectList("emp.detailList", companyNo);
-	}
-	
-	//프로젝트 참여자 사원 목록
-	public int getProjectEmpList(int empNo){
-		return sqlSession.selectOne("project.projectEmpList", empNo);
-	
-
+		return sqlSession.selectList("project.detailList", companyNo);
 	}
 
 }
