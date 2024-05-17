@@ -28,5 +28,13 @@ public class AttachDao {
       return sqlSession.delete("attach.delete", attachNo) > 0;
    }
    
+   public AttachDto findByEmpNo(int empNo) {
+	   return sqlSession.selectOne("attach.findByEmpNo", empNo);
+   }
+   
+   public AttachDto findByCompanyNo(int companyNo) {
+	   return sqlSession.selectOne("attach.findByCompanyNo", companyNo);
+   }
+   
  
 }

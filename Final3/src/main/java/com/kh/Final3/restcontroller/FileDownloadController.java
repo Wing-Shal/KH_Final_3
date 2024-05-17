@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.Final3.dao.AttachDao;
+import com.kh.Final3.dao.CompanyDao;
+import com.kh.Final3.dao.EmpDao;
 import com.kh.Final3.dto.AttachDto;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,13 +32,21 @@ public class FileDownloadController
 {
 	@Autowired
 	private AttachDao attachDao;
+	@Autowired
+	private CompanyDao companyDao;
+	@Autowired
+	private EmpDao empDao;
 	
-	@GetMapping("/{attachNo}")
+	@GetMapping("/{loginId}")
 	public ResponseEntity<ByteArrayResource> download(
-			@PathVariable int attachNo) throws IOException {
-		//imgNo로 imgDto 하나 조회
-		AttachDto attachDto = attachDao.find(attachNo);
+			@PathVariable int loginId) throws IOException {
+		AttachDto attachDto = new AttachDto();
 		
+		if(empDao.selectOne(loginId) != null) {//emp로그인인 경우
+			attachDto = attachDao.findByEmpNo(loginId);
+		}else if(companyDao.selectOne(loginId) != null) {//회사 로그인인 경우
+			attachDto = attachDao.findByCompanyNo(loginId);
+		}		
 		//imgDto가 없으면(null) 404처리
 		if(attachDto == null) {
 			return ResponseEntity.notFound().build();
