@@ -330,6 +330,7 @@ public class CompanyRestController {
 	@PostMapping("/dept")
 	public ResponseEntity<?> updateDept(@RequestBody List<DeptDto> deptList) {		
 		for(DeptDto deptDto : deptList) {
+			if(deptDto.getDeptName() == null || deptDto.getDeptName().equals("")) continue;
 			int deptNo = deptDto.getDeptNo();
 			if(deptNo == 0) { //새로 추가된 부서라면
 				deptDto.setDeptNo(deptDao.sequence());
@@ -366,6 +367,7 @@ public class CompanyRestController {
 	@PostMapping("/grade")
 	public ResponseEntity<?> updateGrade(@RequestBody List<GradeDto> gradeList) {		
 		for(GradeDto gradeDto : gradeList) {
+			if(gradeDto.getGradeName() == null || gradeDto.getGradeName().equals("")) continue;
 			int gradeNo = gradeDto.getGradeNo();
 			if(gradeNo == 0) { //새로 추가된 부서라면
 				gradeDto.setGradeNo(gradeDao.sequence());
