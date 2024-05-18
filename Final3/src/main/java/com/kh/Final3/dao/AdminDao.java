@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.Final3.dto.AdminAttachDto;
 import com.kh.Final3.dto.AdminDto;
+import java.util.List;
 
 @Repository
 public class AdminDao {
@@ -27,5 +28,13 @@ public class AdminDao {
 	
 	public int selectAttachNoByAdminNo(int adminAttachNo) {
 		return sqlSession.selectOne("admin.selectAttachNoByAdminNo", adminAttachNo);
+	}
+	
+	public List<AdminAttachDto> selectList() {
+		return sqlSession.selectList("admin.selectList");
+	}
+	
+	public boolean delete(int adminAttachNo) {
+		return sqlSession.delete("admin.delete", adminAttachNo) > 0;
 	}
 }

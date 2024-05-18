@@ -17,15 +17,25 @@
 	<insert id="connAttach">
 		insert into admin_attach(
 			admin_attach_no, 
-			attach_no
+			attach_no,
+			attach_name
 		) values (
 			#{adminAttachNo},
-			#{attachNo}
+			#{attachNo},
+			#{attachName}
 		)
 	</insert>
 	
 	<select id="selectAttachNoByAdminNo" resultType="int">
 		select attach_no where admin_attach_no = #{adminAttachNo}
 	</select>
+	
+	<select id="selectList" resultType="AdminAttachDto">
+		select * from admin_attach
+	</select>
+	
+	<delete id="delete">
+		delete admin_attach where admin_attach_no = #{adminAttachNo}
+	</delete>
 		
 </mapper>

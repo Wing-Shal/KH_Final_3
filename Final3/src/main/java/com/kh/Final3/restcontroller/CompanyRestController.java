@@ -79,6 +79,7 @@ public class CompanyRestController {
 			if(findDto.getCompanyChecked() == null) {//인증이 안된 회사
 				isChecked = "UnChecked";
 			}
+			System.out.println(paymentDao.isPaid(findDto.getCompanyNo()));
 			
 			return ResponseEntity.ok().body(LoginVO.builder()
 					.loginId(findDto.getCompanyNo())
