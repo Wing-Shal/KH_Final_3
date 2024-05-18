@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 public class AdminAttachDto {
 	private int adminAttachNo;
 	private int attachNo;
+	private String attachName;
 }
