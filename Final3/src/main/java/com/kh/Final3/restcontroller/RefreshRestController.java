@@ -49,6 +49,7 @@ public class RefreshRestController {
 
 				return ResponseEntity.ok().body(LoginVO.builder().loginId(adminDto.getAdminId()).loginLevel("운영자")
 						.isPaid("운영자")
+						.isChecked("")
 						.accessToken(accessToken).refreshToken(newRefreshToken).build());
 			}
 			case "회사": {
@@ -58,9 +59,14 @@ public class RefreshRestController {
 				}
 				String accessToken = jwtService.createAccessToken(companyDto);
 				String newRefreshToken = jwtService.createRefreshToken(companyDto);
+				String isChecked = "Checked";
+				if(companyDto.getCompanyChecked() == null) {//인증이 안된 회사
+					isChecked = "UnChecked";
+				}
 
 				return ResponseEntity.ok().body(LoginVO.builder().loginId(companyDto.getCompanyNo()).loginLevel("회사")
 						.isPaid(paymentDao.isPaid(companyDto.getCompanyNo()))
+						.isChecked(isChecked)
 						.accessToken(accessToken).refreshToken(newRefreshToken).build());
 			}
 			default: {
@@ -78,6 +84,7 @@ public class RefreshRestController {
 				return ResponseEntity.ok()
 						.body(LoginVO.builder().loginId(empDto.getEmpNo()).loginLevel(empDto.getEmpType())
 								.isPaid(paymentDao.isPaid(empDto.getCompanyNo()))
+								.isChecked("")
 								.accessToken(accessToken).refreshToken(newRefreshToken).build());
 				}
 			}
