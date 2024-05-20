@@ -67,7 +67,7 @@
 	
 
 
-	<!-- update 전체수정/ -->
+<!-- update 전체수정/ -->
 	<update id="edit">
 		update document
 		<set>
@@ -76,10 +76,10 @@
 			<if test="documentWriteTime != null"> document_write_time = #{documentWriteTime},</if>
 			<if test="documentLimitTime != null">document_limit_time = #{documentLimitTime},</if>
 			<if test="documentApprover != null">document_approver = #{documentApprover},</if>
+			<if test="documentStatus != null">document_status = #{documentStatus},</if>
 		</set>
 		where document_no = #{documentNo}
 	</update>
-
 
 
 
