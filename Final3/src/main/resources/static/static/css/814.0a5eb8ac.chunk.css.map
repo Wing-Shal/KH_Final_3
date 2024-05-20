@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/814.0a5eb8ac.chunk.css","mappings":"AAAA,iBACI,YAAa,CACb,WACF","sources":["components/intergrated/Company/BoardNoticeEditAdd.css"],"sourcesContent":[".custom-textarea {\r\n    height: 300px;\r\n    resize: none;\r\n  }"],"names":[],"sourceRoot":""}
