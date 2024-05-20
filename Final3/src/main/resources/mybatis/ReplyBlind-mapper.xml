@@ -27,7 +27,7 @@
     
     <!-- Read -->
     <select id="list" resultType="ReplyBlindDto">
-        select * from reply_blind order by reply_blind_no asc
+        select * from reply_blind order by reply_blind_no desc
     </select>
     
     
