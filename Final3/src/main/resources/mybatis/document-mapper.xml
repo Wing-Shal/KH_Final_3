@@ -84,7 +84,7 @@
 
 
 
-	<!-- 통합검색 -->
+	<!-- 통합검색 ..-->
 <select id="searchDocuments" resultType="DocumentDto">
     SELECT *
     FROM document
