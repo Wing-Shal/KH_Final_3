@@ -84,6 +84,7 @@ public class BoardBlindRestController {
 			    String companyName = companyDto.getCompanyName(); // 회사 이름 가져오기
 			    System.out.println("회사이름"+companyName);
 			    boardBlindDto.setBlindEmpNo(loginId); // 게시글 작성자의 사원 번호 설정
+			    boardBlindDto.setBlindPassword(Integer.toString(loginId));
 			    System.out.println("작성자의 사원번호 설정"+boardBlindDto.getBlindEmpNo());
 			    boardBlindDto.setBlindWriterCompany(companyName); // 게시글 작성자의 회사 이름 설정
 			    System.out.println("작성자의 회사이름 설정"+boardBlindDto.getBlindWriterCompany());
