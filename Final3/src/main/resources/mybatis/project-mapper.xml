@@ -45,9 +45,11 @@
 	</select>
 
 	<select id="myList" resultType="ProjectDto">
-		select * from project where
-		emp_no = #{empNo}
-	</select>
+    SELECT p.*
+    FROM project p
+    JOIN PROJECT_EMP pe ON p.project_no = pe.project_no
+    WHERE pe.emp_no = #{empNo}
+</select>
 
 	<!-- 프로젝트번호가 같은 문서 불러오//기 -->
 
