@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/965.a28c8c7c.chunk.css","mappings":"AAAA,cAEI,cAAe,CADf,eAEJ","sources":["components/intergrated/Company/BoardNoticeDetailForCompany.css"],"sourcesContent":[".notice-title{\r\n    font-weight: bold;\r\n    font-size: 28px;\r\n}"],"names":[],"sourceRoot":""}

@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/992.0a423046.chunk.css","mappings":"AAAA,QAGI,4BAAgC,CAFhC,eAAgB,CAChB,UAEJ","sources":["components/Header.css"],"sourcesContent":[".header {\r\n    min-height: 30px;\r\n    width: 100%;\r\n    border-bottom: 1px solid #FFC0CB;\r\n}"],"names":[],"sourceRoot":""}
